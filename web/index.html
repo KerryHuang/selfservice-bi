@@ -1,0 +1,1970 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自助營運分析</title>
+<style>
+:root { --brand-primary: #0f766e; --brand-primary-text: #ffffff; --brand-secondary: #0e7490; --brand-accent: #b45309; --color-surface-default: #ffffff; --color-surface-subtle: #f8f9fa; --color-surface-muted: #e9ecef; --color-surface-emphasis: #dee2e6; --color-surface-inverse: #1f2933; --color-surface-dark-permanent: #1f2933; --color-text-default: #000000; --color-text-muted: rgba(0, 0, 0, 0.7); --color-text-hint: rgba(0, 0, 0, 0.6); --color-text-disabled: rgba(0, 0, 0, 0.38); --color-text-inverse: #ffffff; --color-text-on-dark-permanent: #e6edf3; --color-border-default: #dee2e6; --color-border-subtle: #e9ecef; --color-border-emphasis: #ced4da; --color-border-focus: #0f766e; --color-interactive-default: #0f766e; --color-interactive-hover: #115e59; --color-interactive-active: #134e4a; --color-status-success: #21ba45; --color-status-success-subtle: #e8f5e9; --color-status-error: #ea3248; --color-status-error-subtle: #ffebee; --color-status-error-subtle-text: #b3261e; --color-status-warning: #b45309; --color-status-warning-fill: #f59e0b; --color-status-warning-subtle: #fff8e1; --color-status-warning-text: #3d2c00; --color-status-warning-subtle-text:#720000; --color-status-info: #368daa; --color-status-info-subtle: #e3f2fd; --dialog-backdrop-bg: rgba(0, 0, 0, 0.5); --dialog-width-sm: min(400px, 95vw); --dialog-width-md: min(600px, 90vw); --dialog-width-lg: min(900px, 85vw); --dialog-max-height: 90vh; --color-brand-primary: #0f766e; --color-brand-primary-subtle: rgba(15, 118, 110, 0.12); --color-tone-green-subtle-fg: #2e7d32; --color-tone-slate-bg: #9e9e9e; --color-tone-blue-subtle-fg: #1565c0; --color-tone-gray-bg: #00bcd4; --color-tone-red-subtle-fg: #c62828; --color-tone-purple-bg: #9c27b0; --color-table-header-primary-bg: #4b5c78; --color-table-header-primary-fg: #f1f5f9; --color-table-row-hover-bg: var(--color-surface-emphasis); --color-table-row-selected-bg: #e0f2fe; --color-table-row-selected-fg: #0277bd; --font-size-xs: 12px; --font-size-sm: 14px; --font-size-md: 18px; --font-size-lg: 20px; --line-height-tight: 1.25; --line-height-normal: 1.5; --font-weight-normal: 400; --font-weight-medium: 500; --font-weight-semibold: 600; --font-weight-bold: 700; --spacing-1: 2px; --spacing-2: 4px; --spacing-4: 8px; --spacing-5: 12px; --spacing-6: 16px; --spacing-8: 24px; --padding-field: 8px 12px; --padding-cell: 6px 12px; --padding-card: 12px; --gap-xs: 4px; --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04); --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.04); --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.05), 0 4px 6px rgba(0, 0, 0, 0.03); --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.02); --shadow-focus: 0 0 0 2px var(--color-border-focus); --radius-none: 0; --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --transition-fast: 150ms; --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94); --app-header-height: 50px; --row-height-table-header: 39px; --row-height-table: 49px; --padding-cell-table: 4px 8px; --color-section-header-bg: #f6f7f8; --field-height: 48px; --color-field-bg: #ffffff; --color-link-in-table: #1e40af; --color-body-bg: #fafbfc; --color-toolbar-bg: #1f2933; --color-btn-new: #21ba45; --color-btn-delete: #ea3248; --color-btn-neutral-bg: #dfe2e6; --color-tone-green-run: #0d9488; --color-text-strong: #1f2937; --color-text-secondary: #4b5563; --color-icon-subtle: #6b7280; --color-line-12: rgba(0, 0, 0, 0.12); --color-section-border: #dfe2e6; --color-ffield-ro-bg: #f3f4f6; --color-ffield-ro-border: #ebedef; --color-ffield-value: #1f2937; --toolbar-height: 56px; --toolbar-padding-x: 12px; --field-box-height: 48px; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Noto Sans TC", "Microsoft JhengHei", "微軟正黑體", "PingFang TC", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: var(--font-size-sm); font-weight: var(--font-weight-normal); line-height: var(--line-height-normal); color: var(--color-text-strong); background-color: var(--color-body-bg); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+a { color: var(--color-interactive-default); text-decoration: none; }
+a:hover { color: var(--color-interactive-hover); text-decoration: underline; }
+img, svg { display: block; max-width: 100%; }
+button { cursor: pointer; font-family: inherit; font-size: inherit; }
+input, textarea, select { font-family: inherit; font-size: inherit; }
+.ui-card { background-color: var(--color-surface-default); border-radius: var(--radius-none); box-shadow: var(--shadow-sm); border: 1px solid var(--color-border-subtle); padding: var(--padding-card); color: var(--color-text-default); }
+.ui-sidebar { background-color: var(--color-surface-dark-permanent); color: var(--color-text-on-dark-permanent); width: 220px; flex-shrink: 0; display: flex; flex-direction: column; padding: var(--spacing-5) 0; box-shadow: var(--shadow-md); border-radius: var(--radius-none); }
+.ui-sidebar-item { display: flex; align-items: center; gap: var(--spacing-4); padding: var(--spacing-4) var(--spacing-6); color: var(--color-text-on-dark-permanent); font-size: var(--font-size-sm); font-weight: var(--font-weight-normal); cursor: pointer; border-radius: var(--radius-none); transition: background-color var(--transition-fast) var(--ease-out); text-decoration: none; border: none; background: transparent; width: 100%; text-align: left; }
+.ui-sidebar-item:hover { background-color: rgba(255, 255, 255, 0.1); color: var(--color-text-on-dark-permanent); text-decoration: none; }
+.ui-sidebar-item.active { background-color: var(--brand-primary); color: var(--brand-primary-text); font-weight: var(--font-weight-medium); }
+.ui-sidebar-item.active:hover { background-color: var(--color-interactive-hover); }
+.ui-table { width: 100%; border-collapse: collapse; border-radius: var(--radius-none); font-size: var(--font-size-lg); color: var(--color-text-default); background-color: var(--color-surface-default); }
+.ui-table th { background-color: var(--color-table-header-primary-bg); color: var(--color-table-header-primary-fg); font-weight: var(--font-weight-semibold); padding: var(--padding-cell-table); height: var(--row-height-table-header); text-align: left; white-space: nowrap; }
+.ui-table td { padding: var(--padding-cell-table); height: var(--row-height-table); border-bottom: 1px solid var(--color-line-12); vertical-align: middle; }
+.ui-table td a, .ui-table td .ui-link { color: var(--color-link-in-table); text-decoration: none; cursor: pointer; }
+.ui-table tbody tr:hover td { background-color: var(--color-table-row-hover-bg); }
+.ui-table tbody tr.is-selected td { background-color: var(--color-table-row-selected-bg); color: var(--color-table-row-selected-fg); }
+.ui-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--spacing-2); min-height: 36px; padding: 4px 16px; font-family: inherit; font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); line-height: var(--line-height-tight); border-radius: var(--radius-md); border: 1px solid transparent; cursor: pointer; text-decoration: none; transition: background-color var(--transition-fast) var(--ease-out), border-color var(--transition-fast) var(--ease-out), color var(--transition-fast) var(--ease-out), box-shadow var(--transition-fast) var(--ease-out); white-space: nowrap; user-select: none; }
+.ui-btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.ui-btn:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+.ui-btn--secondary { background-color: transparent; color: var(--brand-primary); border-color: var(--brand-primary); }
+.ui-btn--secondary:hover:not(:disabled) { background-color: var(--color-surface-subtle); border-color: var(--color-interactive-hover); color: var(--color-interactive-hover); text-decoration: none; }
+.ui-btn--secondary:active:not(:disabled) { background-color: var(--color-surface-muted); border-color: var(--color-interactive-active); color: var(--color-interactive-active); }
+.ui-field { display: block; width: 100%; padding: var(--padding-field); font-family: inherit; font-size: var(--font-size-md); font-weight: var(--font-weight-normal); line-height: var(--line-height-normal); color: var(--color-text-strong); height: var(--field-height); background-color: var(--color-field-bg); border: 1px solid var(--color-section-border); border-radius: var(--radius-md); transition: border-color var(--transition-fast) var(--ease-out), box-shadow var(--transition-fast) var(--ease-out); appearance: none; -webkit-appearance: none; }
+.ui-field::placeholder { color: var(--color-text-hint); }
+.ui-field:focus { outline: none; border-color: var(--color-border-focus); box-shadow: var(--shadow-focus); }
+.ui-field:disabled { background-color: var(--color-surface-subtle); color: var(--color-text-disabled); cursor: not-allowed; }
+.ui-field:read-only { background-color: var(--color-ffield-ro-bg); border-color: var(--color-ffield-ro-border); color: var(--color-text-strong); }
+textarea.ui-field { min-height: 80px; resize: vertical; }
+.ui-chip { display: inline-flex; align-items: center; gap: var(--spacing-1); padding: var(--spacing-1) var(--spacing-4); font-size: var(--font-size-xs); font-weight: var(--font-weight-medium); line-height: var(--line-height-tight); border-radius: var(--radius-none); white-space: nowrap; border: 1px solid transparent; }
+.ui-chip--positive { background-color: var(--color-status-success-subtle); color: var(--color-tone-green-subtle-fg); border-color: var(--color-status-success); }
+.ui-chip--negative { background-color: var(--color-status-error-subtle); color: var(--color-tone-red-subtle-fg); border-color: var(--color-status-error); }
+.ui-chip--warning { background-color: var(--color-status-warning-subtle); color: var(--color-status-warning-subtle-text); border-color: var(--color-status-warning); }
+.ui-chip--info { background-color: var(--color-status-info-subtle); color: var(--color-tone-blue-subtle-fg); border-color: var(--color-status-info); }
+.ui-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--spacing-8) var(--spacing-6); text-align: center; color: var(--color-text-hint); font-size: var(--font-size-sm); gap: var(--spacing-5); min-height: 160px; }
+.ui-dialog-overlay { position: fixed; inset: 0; background-color: var(--dialog-backdrop-bg); display: flex; align-items: center; justify-content: center; z-index: 9000; padding: var(--spacing-6); }
+.ui-dialog { background-color: var(--color-surface-default); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl); border: 1px solid var(--color-border-subtle); width: 100%; max-width: var(--dialog-width-md); max-height: var(--dialog-max-height); display: flex; flex-direction: column; overflow: hidden; }
+.ui-dialog--sm { max-width: var(--dialog-width-sm); }
+.ui-dialog--lg { max-width: var(--dialog-width-lg); }
+.ui-dialog-header { display: flex; align-items: center; justify-content: space-between; padding: var(--spacing-5) var(--spacing-6); border-bottom: 1px solid var(--color-border-default); font-size: var(--font-size-lg); font-weight: var(--font-weight-semibold); color: var(--color-text-default); background-color: var(--color-section-header-bg); flex-shrink: 0; }
+.ui-dialog-body { padding: var(--spacing-6); overflow-y: auto; flex: 1; color: var(--color-text-default); }
+.ui-dialog-footer { display: flex; align-items: center; justify-content: flex-end; gap: var(--spacing-4); padding: var(--spacing-5) var(--spacing-6); border-top: 1px solid var(--color-border-default); background-color: var(--color-surface-subtle); flex-shrink: 0; }
+.ui-app { position: relative; display: flex; flex-direction: column; height: 100vh; background-color: var(--color-body-bg); color: var(--color-text-default); font-size: var(--font-size-sm); }
+.ui-app-header { height: var(--app-header-height); flex-shrink: 0; display: flex; align-items: center; gap: var(--spacing-5); padding: 0 var(--toolbar-padding-x); background-color: var(--brand-primary); color: var(--brand-primary-text); font-size: var(--font-size-sm); }
+.ui-app-header a, .ui-app-header button { color: var(--brand-primary-text); }
+.ui-app-header .ui-btn:not([class*="ui-btn--"]) { background-color: transparent; border-color: transparent; color: inherit; padding: 0 var(--spacing-4); min-height: 34px; }
+.ui-app-header .ui-btn:not([class*="ui-btn--"]):hover { background-color: rgba(255, 255, 255, 0.14); }
+.ui-app-header__title { font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); line-height: 32px; }
+.ui-app-header__spacer { margin-left: auto; }
+.ui-data-header { height: var(--toolbar-height); flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 var(--toolbar-padding-x); background-color: var(--color-toolbar-bg); color: #ffffff; }
+.ui-data-header a, .ui-data-header button { color: #ffffff; }
+.ui-data-header .ui-btn:not([class*="ui-btn--"]) { background-color: transparent; border-color: transparent; color: #ffffff; }
+.ui-data-header .ui-btn:not([class*="ui-btn--"]):hover { background-color: rgba(255, 255, 255, 0.14); }
+.ui-data-header-left { display: flex; align-items: center; height: 100%; }
+.ui-data-header-title { font-size: 16px; font-weight: var(--font-weight-semibold); padding-right: var(--spacing-6); margin-right: var(--spacing-6); border-right: 1px solid rgba(255, 255, 255, 0.18); height: 28px; display: flex; align-items: center; }
+.ui-data-header-actions { display: flex; align-items: center; gap: var(--gap-xs); }
+.ui-btn--new { background-color: var(--color-btn-new); border-color: var(--color-btn-new); color: #ffffff; }
+.ui-btn--new:hover:not(:disabled) { filter: brightness(0.92); }
+.ui-btn--delete { background-color: var(--color-btn-delete); border-color: var(--color-btn-delete); color: #ffffff; }
+.ui-btn--delete:hover:not(:disabled) { filter: brightness(0.92); }
+.ui-btn--action { background-color: var(--brand-primary); border-color: var(--brand-primary); color: #ffffff; }
+.ui-btn--action:hover:not(:disabled) { filter: brightness(0.92); }
+.ui-btn--flat { background-color: transparent; border-color: transparent; color: inherit; }
+.ui-btn--flat:hover:not(:disabled) { background-color: rgba(255, 255, 255, 0.14); }
+.ui-btn--neutral { background-color: var(--color-btn-neutral-bg); border-color: var(--color-btn-neutral-bg); color: var(--color-text-strong); }
+.ui-btn--neutral:hover:not(:disabled) { filter: brightness(0.95); }
+.ui-btn--outline { background-color: transparent; border-color: currentColor; color: var(--brand-primary); border-radius: var(--radius-sm); }
+.ui-btn--outline:hover:not(:disabled) { background-color: rgba(15, 118, 110, 0.06); }
+.ui-icon-btn { width: 42px; height: 42px; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; border-radius: var(--radius-md); color: var(--color-text-strong); font-size: 22px; line-height: 1; }
+.ui-icon-btn:hover { background-color: rgba(0, 0, 0, 0.06); }
+.ui-ffield { position: relative; height: var(--field-box-height); background-color: var(--color-ffield-ro-bg); border: 1px solid var(--color-ffield-ro-border); border-radius: var(--radius-md); }
+.ui-ffield.is-editable { background-color: #ffffff; border-color: var(--color-section-border); }
+.ui-ffield.is-editable:focus-within { border-color: var(--color-border-focus); box-shadow: var(--shadow-focus); }
+.ui-ffield__label { position: absolute; top: 5px; left: 12px; right: 12px; font-size: 13px; font-weight: var(--font-weight-medium); line-height: 16px; color: var(--color-text-secondary); pointer-events: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui-req { margin-left: var(--spacing-2); color: var(--color-status-error); font-size: 13px; }
+.ui-ffield__value { display: block; width: 100%; height: 100%; padding: 20px 12px 0; background: transparent; border: none; outline: none; font-family: inherit; font-size: var(--font-size-md); font-weight: var(--font-weight-normal); line-height: 26px; color: var(--color-ffield-value); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ui-ffield--select::after { content: "\25BE"; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--color-icon-subtle); pointer-events: none; }
+.ui-ffield.is-error { border-color: var(--color-status-error); }
+.ui-empty-inline { padding: var(--spacing-8) var(--spacing-5); text-align: center; color: #4b5563; font-size: var(--font-size-md); background-color: var(--color-surface-subtle); }
+.ui-empty-inline small { display: block; margin-top: var(--spacing-4); color: var(--color-text-hint); font-size: var(--font-size-sm); }
+.ui-screen { display: none; }
+.ui-screen.active { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.ui-layout { display: flex; flex: 1; min-height: 0; }
+.ui-content { flex: 1; overflow: auto; display: flex; flex-direction: column; min-width: 0; }
+.ui-state-alert { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--color-status-warning-subtle); color: var(--color-status-warning-subtle-text); border: 1px solid var(--color-status-warning); font-size: 14px; margin-bottom: 8px; }
+.ui-note { font-size: 12px; color: var(--color-text-hint); }
+.ui-table-wrap { overflow-x: auto; }
+.ui-table .num { text-align: right; }
+.ui-seg { display: inline-flex; border: 1px solid var(--brand-primary); }
+.ui-seg button { padding: 6px 14px; font-size: 14px; border: none; background: transparent; color: var(--brand-primary); cursor: pointer; }
+.ui-seg button.active { background: var(--brand-primary); color: #fff; }
+.ui-seg button.is-off { opacity: .45; cursor: not-allowed; text-decoration: line-through; }
+.ui-link { color: var(--brand-primary); text-decoration: none; cursor: pointer; }
+.ui-link:hover { text-decoration: underline; }
+.ui-sidebar-item { text-align: left; }
+.ui-sidebar { overflow-y: auto; }
+.rp-nav-h { padding: 14px 16px 4px; font-size: 12px; opacity: .6; }
+.rp-nav-h:first-child { padding-top: 2px; }
+.rp-nav-def { margin-left: auto; font-size: 11px; opacity: .85; white-space: nowrap; }
+.rp-role { height: 32px; padding: 2px 8px; font-size: 14px; border: 1px solid rgba(255, 255, 255, 0.55); border-radius: var(--radius-sm); background: var(--brand-primary); color: var(--brand-primary-text); }
+.rp-role option { background: var(--color-surface-default); color: var(--color-text-default); }
+.rp-nav-adj { margin-left: 6px; font-size: 11px; padding: 0 6px; border-radius: 10px; background: var(--color-status-warning-subtle); color: var(--color-status-warning-text); white-space: nowrap; }
+.rp-hinfo { display: inline-flex; gap: 14px; font-size: 13px; color: var(--brand-primary-text); opacity: .9; margin-right: 10px; white-space: nowrap; }
+.rp-refresh { height: 32px; border: 1px solid rgba(255, 255, 255, 0.55); background: transparent; color: var(--brand-primary-text); }
+.rp-cmp { font-size: 14px; font-weight: 600; margin-top: 2px; }
+.rp-cmp .ui-note { font-weight: 400; margin-left: 6px; }
+.rp-cmp.is-up { color: var(--color-status-success); }
+.rp-cmp.is-down { color: var(--color-status-error); }
+.rp-rnote { font-size: 12px; margin-top: 4px; }
+.rp-cum { fill: none; stroke: var(--color-status-warning-fill); stroke-width: 2; }
+.rp-cum-t { fill: var(--color-status-warning); }
+.rp-opts .rp-toolbar { margin-bottom: 6px; }
+.rp-navbtn { display: none !important; }
+@media (max-width: 768px) {
+  .rp-navbtn { display: inline-flex !important; }
+  .ui-app-header__title { font-size: 16px; white-space: nowrap; }
+  .ui-app-header { height: auto; flex-wrap: wrap; row-gap: 4px; gap: 8px; padding-top: 6px; padding-bottom: 6px; }
+  .ui-app-header__spacer { display: none; }
+  .rp-hinfo { order: 5; flex: 1 1 60%; font-size: 12px; gap: 10px; margin: 0; }
+  .rp-refresh { order: 6; height: 28px; font-size: 12px; }
+  .ui-layout { position: relative; }
+  .ui-sidebar { position: absolute; top: 0; bottom: 0; left: 0; z-index: 50; transform: translateX(-100%); transition: transform var(--transition-fast) var(--ease-out); }
+  .ui-layout.nav-open .ui-sidebar { transform: none; }
+  .ui-data-header { height: auto; min-height: var(--toolbar-height); flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
+  .ui-data-header-left { height: auto; flex-wrap: wrap; gap: 6px; }
+  .ui-data-header-actions { flex-wrap: wrap; }
+  .rp-grid .rp-S, .rp-grid .rp-M { grid-column: span 12; }
+  .rp-page .rp-three, .rp-page .rp-topics { grid-template-columns: 1fr; }
+}
+.rp-page { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.rp-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.rp-sp { flex: 1; }
+.rp-fld { height: 36px; font-size: 14px; padding: 4px 10px; }
+.rp-w80 { width: 80px; }
+.rp-w120 { width: 120px; }
+.rp-w160 { width: 160px; }
+.rp-w200 { width: 200px; }
+.rp-w240 { width: 240px; }
+.rp-w260 { width: 260px; }
+.rp-w300 { width: 300px; }
+.rp-red { color: var(--color-status-error); font-weight: 600; font-size: 13px; }
+.rp-left { text-align: left; font-size: 13px; }
+.rp-pad { padding: 6px 0; }
+.rp-h4 { margin: 12px 0 6px; font-size: 14px; color: var(--color-text-default); }
+.rp-inline { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.rp-actions { white-space: nowrap; }
+.rp-actions .ui-btn { min-height: 28px; padding: 2px 10px; margin-right: 4px; }
+.ui-table.rp-compact { font-size: 14px; }
+.ui-table.rp-compact th, .ui-table.rp-compact td { padding: 6px 10px; height: auto; }
+.rp-th { background: none; border: none; color: inherit; font: inherit; cursor: pointer; padding: 0; }
+.rp-total td { font-weight: 700; background: var(--color-surface-muted); border-top: 2px solid var(--color-border-emphasis); }
+.rp-pager { display: flex; align-items: center; gap: 8px; padding: 8px 0; flex-wrap: wrap; }
+.rp-pageno { font-size: 13px; }
+.rp-err { border-left: 4px solid var(--color-status-error); background: var(--color-status-error-subtle); color: var(--color-status-error-subtle-text); padding: 8px 12px; margin: 6px 0; font-size: 13px; }
+.rp-err-act { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.rp-err-act .ui-btn { min-height: 28px; }
+.rp-err-box { background: var(--color-surface-default); border: 1px solid var(--color-status-error); padding: 12px; }
+.rp-inline-err { background: var(--color-status-error-subtle); color: var(--color-status-error-subtle-text); padding: 10px 12px; font-size: 13px; border-left: 4px solid var(--color-status-error); }
+.rp-loading { display: flex; align-items: center; gap: 10px; padding: 40px; justify-content: center; color: var(--color-text-hint); }
+.rp-spin { width: 18px; height: 18px; border: 3px solid var(--color-border-emphasis); border-top-color: var(--brand-primary); border-radius: 50%; animation: rpspin .8s linear infinite; }
+@keyframes rpspin { to { transform: rotate(360deg); } }
+.rp-hsub { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.rp-viewhead { display: flex; gap: 12px; }
+.rp-empty { padding: 24px; text-align: center; }
+.ui-card .ui-empty { min-height: 120px; }
+.rp-steps { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.rp-step { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--color-surface-default); border: 1px solid var(--color-border-emphasis); cursor: pointer; font-size: 14px; color: var(--color-text-default); }
+.rp-step-no { width: 22px; height: 22px; border-radius: 50%; background: var(--color-surface-emphasis); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+.rp-step-tag { font-size: 11px; color: var(--color-text-hint); }
+.rp-step-tag.req { color: var(--color-status-error); font-weight: 700; }
+.rp-step.is-cur { border-color: var(--brand-primary); background: var(--color-brand-primary-subtle); font-weight: 700; }
+.rp-step.is-cur .rp-step-no { background: var(--brand-primary); color: #fff; }
+.rp-step.is-done .rp-step-no { background: var(--color-status-success); color: #fff; }
+.rp-step.is-locked { opacity: .5; cursor: not-allowed; }
+.rp-step-sep { width: 14px; height: 2px; background: var(--color-border-emphasis); }
+.rp-dgrid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 12px; align-items: start; }
+.rp-stephead { margin-bottom: 8px; }
+.rp-dnav { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--color-border-default); }
+.rp-side-sec { padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--color-border-subtle); }
+.rp-side-sec:last-child { border-bottom: none; margin: 0; }
+.rp-side-k { font-size: 12px; color: var(--color-text-hint); font-weight: 700; margin-bottom: 4px; }
+.rp-side-big { font-size: 16px; font-weight: 700; color: var(--brand-primary); }
+.rp-side ul, .rp-three ul { margin: 0; padding-left: 18px; font-size: 13px; }
+.rp-topics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.rp-topic { text-align: left; padding: 14px; background: var(--color-surface-default); border: 2px solid var(--color-border-emphasis); display: flex; flex-direction: column; gap: 4px; cursor: pointer; font-size: 14px; }
+.rp-topic b { font-size: 16px; }
+.rp-topic.is-active { border-color: var(--brand-primary); background: var(--color-brand-primary-subtle); }
+.rp-rel { display: flex; flex-direction: column; gap: 6px; }
+.rp-chk, .rp-chk2 { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+.rp-chk.is-off { opacity: .6; }
+.rp-chk .ui-note { margin-left: 6px; }
+.rp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rp-flist { margin-top: 8px; border: 1px solid var(--color-border-default); max-height: 52vh; overflow: auto; }
+.rp-fgrp-h { background: var(--color-section-header-bg); font-weight: 700; font-size: 13px; padding: 6px 10px; border-bottom: 1px solid var(--color-border-default); }
+.rp-frow { display: flex; align-items: center; gap: 8px; padding: 5px 10px; border-bottom: 1px solid var(--color-border-subtle); font-size: 14px; }
+.rp-frow .ui-btn { min-height: 28px; padding: 2px 10px; }
+.rp-tag { font-size: 11px; background: var(--color-surface-muted); padding: 0 6px; color: var(--color-text-muted); }
+.rp-no { min-width: 20px; color: var(--color-text-hint); font-size: 12px; }
+.rp-selname { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.rp-cond { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px; border: 1px solid var(--color-border-default); margin-bottom: 8px; background: var(--color-surface-default); }
+.rp-cond.is-bad { border-color: var(--color-status-error); background: var(--color-status-error-subtle); }
+.rp-cond-err { color: var(--color-status-error-subtle-text); font-size: 12px; font-weight: 700; flex-basis: 100%; }
+.rp-cond-err:empty { display: none; }
+.rp-cv { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.rp-enum { display: inline-flex; gap: 10px; flex-wrap: wrap; }
+.rp-metric-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.rp-roles { display: flex; gap: 14px; align-items: center; margin: 6px 0 6px 22px; flex-wrap: wrap; }
+.rp-cgrid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 12px; align-items: start; }
+.rp-cardhead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.rp-segwrap { flex-wrap: wrap; }
+.rp-why { margin: 6px 0 0; padding-left: 18px; font-size: 12px; color: var(--color-text-muted); }
+.rp-why li { margin-bottom: 4px; }
+.rp-why .ui-btn { min-height: 24px; padding: 0 8px; font-size: 12px; }
+.rp-radio { display: block; padding: 4px 0; font-size: 14px; }
+.rp-fbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rp-dd { position: relative; }
+.rp-dd > summary { cursor: pointer; border: 1px solid var(--color-border-emphasis); padding: 6px 12px; font-size: 14px; background: var(--color-surface-default); list-style: none; min-width: 140px; }
+.rp-dd > summary::-webkit-details-marker { display: none; }
+.rp-dd > summary::after { content: " ▾"; }
+.rp-dd-p { position: absolute; z-index: 20; top: 100%; left: 0; background: var(--color-surface-default); border: 1px solid var(--color-border-emphasis); box-shadow: var(--shadow-lg); padding: 8px 12px; display: flex; flex-direction: column; gap: 6px; min-width: 180px; }
+.rp-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 12px; }
+.rp-span12 { grid-column: span 12; }
+.rp-w { background: var(--color-surface-default); border: 1px solid var(--color-border-default); box-shadow: var(--shadow-sm); padding: 12px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.rp-S { grid-column: span 3; }
+.rp-M { grid-column: span 6; }
+.rp-L { grid-column: span 12; }
+@media (max-width: 1200px) {
+  .rp-S { grid-column: span 6; }
+  .rp-M { grid-column: span 12; }
+  .rp-dgrid, .rp-cgrid, .rp-two { grid-template-columns: 1fr; }
+}
+.rp-w.is-invalid { border-color: var(--color-status-warning); background: var(--color-status-warning-subtle); }
+.rp-w.is-drag { opacity: .4; }
+.rp-w.is-over { outline: 3px dashed var(--brand-primary); }
+.rp-w[draggable="true"] { cursor: grab; }
+.rp-whead { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 15px; }
+.rp-wtools { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; padding: 6px; background: var(--color-surface-subtle); border: 1px dashed var(--color-border-emphasis); }
+.rp-wtools .ui-btn { min-height: 28px; padding: 2px 10px; }
+.rp-wtools .ui-seg button { padding: 3px 10px; }
+.rp-drag { font-size: 18px; color: var(--color-text-hint); cursor: grab; }
+.rp-wbody { flex: 1; min-height: 0; }
+.rp-wfoot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-top: 1px solid var(--color-border-subtle); padding-top: 6px; }
+.rp-invalid p { margin: 6px 0; font-size: 13px; }
+.rp-three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.rp-sumcard { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+.rp-sumnote { flex-basis: 100%; margin: 0; }
+.rp-tbl-foot { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; }
+.rp-svg { width: 100%; height: auto; display: block; }
+.rp-svg-pie { max-width: 190px; flex-shrink: 0; }
+.rp-ax { font-size: 11px; fill: var(--color-text-hint); }
+.rp-val { fill: var(--color-text-default); font-weight: 700; }
+.rp-grid-line { stroke: var(--color-border-subtle); stroke-width: 1; }
+.rp-axis { stroke: var(--color-border-emphasis); stroke-width: 1; }
+.rp-hit { cursor: pointer; }
+.rp-hit:hover, .rp-hit:focus { opacity: .75; outline: none; }
+.rp-pie { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rp-pie-total { font-size: 20px; font-weight: 700; fill: var(--color-text-default); }
+.rp-legend { list-style: none; margin: 0; padding: 0; flex: 1; min-width: 150px; }
+.rp-leg { display: flex; align-items: center; gap: 6px; width: 100%; background: none; border: none; padding: 3px 4px; font-size: 13px; cursor: pointer; text-align: left; color: var(--color-text-default); }
+.rp-leg:hover:not(:disabled) { background: var(--color-surface-muted); }
+.rp-leg i { width: 10px; height: 10px; display: inline-block; flex-shrink: 0; }
+.rp-leg b { margin-left: auto; }
+.rp-metric { display: flex; flex-direction: column; gap: 4px; padding: 6px 0; text-align: left; }
+.rp-hit-btn { background: none; border: none; cursor: pointer; width: 100%; color: var(--color-text-default); }
+.rp-hit-btn:hover { background: var(--color-surface-subtle); }
+.rp-metric-name { font-size: 13px; color: var(--color-text-hint); }
+.rp-metric-val { font-size: 30px; font-weight: 700; color: var(--brand-primary); line-height: 1.2; }
+.rp-metric-unit { font-size: 14px; color: var(--color-text-hint); margin-left: 6px; font-weight: 400; }
+#toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--color-surface-inverse); color: var(--color-text-inverse); padding: 10px 18px; font-size: 14px; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 9500; max-width: 80vw; }
+#toast.show { opacity: 1; }
+.rp-demo-note { font-size: 12px; padding: 2px 8px; border: 1px solid rgba(255,255,255,.6); border-radius: 999px; white-space: nowrap; }
+@media (max-width: 720px) {
+  .rp-demo-note { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="ui-app">
+
+  <header class="ui-app-header">
+    <button class="ui-btn rp-navbtn" type="button" data-act="nav-toggle" aria-label="開關選單" aria-expanded="false">&#9776;</button>
+    <span class="ui-app-header__title">自助營運分析</span>
+    <span class="rp-demo-note">示範資料，內容皆為虛構</span>
+    <select class="rp-role" id="role-sel" data-ch="role" aria-label="角色">
+      <option value="sales">業務主管</option><option value="production">生產主管</option><option value="purchasing">採購主管</option><option value="owner">老闆</option><option value="admin">管理員</option>
+    </select>
+    <span class="ui-app-header__spacer"></span>
+    <span class="rp-hinfo" id="hdr-info"></span>
+    <button type="button" class="ui-btn rp-refresh" data-act="refresh" title="重新向資料庫查詢目前頁面的資料">重新整理</button>
+  </header>
+
+  <div class="ui-layout">
+    <nav class="ui-sidebar" id="side-nav" aria-label="主選單"></nav>
+    <main class="ui-content">
+      <section id="screen-reports" class="ui-screen"></section>
+      <section id="screen-designer" class="ui-screen"></section>
+      <section id="screen-view" class="ui-screen"></section>
+      <section id="screen-chart" class="ui-screen"></section>
+      <section id="screen-dashboards" class="ui-screen"></section>
+      <section id="screen-dash" class="ui-screen"></section>
+      <section id="screen-drill" class="ui-screen"></section>
+    </main>
+  </div>
+</div>
+<div id="modal-root"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script id="engine">
+(function (global) {
+'use strict';
+/* 前端只留「不需要資料」的純規則（驗證、描述、選項）。
+   目錄（FIELDS／TOPICS／OPS…）由 GET /api/meta 回來後呼叫 Engine.init(meta) 載入；
+   需要資料的運算（run／chart／drill／chart-options）全部走後端 API。 */
+var TODAY = '', FIELDS = {}, TOPICS = {}, OPS = {}, RANGE_LABELS = {}, DATE_FIELDS = {}, AGG_LABELS = {}, _fmap = {};
+
+/* ---------- 日期工具（只供「本月、近 3 個月…」的區間顯示） ---------- */
+function pad(n) { return (n < 10 ? '0' : '') + n; }
+function parseD(s) { var p = s.split('-'); return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])); }
+function fmtD(d) { return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()); }
+function addDays(s, n) { var d = parseD(s); d.setUTCDate(d.getUTCDate() + n); return fmtD(d); }
+function addMonths(s, n) {
+  var d = parseD(s), day = d.getUTCDate();
+  d.setUTCDate(1); d.setUTCMonth(d.getUTCMonth() + n);
+  var dim = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0)).getUTCDate();
+  d.setUTCDate(Math.min(day, dim)); return fmtD(d);
+}
+function monthEnd(s) { var d = parseD(s); return fmtD(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0))); }
+function monthStart(s) { return s.slice(0, 8) + '01'; }
+function weekStart(s) { var d = parseD(s), k = (d.getUTCDay() + 6) % 7; return addDays(s, -k); }
+
+/* ---------- 欄位目錄 ---------- */
+function fieldMap(topic) {
+  if (_fmap[topic]) return _fmap[topic];
+  var m = {}; (FIELDS[topic] || []).forEach(function (f) { m[f.id] = f; }); _fmap[topic] = m; return m;
+}
+function getField(topic, id) { return (fieldMap(topic) || {})[id] || null; }
+function relGroups(topic) { return (TOPICS[topic] && TOPICS[topic].related) || []; }
+function fieldAvail(def, f) { return relGroups(def.topic).indexOf(f.grp) < 0 || !!(def.related && def.related[f.grp]); }
+/* 比率型彙總：ratio:<id>；onTimeRate 等同 ratio:onTime */
+function isRatio(agg) { return agg === 'onTimeRate' || String(agg).indexOf('ratio:') === 0; }
+function ratioOf(topic, agg) {
+  if (!isRatio(agg)) return null;
+  var id = agg === 'onTimeRate' ? 'onTime' : agg.slice(6), t = TOPICS[topic];
+  return (t && t.ratios && t.ratios[id]) || null;
+}
+function ratioAggs(topic) {
+  var t = TOPICS[topic]; if (!t || !t.ratios) return [];
+  return Object.keys(t.ratios).map(function (id) { return id === 'onTime' && topic === 'orderLine' ? 'onTimeRate' : 'ratio:' + id; });
+}
+/* 比率需要但報表沒勾的相關資料群組（回傳群組名稱；都有回 null） */
+function ratioMissing(def, agg) {
+  var r = ratioOf(def.topic, agg); if (!r) return null;
+  var rel = relGroups(def.topic);
+  for (var i = 0; i < r.groups.length; i++) { var g = r.groups[i]; if (rel.indexOf(g) >= 0 && !(def.related && def.related[g])) return relLabel(def.topic, g); }
+  return null;
+}
+function relLabel(topic, g) { var l = (TOPICS[topic].groups || {})[g] || g; return l.replace(/^相關資料：/, '').replace(/（.*?）$/, ''); }
+function fieldLabel(topic, id) { var f = getField(topic, id); return f ? f.label : id; }
+
+/* ---------- 日期區間 ---------- */
+function resolveRange(key, from, to) {
+  switch (key) {
+    case 'thisWeek': return { from: weekStart(TODAY), to: addDays(weekStart(TODAY), 6) };
+    case 'lastWeek': return { from: addDays(weekStart(TODAY), -7), to: addDays(weekStart(TODAY), -1) };
+    case 'last8w': return { from: addDays(weekStart(TODAY), -49), to: addDays(weekStart(TODAY), 6) };
+    case 'thisMonth': return { from: monthStart(TODAY), to: monthEnd(TODAY) };
+    case 'lastMonth': var lm = addMonths(monthStart(TODAY), -1); return { from: lm, to: monthEnd(lm) };
+    case 'last3m': return { from: addDays(addMonths(TODAY, -3), 1), to: TODAY };
+    case 'last12m': return { from: addDays(addMonths(TODAY, -12), 1), to: TODAY };
+    case 'thisYear': return { from: TODAY.slice(0, 4) + '-01-01', to: TODAY.slice(0, 4) + '-12-31' };
+    case 'custom': return { from: from || '', to: to || '' };
+    default: return null;
+  }
+}
+
+/* ---------- 條件 ---------- */
+function opLabel(type, op) { var l = OPS[type] || []; for (var i = 0; i < l.length; i++) if (l[i][0] === op) return l[i][1]; return op; }
+function defaultOp(type) { return OPS[type][0][0]; }
+function newCond(topic, fieldId) {
+  var f = getField(topic, fieldId) || FIELDS[topic][0];
+  return { id: 'c' + Math.random().toString(36).slice(2, 8), field: f.id, op: defaultOp(f.type), value: '', value2: '', values: [], from: '', to: '' };
+}
+function validateConditions(def) {
+  var errs = [], topic = def.topic;
+  ((def.filters && def.filters.rows) || []).forEach(function (c, idx) {
+    var f = getField(topic, c.field), m = null;
+    if (!f || !fieldAvail(def, f)) m = '欄位「' + (f ? f.label : c.field) + '」目前不可用（請確認相關資料已加入）';
+    else if (f.type === 'text') { if ((c.op === 'contains' || c.op === 'eq') && !String(c.value || '').trim()) m = '請輸入要比對的文字'; }
+    else if (f.type === 'number') {
+      var v = parseFloat(c.value);
+      if (c.value === '' || c.value == null || isNaN(v)) m = '請輸入數值';
+      else if (c.op === 'between') {
+        var v2 = parseFloat(c.value2);
+        if (c.value2 === '' || isNaN(v2)) m = '「介於」需要填起、迄兩個數值';
+        else if (v > v2) m = '起值不可大於迄值';
+      }
+    } else if (f.type === 'date') {
+      if (c.op === 'custom') {
+        if (!c.from || !c.to) m = '自訂區間需要填起、迄日期';
+        else if (c.from > c.to) m = '起日不可晚於迄日';
+      }
+    } else if (f.type === 'enum') { if (!c.values || !c.values.length) m = '請至少勾選一個項目'; }
+    if (m) errs.push({ code: 'COND_INCOMPLETE', condId: c.id, index: idx, short: m, step: 3, msg: '第 ' + (idx + 1) + ' 個條件：' + m });
+  });
+  return errs;
+}
+function describeCond(topic, c) {
+  var f = getField(topic, c.field); if (!f) return c.field;
+  var n = f.label;
+  if (f.type === 'enum') return n + ' 屬於 ' + (c.values || []).join('、');
+  if (f.type === 'date') {
+    if (c.op === 'custom') return n + ' ' + (c.from || '?') + ' ～ ' + (c.to || '?');
+    if (c.op === 'empty') return n + ' 是空的';
+    var r = resolveRange(c.op); return n + ' ' + opLabel('date', c.op) + '（' + r.from + ' ～ ' + r.to + '）';
+  }
+  if (f.type === 'number') return n + ' ' + opLabel('number', c.op) + ' ' + c.value + (c.op === 'between' ? ' ～ ' + c.value2 : '');
+  if (c.op === 'empty' || c.op === 'notEmpty') return n + ' ' + opLabel('text', c.op);
+  return n + ' ' + opLabel('text', c.op) + ' 「' + c.value + '」';
+}
+function describeDef(def) {
+  var t = [], rows = (def.filters && def.filters.rows) || [];
+  rows.forEach(function (c) { t.push(describeCond(def.topic, c)); });
+  return rows.length ? [(def.filters.logic === 'any' ? '符合以下任一條件：' : '符合以下全部條件：') + t.join('；')] : ['報表本身沒有設條件（全部資料）'];
+}
+
+/* ---------- 彙總標籤 ---------- */
+function aggLabel(topic, agg) { var r = ratioOf(topic, agg); if (r) return r.label; return agg === 'count' ? TOPICS[topic].countLabel : AGG_LABELS[agg]; }
+function metricDefaultLabel(topic, m) {
+  var f = m.field ? getField(topic, m.field) : null;
+  if (m.agg === 'sum') return (f ? f.label : '') + '合計';
+  if (m.agg === 'avg') return '平均' + (f ? f.label : '');
+  if (m.agg === 'max') return '最大' + (f ? f.label : '');
+  if (m.agg === 'min') return '最小' + (f ? f.label : '');
+  return aggLabel(topic, m.agg);
+}
+function metricLabel(topic, m) { return m.label || metricDefaultLabel(topic, m); }
+function metricUnit(topic, m) {
+  var rt = ratioOf(topic, m.agg); if (rt) return rt.unit || '%';
+  if (m.agg === 'distinctOrders') return '張';
+  if (m.agg === 'distinctShips') return '張';
+  if (m.agg === 'count' || m.agg === 'distinctLines' || m.agg === 'overdueCount') return '筆';
+  var f = m.field ? getField(topic, m.field) : null;
+  if (!f) return '';
+  if (f.kind === 'localMoney') return '本幣';
+  if (f.kind === 'origMoney' || f.kind === 'origPrice') return '原幣';
+  if (f.kind === 'qty') return '數量';
+  return '';
+}
+
+/* ---------- 驗證（後端會再驗一次；前端先擋，才能立刻給「一鍵修正」） ---------- */
+function singleOf(def, extra, field) {
+  if ((def.groups || []).some(function (g) { return g.field === field; })) return true;
+  var conds = ((def.filters && def.filters.logic !== 'any') ? (def.filters.rows || []) : []).concat(extra || []);
+  return conds.some(function (c) { return c.field === field && c.op === 'in' && (c.values || []).length === 1; });
+}
+function validateDef(def, extra) {
+  var errs = [], topic = def.topic, cols = (def.columns || []).map(function (c) { return c.field; });
+  if (!TOPICS[topic]) return [{ code: 'NO_TOPIC', msg: '請先選擇資料主題' }];
+  if (def.mode !== 'summary') {
+    if (!cols.length) errs.push({ code: 'NO_COLUMNS', msg: '還沒有選任何欄位，請先到「選擇欄位」加入至少一個欄位', step: 2 });
+    return errs;
+  }
+  var groups = def.groups || [], metrics = def.metrics || [];
+  if (groups.length > 2) errs.push({ code: 'GROUP_LIMIT', msg: '分組欄位最多 2 個', step: 4 });
+  groups.forEach(function (g) {
+    var f = getField(topic, g.field);
+    if (!f || cols.indexOf(g.field) < 0) errs.push({ code: 'FIELD_MISSING', msg: '分組欄位「' + (f ? f.label : g.field) + '」不在已選欄位中', step: 2 });
+    else if (f.type === 'number') errs.push({ code: 'GROUP_TYPE', msg: '數值欄位「' + f.label + '」不能當分組', step: 4 });
+  });
+  if (!metrics.length) errs.push({ code: 'NO_METRIC', msg: '彙總表至少要有一個指標', step: 4 });
+  metrics.forEach(function (m) {
+    var f = m.field ? getField(topic, m.field) : null, nm = metricLabel(topic, m);
+    if (['sum', 'avg', 'max', 'min'].indexOf(m.agg) >= 0) {
+      if (!f) { errs.push({ code: 'FIELD_MISSING', msg: '指標「' + nm + '」還沒選欄位', step: 4, metricId: m.id }); return; }
+      if (cols.indexOf(f.id) < 0) { errs.push({ code: 'FIELD_MISSING', msg: '指標欄位「' + f.label + '」不在已選欄位中', step: 2, metricId: m.id }); return; }
+      if (f.notSummable) { errs.push({ code: 'NOT_SUMMABLE', msg: '「' + f.label + '」不可做' + AGG_LABELS[m.agg] + '：' + f.notSummable, step: 4, metricId: m.id, field: f.id }); return; }
+      if (f.kind === 'origMoney' || f.kind === 'origPrice') {
+        if (!singleOf(def, extra, 'currency')) errs.push({ code: 'MIXED_CURRENCY', msg: '「' + f.label + '」的資料混有不同幣別，不能直接' + AGG_LABELS[m.agg] + '。', step: 4, metricId: m.id, field: f.id,
+          fixes: [{ type: 'addGroup', field: 'currency', text: '加入「幣別」分組' }, { type: 'filterCurrency', text: '條件篩成單一幣別' }] });
+      }
+      if (f.kind === 'qty') {
+        if (!singleOf(def, extra, 'unit')) errs.push({ code: 'MIXED_UNIT', msg: '「' + f.label + '」的資料混有不同單位（套／PCS），不能直接' + AGG_LABELS[m.agg] + '。', step: 4, metricId: m.id, field: f.id,
+          fixes: [{ type: 'addGroup', field: 'unit', text: '加入「單位」分組' }, { type: 'filterUnit', text: '條件篩成單一單位' }] });
+      }
+    } else if (isRatio(m.agg)) {
+      if (!ratioOf(topic, m.agg)) errs.push({ code: 'BAD_AGG', msg: '這個資料主題沒有「' + nm + '」', step: 4, metricId: m.id });
+      else { var miss = ratioMissing(def, m.agg); if (miss) errs.push({ code: 'NEEDS_RELATED', msg: '「' + nm + '」需要先在步驟 1 加入「' + miss + '」', step: 1, metricId: m.id }); }
+    } else if (m.agg === 'overdueCount') {
+      if (topic !== 'orderLine' || !(def.related && def.related.delivery)) errs.push({ code: 'NEEDS_RELATED', msg: '「' + nm + '」需要「訂單明細」主題並加入「交期結果」', step: 1, metricId: m.id });
+    } else if (m.agg === 'distinctShips' && topic !== 'shipment') errs.push({ code: 'AGG_TOPIC', msg: '「不重複出貨單數」只適用出貨明細主題', step: 4, metricId: m.id });
+  });
+  return errs;
+}
+function allErrors(def, extra) {
+  var e = validateConditions(def); if (e.length) return e;
+  return validateDef(def, extra);
+}
+
+/* ---------- 圖表／指標的選項規則（不需資料） ---------- */
+function widgetStatus(w, report) {
+  if (!report) return { ok: false, code: 'REPORT_MISSING', reason: '來源報表已被刪除，或不再分享給你。' };
+  if (w.topic && report.topic !== w.topic) return { ok: false, code: 'TOPIC_CHANGED', reason: '來源報表的資料主題已改變，這張圖原本的欄位對不上。' };
+  if (w.type === 'table') return { ok: true };
+  var cols = (report.columns || []).map(function (c) { return c.field; });
+  if (w.type !== 'metric' && (!w.category || cols.indexOf(w.category.field) < 0))
+    return { ok: false, code: 'FIELD_REMOVED', reason: '分類欄位「' + fieldLabel(report.topic, w.category && w.category.field) + '」已從來源報表移除。' };
+  if (w.metric && w.metric.field && cols.indexOf(w.metric.field) < 0)
+    return { ok: false, code: 'FIELD_REMOVED', reason: '數值欄位「' + fieldLabel(report.topic, w.metric.field) + '」已從來源報表移除。' };
+  var miss = w.metric && (isRatio(w.metric.agg) ? ratioMissing(report, w.metric.agg) : (w.metric.agg === 'overdueCount' && !(report.related && report.related.delivery) ? '交期結果' : null));
+  if (miss) return { ok: false, code: 'FIELD_REMOVED', reason: '來源報表已不含「' + miss + '」，無法計算「' + metricLabel(report.topic, w.metric) + '」。' };
+  return { ok: true };
+}
+function categoryOptions(report) {
+  var topic = report.topic;
+  return (report.columns || []).map(function (c) { return getField(topic, c.field); }).filter(function (f) { return f && (f.type === 'enum' || f.type === 'date') && !f.displayOnly; });
+}
+function metricChoices(report) {
+  var topic = report.topic, list = [];
+  list.push({ agg: 'count', field: null });
+  list.push({ agg: 'distinctOrders', field: null });
+  list.push({ agg: topic === 'shipment' ? 'distinctShips' : 'distinctLines', field: null });
+  ratioAggs(topic).forEach(function (a) { if (!ratioMissing(report, a)) list.push({ agg: a, field: null }); });
+  if (topic === 'orderLine' && report.related && report.related.delivery) list.push({ agg: 'overdueCount', field: null });
+  (report.columns || []).forEach(function (c) {
+    var f = getField(topic, c.field);
+    if (f && f.type === 'number' && !f.notSummable) ['sum', 'avg', 'max', 'min'].forEach(function (a) { list.push({ agg: a, field: f.id }); });
+  });
+  return list.filter(function (m) { return !(topic === 'orderLine' && m.agg === 'distinctLines'); });
+}
+function impactedWidgets(state, newDef) {
+  var out = [];
+  state.dashboards.forEach(function (d) {
+    d.widgets.forEach(function (w) {
+      if (w.reportId !== newDef.id) return;
+      var old = state.reports.filter(function (r) { return r.id === newDef.id; })[0];
+      var before = widgetStatus(w, old), after = widgetStatus(w, newDef);
+      if (before.ok && !after.ok) out.push({ dashId: d.id, dashName: d.name, widgetId: w.id, title: w.title, reason: after.reason });
+    });
+  });
+  return out;
+}
+function usages(state, reportId) {
+  var out = [];
+  state.dashboards.forEach(function (d) { d.widgets.forEach(function (w) { if (w.reportId === reportId) out.push({ dashId: d.id, dashName: d.name, widgetId: w.id, title: w.title }); }); });
+  return out;
+}
+
+var E = {
+  getField: getField, fieldAvail: fieldAvail, fieldLabel: fieldLabel, opLabel: opLabel, defaultOp: defaultOp, newCond: newCond,
+  resolveRange: resolveRange, validateConditions: validateConditions, validateDef: validateDef, allErrors: allErrors,
+  widgetStatus: widgetStatus, categoryOptions: categoryOptions, metricChoices: metricChoices, metricLabel: metricLabel,
+  metricDefaultLabel: metricDefaultLabel, metricUnit: metricUnit, aggLabel: aggLabel, describeCond: describeCond, describeDef: describeDef,
+  impactedWidgets: impactedWidgets, usages: usages, isRatio: isRatio, ratioOf: ratioOf, ratioAggs: ratioAggs, ratioMissing: ratioMissing, relGroups: relGroups, relLabel: relLabel,
+  /* 載入 GET /api/meta 的目錄（頁面啟動時先呼叫，之後才能 render） */
+  init: function (meta) {
+    TODAY = meta.today; FIELDS = meta.FIELDS; TOPICS = meta.TOPICS; OPS = meta.OPS; RANGE_LABELS = meta.RANGE_LABELS;
+    DATE_FIELDS = meta.DATE_FIELDS; AGG_LABELS = meta.AGG_LABELS; _fmap = {};
+    function opts(topic, id) { var f = getField(topic, id); return (f && f.opts) || []; }
+    E.TODAY = TODAY; E.FIELDS = FIELDS; E.TOPICS = TOPICS; E.OPS = OPS; E.RANGE_LABELS = RANGE_LABELS; E.DATE_FIELDS = DATE_FIELDS; E.AGG_LABELS = AGG_LABELS;
+    E.CUSTOMERS = opts('orderLine', 'customer'); E.TYPES = opts('orderLine', 'orderType');
+  }
+};
+global.Engine = E;
+})(window);
+</script>
+<script id="app">
+(function () {
+"use strict";
+/* ===== 核心：工具、儲存、modal、導覽 ===== */
+var E = window.Engine;
+var A = {};            // data-act 處理器
+var CH = {};           // data-ch（change）處理器
+var IN = {};           // data-in（input）處理器
+var S, UI = { screen: null, q: '' }, D = null, C = null, V = { dashId: null, edit: false, buf: null, orig: null }, R = null, VW = { id: null, pv: null };
+
+function $(s, r) { return (r || document).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function uid(p) { return p + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }   // 只用於卡片（widget）id；報表與 Dashboard 的 id 由後端配發
+
+/* ----- API ----- */
+var LOADING = '<div class="rp-loading"><span class="rp-spin"></span>資料載入中…</div>';
+function api(method, path, body, refresh) {
+  var h = { 'content-type': 'application/json', 'X-Viewer': UI.role };
+  if (refresh) h['X-Refresh'] = '1';
+  return fetch(path, { method: method, headers: h, body: body === undefined ? undefined : JSON.stringify(body) }).then(function (res) {
+    return res.json().catch(function () { return null; }).then(function (j) { return { status: res.status, body: j }; });
+  }, function () { return { status: 0, body: null }; });
+}
+function apiMsg(r) {
+  var b = r.body;
+  if (b && b.errors && b.errors[0]) return b.errors[0].msg;
+  return r.status === 0 ? '無法連線到後端，請確認伺服器是否在執行。' : '伺服器回應錯誤（HTTP ' + r.status + '）';
+}
+/* 需要資料的 API（run／chart／drill／chart-options）：不論成敗都回結果物件。
+   HTTP 失敗統一成 {ok:false, errors:[{code,msg}]}，沿用同一套錯誤呈現。 */
+function dataApi(path, body, refresh) {
+  return api('POST', path, body, refresh).then(function (r) {
+    if (r.body && typeof r.body === 'object' && (r.status === 200 || r.body.errors)) return r.body;
+    return { ok: false, errors: [{ code: 'HTTP_' + r.status, msg: apiMsg(r) }] };
+  });
+}
+/* 報表／Dashboard CRUD：成功回 body，失敗 reject（message 為可直接顯示的訊息） */
+function crud(method, path, body) {
+  return api(method, path, body).then(function (r) { if (r.status >= 200 && r.status < 300) return r.body; throw new Error(apiMsg(r)); });
+}
+function fail(e) { toast('操作失敗：' + (e && e.message ? e.message : e)); }
+function put(list, item) { var i = list.map(function (x) { return x.id; }).indexOf(item.id); if (i >= 0) list[i] = item; else list.push(item); }
+function rep(id) { return S.reports.filter(function (r) { return r.id === id; })[0] || null; }
+function dashById(id) { return S.dashboards.filter(function (d) { return d.id === id; })[0] || null; }
+function curDash() { return V.edit && V.buf ? V.buf : dashById(V.dashId); }
+function topicName(t) { return E.TOPICS[t] ? E.TOPICS[t].label : '—'; }
+function shareText(r) { return r.shared === true ? '共用報表' : '僅自己'; }
+function ownerText(r) { return r.shared === true ? '管理員' : (r.ownerId === UI.role ? '我' : (ROLE_NAMES[r.ownerId] || r.ownerId || '—')); }
+function homeId() { return S.home && dashById(S.home) ? S.home : (S.dashboards[0] && S.dashboards[0].id) || null; }
+/* 重新取得這個角色看得到的報表與儀表板（角色儀表板存成個人版、還原、刪除後，id 與可見範圍會變） */
+function reloadState() { return api('GET', '/api/state').then(function (r) { if (r.status !== 200 || !r.body) throw new Error(apiMsg(r)); S = r.body; }); }
+/* 儲存儀表板：非管理員改角色儀表板時，後端存成個人版（新 id） */
+function putDash(d) {
+  var toPersonal = d.kind === 'role' && !isAdmin();
+  return crud('PUT', '/api/dashboards/' + encodeURIComponent(d.id), d).then(function (saved) {
+    return reloadState().then(function () { if (V.dashId === d.id) V.dashId = saved.id; if (toPersonal) toast('已存成你的個人版，不影響其他人'); renderNav(); return saved; });
+  });
+}
+
+/* ----- toast ----- */
+var toastTimer = null;
+function toast(msg) {
+  var t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove('show'); }, 3200);
+}
+
+/* ----- modal（頁內，不使用瀏覽器 dialog） ----- */
+var modals = [];
+function openModal(o) {
+  var ov = document.createElement('div');
+  ov.className = 'ui-dialog-overlay'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+  var btns = (o.buttons || []).map(function (b, i) { return '<button type="button" class="ui-btn ' + (b.cls || 'ui-btn--neutral') + '" data-mi="' + i + '"' + (b.disabled ? ' disabled' : '') + '>' + esc(b.label) + '</button>'; }).join('');
+  ov.innerHTML = '<div class="ui-dialog ' + (o.size || '') + '"><div class="ui-dialog-header"><span>' + esc(o.title) + '</span><button type="button" class="ui-icon-btn" data-mi="x" aria-label="關閉">&#10005;</button></div>' +
+    '<div class="ui-dialog-body">' + o.body + '</div><div class="ui-dialog-footer">' + btns + '</div></div>';
+  ov._o = o;
+  ov.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mi]'); if (!b || !ov.contains(b)) return;
+    var k = b.getAttribute('data-mi');
+    if (k === 'x') { closeModal(ov); if (o.onCancel) o.onCancel(); return; }
+    var btn = o.buttons[+k];
+    var keep = btn.act ? btn.act(ov) === false : false;
+    if (!keep) closeModal(ov);
+  });
+  $('#modal-root').appendChild(ov); modals.push(ov);
+  var f = $('input,select', ov); if (f && o.focus !== false) f.focus();
+  return ov;
+}
+function closeModal(ov) {
+  ov = ov || modals[modals.length - 1]; if (!ov) return;
+  if (ov.parentNode) ov.parentNode.removeChild(ov);
+  modals = modals.filter(function (m) { return m !== ov; });
+}
+function showConfirm(o) {
+  return openModal({ title: o.title, size: o.size || 'ui-dialog--sm', body: o.body, buttons: [
+    { label: o.cancelText || '取消', cls: 'ui-btn--neutral' },
+    { label: o.okText || '確定', cls: o.okCls || 'ui-btn--action', act: function (ov) { return o.onOk ? o.onOk(ov) : undefined; } }] });
+}
+function showInfo(title, body, btn) {
+  return openModal({ title: title, body: body, buttons: [{ label: btn || '我知道了', cls: 'ui-btn--action' }] });
+}
+
+/* ----- 導覽 ----- */
+var SCREEN_IDS = ['screen-reports', 'screen-designer', 'screen-view', 'screen-chart', 'screen-dashboards', 'screen-dash', 'screen-drill'];
+function showScreen(id) {
+  if (id === 'screen-dash' && UI.screen !== 'screen-dash') chartCache = {};
+  UI.screen = id;
+  $$('.ui-screen').forEach(function (s) { s.classList.toggle('active', s.id === id); });
+  var c = $('.ui-content'); if (c) c.scrollTop = 0;
+  var rend = { 'screen-reports': renderReports, 'screen-designer': renderDesigner, 'screen-view': renderView, 'screen-chart': renderChart,
+    'screen-dashboards': renderDashboards, 'screen-dash': renderDash, 'screen-drill': renderDrill }[id];
+  if (rend) rend();
+  renderNav();
+}
+function pending() {
+  if (UI.screen === 'screen-designer' && D && designerDirty()) return 'designer';
+  if (UI.screen === 'screen-dash' && V.edit && V.buf && JSON.stringify(V.buf) !== V.orig) return 'dash';
+  return null;
+}
+function leaveDash() { V.edit = false; V.buf = null; V.orig = null; }
+function go(target, after) {
+  var p = pending();
+  var run = function () {
+    if (UI.screen === 'screen-dash' && V.edit && target !== 'screen-dash') leaveDash();
+    if (UI.screen === 'screen-designer' && target !== 'screen-designer') D = null;
+    if (after) after();
+    showScreen(target);
+  };
+  if (!p) { run(); return; }
+  var what = p === 'designer' ? '報表' : '儀表板';
+  openModal({ title: '有尚未儲存的變更', body: '<p>這份' + what + '有變更還沒儲存。離開前要怎麼處理？</p>', size: 'ui-dialog--sm', buttons: [
+    { label: '繼續編輯', cls: 'ui-btn--neutral' },
+    { label: '放棄變更', cls: 'ui-btn--delete', act: function () { if (p === 'designer') { D.orig = JSON.stringify(D.draft); } else { V.buf = null; } run(); } },
+    { label: '儲存', cls: 'ui-btn--new', act: function () {
+      if (p === 'designer') { saveFlow(function () { run(); }); }
+      else { commitDash().then(run, fail); }
+    } }] });
+}
+function sideNav(target) {
+  if (target === 'screen-dash' && !V.dashId) V.dashId = homeId();
+  go(target);
+}
+
+/* ----- 角色與左側選單 ----- */
+/* 角色決定看到哪些儀表板與報表（每個 API 呼叫帶 X-Viewer）；示範站沒有登入 */
+var ROLE_KEY = 'selfservice-bi-role', ROLES = ['sales', 'production', 'purchasing', 'owner', 'admin'], ASSIGNABLE = ['sales', 'production', 'purchasing', 'owner'];
+var ROLE_NAMES = { sales: '業務主管', production: '生產主管', purchasing: '採購主管', owner: '老闆', admin: '管理員' };
+function loadRole() {
+  try { var v = localStorage.getItem(ROLE_KEY); if (ROLES.indexOf(v) >= 0) return v; for (var k in ROLE_NAMES) if (ROLE_NAMES[k] === v) return k; } catch (x) { }
+  return ROLES[0];
+}
+UI.role = loadRole();
+$('#role-sel').value = UI.role;
+function isAdmin() { return UI.role === 'admin'; }
+/* 報表預覽、圖表設定、下鑽明細不在選單上，進入時讓所屬的選單項目保持選取 */
+function navKey() {
+  switch (UI.screen) {
+    case 'screen-dash': return 'dash:' + V.dashId;
+    case 'screen-drill': return 'dash:' + (R ? R.dashId : V.dashId);
+    case 'screen-designer': return D && D.isNew ? 'rep-new' : 'screen-reports';
+    case 'screen-dashboards': return 'screen-dashboards';
+    default: return 'screen-reports';
+  }
+}
+function renderNav() {
+  var nav = $('#side-nav'); if (!nav || !S) return;
+  var k = navKey();
+  function item(key, label, attrs, extra) {
+    var on = key === k;
+    return '<button type="button" class="ui-sidebar-item' + (on ? ' active' : '') + '" ' + attrs + (on ? ' aria-current="page"' : '') + '><span>' + label + '</span>' + (extra || '') + '</button>';
+  }
+  var home = homeId();
+  var fromRole = function (d) { return d.kind === 'role' || !!d.baseId; };
+  var ds = S.dashboards.filter(fromRole).sort(function (a, b) { return (b.id === home) - (a.id === home); }).concat(S.dashboards.filter(function (d) { return !fromRole(d); }));
+  nav.innerHTML = '<div class="rp-nav-h">儀表板</div>' +
+    ds.map(function (d) {
+      var tag = (S.home && d.id === home ? '<span class="rp-nav-def" title="首頁">★ 首頁</span>' : '') + (d.baseId ? '<span class="rp-nav-adj" title="你調整過的個人版">已調整</span>' : '');
+      return item('dash:' + d.id, esc(d.name), 'data-nav="dash" data-id="' + esc(d.id) + '"', tag);
+    }).join('') +
+    item(null, '＋ 新增儀表板', 'data-nav="dash-new"') +
+    '<div class="rp-nav-h">報表</div>' + item('screen-reports', '我的報表', 'data-nav="screen-reports"') + item('rep-new', '新增報表', 'data-nav="rep-new"') +
+    (isAdmin() ? '<div class="rp-nav-h">管理</div>' + item('screen-dashboards', '角色儀表板管理', 'data-nav="screen-dashboards"') : '');
+}
+function closeNav() { $('.ui-layout').classList.remove('nav-open'); $('.rp-navbtn').setAttribute('aria-expanded', 'false'); }
+A['nav-toggle'] = function (el) { var open = $('.ui-layout').classList.toggle('nav-open'); el.setAttribute('aria-expanded', open ? 'true' : 'false'); };
+function navTo(el) {
+  var n = el.getAttribute('data-nav');
+  closeNav();
+  if (n === 'dash') A['dash-open'](el);
+  else if (n === 'dash-new') A['dash-new']();
+  else if (n === 'rep-new') openDesigner(null);
+  else go(n);
+}
+CH.role = function (el) {
+  var next = el.value;
+  if (!S) { UI.role = next; return; }
+  if (pending()) { el.value = UI.role; toast('請先儲存或取消目前的編輯，再切換角色'); return; }
+  UI.role = next;
+  try { localStorage.setItem(ROLE_KEY, UI.role); } catch (x) { }
+  leaveDash(); D = null; chartCache = {};
+  reloadState().then(function () { if (UI.role !== next) return; V.dashId = homeId(); showScreen('screen-dash'); }, fail);
+};
+/* ----- 頂列：資料基準日、資料時間、重新整理 ----- */
+UI.dataTimes = []; UI.lastRefresh = 0;
+function hhmm(iso) { var d = new Date(iso); return isNaN(d.getTime()) ? '' : (d.getHours() < 10 ? '0' : '') + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes(); }
+function renderHdrInfo() {
+  var el = $('#hdr-info'); if (!el) return;
+  var t = UI.dataTimes.length ? UI.dataTimes.slice().sort()[0] : null;
+  el.innerHTML = (UI.asOf ? '<span>資料基準日 <b>' + esc(UI.asOf) + '</b></span>' : '') + (t ? '<span>資料時間 <b>' + esc(hhmm(t)) + '</b></span>' : '');
+}
+function noteDataTime(meta) { if (meta && meta.dataTime) { UI.dataTimes.push(meta.dataTime); renderHdrInfo(); } }
+A.refresh = function () {
+  if (UI.screen !== 'screen-dash' || V.edit) { toast('重新整理只用在儀表板檢視畫面'); return; }
+  var left = 60 - Math.floor((Date.now() - UI.lastRefresh) / 1000);
+  if (left > 0) { toast('資料剛更新過，請 ' + left + ' 秒後再試'); return; }
+  UI.lastRefresh = Date.now(); chartCache = {}; UI.refreshNext = true; redrawGrid(); UI.refreshNext = false;
+};
+/* ===== 格式化、表格、圖表（SVG） ===== */
+function fmtNum(v, max) { return Number(v).toLocaleString('en-US', { maximumFractionDigits: max == null ? 2 : max }); }
+function fmtVal(v, fmt) {
+  if (v == null || v === '') return '—';
+  switch (fmt) {
+    case 'money': return fmtNum(v, 2);
+    case 'money2': return Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    case 'int': return fmtNum(v, 0);
+    case 'num': return fmtNum(v, 2);
+    case 'rate': return Number(v).toFixed(2) + '%';
+    default: return String(v);
+  }
+}
+function fmtCompact(v) {
+  var a = Math.abs(v);
+  if (a >= 1e8) return (v / 1e8).toFixed(1).replace(/\.0$/, '') + '億';
+  if (a >= 1e4) return (v / 1e4).toFixed(1).replace(/\.0$/, '') + '萬';
+  return fmtNum(v, 0);
+}
+var CHIP = { '未到期': 'ui-chip--info', '如期': 'ui-chip--positive', '提早': 'ui-chip--positive', '延誤': 'ui-chip--warning', '逾期未交': 'ui-chip--negative' };
+function chipHtml(v) { return '<span class="ui-chip ' + (CHIP[v] || 'ui-chip--info') + '">' + esc(v) + '</span>'; }
+function cellHtml(col, v, row) {
+  if (v == null || v === '') return '<span class="ui-note">—</span>';
+  if (col.chip) return chipHtml(v);
+  if (col.key === 'delayDays' && v > 0) return '<span class="rp-red">' + fmtVal(v, 'int') + '</span>';
+  if (col.type === 'number' || col.kind === 'metric') return fmtVal(v, col.fmt);
+  return esc(v);
+}
+function newPV(size) { return { page: 1, size: size || 10, sort: null, loading: false, token: 0, res: null, sig: '' }; }
+
+/* 表格：detail 分頁／排序；summary 帶合計列 */
+function tableHtml(res, pv, o) {
+  o = o || {};
+  var head = res.columns.map(function (c) {
+    var sorted = pv && pv.sort && pv.sort.key === c.key;
+    var arrow = sorted ? (pv.sort.dir === 'asc' ? ' ▲' : ' ▼') : '';
+    var inner = (res.mode === 'detail' && pv && !o.noSort) ? '<button type="button" class="rp-th" data-act="pv-sort" data-key="' + esc(c.key) + '">' + esc(c.label) + arrow + '</button>' : esc(c.label);
+    return '<th class="' + (c.align === 'right' ? 'num' : '') + '">' + inner + '</th>';
+  }).join('');
+  var rows = res.rows, body = '';
+  if (res.mode === 'detail' && pv) { var st = (pv.page - 1) * pv.size; rows = rows.slice(st, st + pv.size); }
+  if (o.limit) rows = rows.slice(0, o.limit);
+  rows.forEach(function (r) {
+    body += '<tr>' + res.columns.map(function (c) { return '<td class="' + (c.align === 'right' ? 'num' : '') + '">' + cellHtml(c, r[c.key], r) + '</td>'; }).join('') + '</tr>';
+  });
+  var foot = '';
+  if (res.mode === 'summary' && res.total && res.columns.some(function (c) { return c.kind === 'group'; })) {
+    foot = '<tfoot><tr class="rp-total">' + res.columns.map(function (c, i) {
+      if (c.kind === 'group') return '<td>' + (i === 0 ? '合計（重新計算）' : '') + '</td>';
+      return '<td class="num">' + fmtVal(res.total[c.key], c.fmt) + '</td>';
+    }).join('') + '</tr></tfoot>';
+  }
+  var notes = (foot && res.total._notes && res.total._notes.length) ? '<p class="ui-note">' + res.total._notes.map(esc).join('<br>') + '</p>' : '';
+  return '<div class="ui-table-wrap"><table class="ui-table rp-compact"><thead><tr>' + head + '</tr></thead><tbody>' + body + '</tbody>' + foot + '</table></div>' + notes;
+}
+function pagerHtml(total, pv, sizes) {
+  var pages = Math.max(1, Math.ceil(total / pv.size)); if (pv.page > pages) pv.page = pages;
+  var from = total ? (pv.page - 1) * pv.size + 1 : 0, to = Math.min(total, pv.page * pv.size);
+  var btns = '<button type="button" class="ui-btn ui-btn--secondary" data-act="pv-page" data-p="' + (pv.page - 1) + '"' + (pv.page <= 1 ? ' disabled' : '') + '>&#8249; 上一頁</button>' +
+    '<span class="rp-pageno">第 ' + pv.page + ' / ' + pages + ' 頁</span>' +
+    '<button type="button" class="ui-btn ui-btn--secondary" data-act="pv-page" data-p="' + (pv.page + 1) + '"' + (pv.page >= pages ? ' disabled' : '') + '>下一頁 &#8250;</button>';
+  var sel = '<label class="rp-inline">每頁 <select class="ui-field rp-fld rp-w80" data-ch="pv-size">' + (sizes || [10, 20, 50]).map(function (n) { return '<option value="' + n + '"' + (n === pv.size ? ' selected' : '') + '>' + n + '</option>'; }).join('') + '</select> 筆</label>';
+  return '<div class="rp-pager"><span class="ui-note">第 ' + from + '–' + to + ' 筆，共 ' + total + ' 筆</span><span class="rp-sp"></span>' + sel + btns + '</div>';
+}
+function errorsHtml(errs, ctx) {
+  if (ctx !== 'designer') return errs.map(function (e) { return '<div class="rp-err" role="alert"><div>' + esc(e.msg) + '</div></div>'; }).join('');
+  return errs.map(function (e, i) {
+    var fx = (e.fixes || []).map(function (f, j) { return '<button type="button" class="ui-btn ui-btn--outline" data-act="fix" data-ei="' + i + '" data-fi="' + j + '" data-ctx="' + (ctx || '') + '">' + esc(f.text) + '</button>'; }).join('');
+    var go2 = e.step ? '<button type="button" class="ui-btn ui-btn--secondary" data-act="step" data-n="' + e.step + '">回步驟 ' + e.step + '</button>' : '';
+    return '<div class="rp-err" role="alert"><div>' + esc(e.msg) + '</div><div class="rp-err-act">' + fx + go2 + '</div></div>';
+  }).join('');
+}
+
+/* ----- SVG 圖表 ----- */
+var PALETTE = ['var(--brand-primary)', 'var(--brand-secondary)', 'var(--color-status-success)', 'var(--color-status-warning-fill)', 'var(--brand-accent)', 'var(--color-tone-purple-bg)', 'var(--color-tone-gray-bg)', 'var(--color-tone-slate-bg)'];
+var STATUS_COLOR = { '未到期': 'var(--brand-secondary)', '如期': 'var(--color-status-success)', '提早': 'var(--color-tone-gray-bg)', '延誤': 'var(--color-status-warning-fill)', '逾期未交': 'var(--color-status-error)' };
+function colorFor(label, i) { return STATUS_COLOR[label] || PALETTE[i % PALETTE.length]; }
+function niceMax(v) {
+  if (v <= 0) return 1;
+  var p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p;
+  var f = n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10; return f * p;
+}
+function xLabelAttrs(n, x, y) { return n > 6 ? ' transform="rotate(-35 ' + x + ' ' + y + ')" text-anchor="end"' : ' text-anchor="middle"'; }
+function hitAttrs(wid, key, on) { return on ? ' class="rp-hit" data-act="drill" data-wid="' + esc(wid) + '" data-key="' + esc(key) + '" tabindex="0" role="button" aria-label="下鑽：' + esc(key) + '"' : ''; }
+
+function barSvg(d, wid, on) {
+  var W = 560, H = 270, ml = 56, mr = 12, mt = 16, mb = d.points.length > 6 ? 62 : 34;
+  var pw = W - ml - mr, ph = H - mt - mb, max = niceMax(Math.max.apply(null, d.points.map(function (p) { return p.value || 0; })));
+  var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="rp-svg" role="img" aria-label="長條圖">';
+  for (var t = 0; t <= 4; t++) {
+    var y = mt + ph - ph * t / 4;
+    s += '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + y + '" y2="' + y + '" class="rp-grid-line"/><text x="' + (ml - 6) + '" y="' + (y + 4) + '" text-anchor="end" class="rp-ax">' + (d.fmt === 'rate' ? (max * t / 4) + '%' : fmtCompact(max * t / 4)) + '</text>';
+  }
+  var bw = pw / d.points.length;
+  d.points.forEach(function (p, i) {
+    var h = ph * (p.value || 0) / max, x = ml + bw * i + bw * 0.18, w = bw * 0.64, y2 = mt + ph - h;
+    s += '<g' + hitAttrs(wid, p.key, on) + '><title>' + esc(p.label) + '：' + fmtVal(p.value, d.fmt) + (p.cumPct != null ? '（累計 ' + p.cumPct + '%）' : '') + '</title><rect x="' + x + '" y="' + y2 + '" width="' + w + '" height="' + Math.max(h, 0) + '" fill="' + colorFor(p.label, 0) + '"/>' +
+      '<rect x="' + (ml + bw * i) + '" y="' + mt + '" width="' + bw + '" height="' + ph + '" fill="transparent"/></g>';
+    if (d.points.length <= 8) s += '<text x="' + (x + w / 2) + '" y="' + (y2 - 4) + '" text-anchor="middle" class="rp-ax rp-val">' + (d.fmt === 'rate' ? fmtVal(p.value, 'rate') : fmtCompact(p.value || 0)) + '</text>';
+    var lx = x + w / 2, ly = mt + ph + 14;
+    s += '<text x="' + lx + '" y="' + ly + '" class="rp-ax"' + xLabelAttrs(d.points.length, lx, ly) + '>' + esc(p.label) + '</text>';
+  });
+  var cum = d.points.filter(function (p) { return p.cumPct != null; });
+  if (cum.length) {
+    s += '<polyline class="rp-cum" points="' + d.points.map(function (p, i) { return (ml + bw * i + bw / 2) + ',' + (mt + ph - ph * (p.cumPct || 0) / 100); }).join(' ') + '"/>' +
+      '<text x="' + (W - mr) + '" y="' + (mt + 10) + '" text-anchor="end" class="rp-ax rp-cum-t">累計占比（右軸 0～100%）</text>';
+  }
+  return s + '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + (mt + ph) + '" y2="' + (mt + ph) + '" class="rp-axis"/></svg>';
+}
+function lineSvg(d, wid, on) {
+  var W = 560, H = 270, ml = 56, mr = 16, mt = 16, mb = d.points.length > 6 ? 62 : 34;
+  var pw = W - ml - mr, ph = H - mt - mb, max = niceMax(Math.max.apply(null, d.points.map(function (p) { return p.value || 0; })));
+  var n = d.points.length, s = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="rp-svg" role="img" aria-label="折線圖">';
+  for (var t = 0; t <= 4; t++) {
+    var y = mt + ph - ph * t / 4;
+    s += '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + y + '" y2="' + y + '" class="rp-grid-line"/><text x="' + (ml - 6) + '" y="' + (y + 4) + '" text-anchor="end" class="rp-ax">' + fmtCompact(max * t / 4) + '</text>';
+  }
+  var pts = d.points.map(function (p, i) { return { x: ml + (n === 1 ? pw / 2 : pw * i / (n - 1)), y: mt + ph - ph * (p.value || 0) / max, p: p }; });
+  s += '<polyline fill="none" stroke="var(--brand-primary)" stroke-width="2.5" points="' + pts.map(function (q) { return q.x + ',' + q.y; }).join(' ') + '"/>';
+  pts.forEach(function (q) {
+    s += '<g' + hitAttrs(wid, q.p.key, on) + '><title>' + esc(q.p.label) + '：' + fmtVal(q.p.value, d.fmt) + '</title><circle cx="' + q.x + '" cy="' + q.y + '" r="4.5" fill="var(--brand-primary)" stroke="var(--color-surface-default)" stroke-width="1.5"/><circle cx="' + q.x + '" cy="' + q.y + '" r="11" fill="transparent"/></g>';
+    s += '<text x="' + q.x + '" y="' + (mt + ph + 14) + '" class="rp-ax"' + xLabelAttrs(n, q.x, mt + ph + 14) + '>' + esc(q.p.label) + '</text>';
+  });
+  return s + '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + (mt + ph) + '" y2="' + (mt + ph) + '" class="rp-axis"/></svg>';
+}
+function pieSvg(d, wid, on) {
+  var r = 70, C2 = 2 * Math.PI * r, tot = d.points.reduce(function (s, p) { return s + p.value; }, 0), off = 0;
+  var s = '<div class="rp-pie"><svg viewBox="0 0 200 200" class="rp-svg rp-svg-pie" role="img" aria-label="圓餅（環圈）圖"><g transform="rotate(-90 100 100)">';
+  d.points.forEach(function (p, i) {
+    var len = tot ? C2 * p.value / tot : 0;
+    s += '<circle cx="100" cy="100" r="' + r + '" fill="none" stroke="' + colorFor(p.label, i) + '" stroke-width="34" stroke-dasharray="' + len + ' ' + (C2 - len) + '" stroke-dashoffset="' + (-off) + '"' + hitAttrs(wid, p.key, on) + '><title>' + esc(p.label) + '：' + fmtVal(p.value, d.fmt) + '</title></circle>';
+    off += len;
+  });
+  s += '</g><text x="100" y="97" text-anchor="middle" class="rp-pie-total">' + fmtCompact(tot) + '</text><text x="100" y="116" text-anchor="middle" class="rp-ax">合計</text></svg><ul class="rp-legend">';
+  d.points.forEach(function (p, i) {
+    s += '<li><button type="button" class="rp-leg"' + (on ? ' data-act="drill" data-wid="' + esc(wid) + '" data-key="' + esc(p.key) + '"' : ' disabled') + '><i style="background:' + colorFor(p.label, i) + '"></i>' + esc(p.label) + '<b>' + fmtVal(p.value, d.fmt) + '</b><span class="ui-note">' + (tot ? (p.value / tot * 100).toFixed(1) : '0.0') + '%</span></button></li>';
+  });
+  return s + '</ul></div>';
+}
+function chartBody(d, w, on) {
+  if (!d.ok) {
+    if (d.typeError) return '<div class="rp-inline-err">這個圖表類型目前不適用：' + esc(d.typeError) + '</div>';
+    return '<div class="rp-inline-err">這張圖目前無法計算：' + esc((d.errors && d.errors[0] && d.errors[0].msg) || '設定有誤') + '</div>';
+  }
+  if (d.kind === 'metric') {
+    var cmp = d.compare && d.compare.deltaPct != null ? '<div class="rp-cmp ' + (d.compare.deltaPct >= 0 ? 'is-up' : 'is-down') + '">' + (d.compare.deltaPct >= 0 ? '▲ ' : '▼ ') + fmtNum(Math.abs(d.compare.deltaPct), 1) + '%<span class="ui-note">較前 ' + d.compare.periods + (d.compare.gran === 'week' ? ' 週' : ' 個月') + '平均 ' + fmtVal(d.compare.baseline, d.fmt === 'rate' ? 'num' : d.fmt) + '</span></div>'
+      : (d.compare ? '<div class="ui-note">前 ' + d.compare.periods + (d.compare.gran === 'week' ? ' 週' : ' 個月') + '沒有資料可比較</div>' : '');
+    var rt = w.metric && E.ratioOf(w.topic || (rep(w.reportId) || {}).topic, w.metric.agg);
+    var inner = '<div class="rp-metric-name">' + esc(d.name) + '</div><div class="rp-metric-val">' + fmtVal(d.value, d.fmt === 'rate' ? 'num' : d.fmt) + '<span class="rp-metric-unit">' + esc(d.unit || '') + '</span></div>' + cmp +
+      (rt && rt.note ? '<div class="ui-note rp-rnote">' + esc(rt.note) + '</div>' : '') + (on ? '<div class="ui-note">點一下看明細（' + d.n + ' 筆）</div>' : '');
+    return on ? '<button type="button" class="rp-metric rp-hit-btn" data-act="drill" data-wid="' + esc(w.id) + '" data-key="">' + inner + '</button>' : '<div class="rp-metric">' + inner + '</div>';
+  }
+  if (d.kind === 'table') {
+    if (d.result.empty) return emptyInline('目前條件下查無資料');
+    return tableHtml(d.result, null, { limit: 8, noSort: true }) + '<div class="rp-tbl-foot"><span class="ui-note">顯示前 ' + Math.min(8, d.result.count) + ' 筆，共 ' + fmtVal(d.result.count, 'int') + ' 筆</span>' + (on ? '<button type="button" class="ui-btn ui-btn--outline" data-act="drill" data-wid="' + esc(w.id) + '" data-key="">查看全部明細</button>' : '') + '</div>';
+  }
+  if (d.empty || !d.points.length) return emptyInline('目前條件下查無資料');
+  if (d.kind === 'bar') return barSvg(d, w.id, on);
+  if (d.kind === 'line') return lineSvg(d, w.id, on);
+  if (d.kind === 'pie') return pieSvg(d, w.id, on);
+  return '';
+}
+function emptyInline(t) { return '<div class="ui-empty-inline rp-empty">' + esc(t) + '</div>'; }
+var TYPE_NAME = { table: '表格', metric: '指標卡', bar: '長條圖', line: '折線圖', pie: '圓餅（環圈）圖' };
+/* ===== 畫面：我的報表、報表預覽 ===== */
+function hdr(title, actions, sub) {
+  return '<div class="ui-data-header"><div class="ui-data-header-left"><div class="ui-data-header-title">' + esc(title) + '</div>' + (sub || '') + '</div><div class="ui-data-header-actions">' + (actions || '') + '</div></div>';
+}
+function renderReports() {
+  var q = UI.q.trim(), list = S.reports.filter(function (r) { return !q || r.name.indexOf(q) >= 0; });
+  var rows = list.map(function (r) {
+    var ro = r.readonly, u = E.usages(S, r.id).length;
+    return '<tr><td><a class="ui-link" href="#" data-act="rep-open" data-id="' + esc(r.id) + '">' + esc(r.name) + '</a>' + (ro ? ' <span class="ui-chip ui-chip--info">唯讀</span>' : '') + (u ? ' <span class="ui-note">（' + u + ' 張圖表引用）</span>' : '') + '</td>' +
+      '<td>' + esc(topicName(r.topic)) + '</td><td>' + esc(ownerText(r)) + '</td><td>' + esc(shareText(r)) + '</td><td>' + esc(r.updatedAt) + '</td>' +
+      '<td class="rp-actions"><button type="button" class="ui-btn ui-btn--outline" data-act="rep-open" data-id="' + esc(r.id) + '">開啟</button>' +
+      (ro ? '<button type="button" class="ui-btn ui-btn--outline" data-act="rep-copy" data-id="' + esc(r.id) + '" title="共用報表只有管理員能修改；另存一份後可自由調整">另存一份</button>'
+        : '<button type="button" class="ui-btn ui-btn--outline" data-act="rep-edit" data-id="' + esc(r.id) + '">編輯</button>') +
+      '<button type="button" class="ui-btn ui-btn--outline" data-act="rep-chart" data-id="' + esc(r.id) + '">圖表</button>' +
+      '<button type="button" class="ui-btn ui-btn--outline" data-act="rep-copy" data-id="' + esc(r.id) + '">複製</button>' +
+      '<button type="button" class="ui-btn ui-btn--delete" data-act="rep-del" data-id="' + esc(r.id) + '"' + (ro ? ' disabled title="唯讀報表不能刪除"' : '') + '>刪除</button></td></tr>';
+  }).join('');
+  $('#screen-reports').innerHTML = hdr('我的報表', '<button type="button" class="ui-btn ui-btn--new" data-act="rep-new">＋ 新增報表</button>') +
+    '<div class="rp-page"><div class="rp-toolbar"><input class="ui-field rp-fld rp-w240" id="rep-q" data-in="rep-q" placeholder="搜尋報表名稱" value="' + esc(UI.q) + '"><span class="ui-note">共 ' + list.length + ' 份；報表只存「條件與欄位的設定」，每次開啟都重新從資料算。</span></div>' +
+    (list.length ? '<div class="ui-table-wrap"><table class="ui-table rp-compact"><thead><tr><th>名稱</th><th>資料主題</th><th>擁有者</th><th>分享</th><th>更新時間</th><th>操作</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+      : '<div class="ui-card"><div class="ui-empty"><p style="margin:0">' + (q ? '沒有符合「' + esc(q) + '」的報表' : '還沒有報表') + '</p><button type="button" class="ui-btn ui-btn--new" data-act="rep-new">＋ 新增報表</button></div></div>') + '</div>';
+}
+IN['rep-q'] = function (el) { UI.q = el.value; renderReports(); var qi = $('#rep-q'); qi.focus(); qi.setSelectionRange(qi.value.length, qi.value.length); };
+
+A['rep-new'] = function () { openDesigner(null); };
+A['rep-open'] = function (el) { VW.id = el.getAttribute('data-id'); VW.pv = newPV(10); go('screen-view'); };
+A['rep-edit'] = function (el) { var r = rep(el.getAttribute('data-id')); if (r && !r.readonly) openDesigner(r.id); };
+A['rep-chart'] = function (el) { openChart(el.getAttribute('data-id')); };
+A['rep-copy'] = function (el) {
+  var r = rep(el.getAttribute('data-id')); if (!r) return;
+  var c = copyOfReport(r);
+  crud('POST', '/api/reports', c).then(function (saved) { S.reports.unshift(saved); toast('已複製為「' + saved.name + '」，與原報表互不影響'); renderReports(); }, fail);
+};
+function copyOfReport(r) { var c = clone(r); delete c.id; delete c.ownerId; delete c.readonly; c.name = r.name + '（複本）'; c.shared = false; return c; }
+A['rep-del'] = function (el) {
+  var r = rep(el.getAttribute('data-id')); if (!r) return;
+  var us = E.usages(S, r.id);
+  if (us.length) {
+    var byDash = {}; us.forEach(function (u) { (byDash[u.dashName] = byDash[u.dashName] || []).push(u.title); });
+    var li = Object.keys(byDash).map(function (k) { return '<li><b>' + esc(k) + '</b>：' + byDash[k].map(function (t) { return '「' + esc(t) + '」'; }).join('、') + '</li>'; }).join('');
+    showInfo('這份報表還被儀表板引用，不能刪除', '<p>「' + esc(r.name) + '」目前被下列儀表板的圖表使用：</p><ul>' + li + '</ul><p class="ui-note">請先到那些儀表板的編輯模式移除這些圖表，再回來刪除報表。</p>');
+    return;
+  }
+  showConfirm({ title: '刪除報表', body: '<p>確定要刪除「' + esc(r.name) + '」嗎？</p><p class="ui-note">刪除後無法復原；沒有任何儀表板引用它。</p>', okText: '確定刪除', okCls: 'ui-btn--delete',
+    onOk: function () { crud('DELETE', '/api/reports/' + encodeURIComponent(r.id)).then(function () { S.reports = S.reports.filter(function (x) { return x.id !== r.id; }); toast('已刪除報表'); renderReports(); }, fail); } });
+};
+
+/* ----- 預覽（view / designer 共用） ----- */
+/* 預覽：先在前端驗證（可立刻給「一鍵修正」），通過才打 POST /api/run；結果存在 pv.res，換頁不重查，排序／重新整理才重查。 */
+function previewHtml(def, pv, key) {
+  var h = '<div data-pv="' + key + '">';
+  var local = E.allErrors(def, []);
+  if (local.length) return h + '<div class="rp-err-box"><b>目前無法預覽</b>' + errorsHtml(local, key) + '</div></div>';
+  if (pv.loading || !pv.res) return h + LOADING + '</div>';
+  var res = pv.res;
+  if (!res.ok) return h + '<div class="rp-err-box"><b>目前無法預覽</b>' + errorsHtml(res.errors || [{ msg: '查詢失敗' }], key) + '</div></div>';
+  if (res.empty) {
+    var tips = E.describeDef(def).map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
+    return h + '<div class="ui-card"><div class="ui-empty"><b>查無資料</b><div class="rp-left"><div class="ui-note">目前的條件：</div><ul>' + tips + '</ul><div class="ui-note">建議：</div><ul><li>放寬或移除部分條件（例如把日期改成「近 3 個月」）</li><li>確認「全部／任一」的組合是否正確</li><li>確認資料主題選對了（訂單看接單、出貨明細看出貨）</li></ul></div>' +
+      (key === 'designer' ? '<button type="button" class="ui-btn ui-btn--action" data-act="step" data-n="3">回步驟 3 調整條件</button>' : '') + '</div></div></div>';
+  }
+  var head = '<div class="rp-toolbar"><span class="ui-note">' + (res.mode === 'detail' ? '明細表：每一列＝' + esc(E.TOPICS[def.topic].rowText) : '彙總表：共 ' + res.rows.length + ' 組，合計列為重新計算（比率、不重複數不是各列相加）') + '</span></div>' +
+    (res.truncated ? '<div class="ui-state-alert">只顯示前 ' + fmtVal(res.limit, 'int') + ' 筆（共 ' + fmtVal(res.count, 'int') + ' 筆，超過上限）。請加條件縮小範圍，或改用彙總表。</div>' : '');
+  if (res.mode === 'detail') return h + head + tableHtml(res, pv) + pagerHtml(res.rows.length, pv) + '</div>';
+  return h + head + tableHtml(res, null) + '</div>';
+}
+function getPV(el) {
+  var k = el.closest('[data-pv]'); k = k && k.getAttribute('data-pv');
+  if (k === 'drill') return { pv: R.pv, redraw: function () { renderDrillBody(); }, resort: function () { renderDrillBody(); } };
+  return k === 'designer' ? { pv: D && D.pv, redraw: function () { renderDesignerPreview(); }, resort: function () { loadPreview(); } } : { pv: VW.pv, redraw: function () { renderViewBody(); }, resort: function () { loadView(); } };
+}
+/* 排序：預覽由後端排（sort 參數）；下鑽明細已整批取回，在前端排 */
+A['pv-sort'] = function (el) {
+  var o = getPV(el), key = el.getAttribute('data-key'), s = o.pv.sort;
+  o.pv.sort = !s || s.key !== key ? { key: key, dir: 'asc' } : (s.dir === 'asc' ? { key: key, dir: 'desc' } : null);
+  o.pv.page = 1; o.resort();
+};
+A['pv-page'] = function (el) { var o = getPV(el); o.pv.page = Math.max(1, +el.getAttribute('data-p')); o.redraw(); };
+CH['pv-size'] = function (el) { var o = getPV(el); o.pv.size = +el.value; o.pv.page = 1; o.redraw(); };
+
+function renderView() {
+  var r = rep(VW.id);
+  if (!r) { $('#screen-view').innerHTML = hdr('報表預覽', '') + '<div class="rp-page"><div class="ui-card"><div class="ui-empty"><p style="margin:0">找不到這份報表</p><button type="button" class="ui-btn ui-btn--action" data-goto="screen-reports">回我的報表</button></div></div></div>'; return; }
+  var ro = r.readonly;
+  $('#screen-view').innerHTML = hdr('報表預覽', (ro ? '' : '<button type="button" class="ui-btn ui-btn--flat" data-act="rep-edit" data-id="' + esc(r.id) + '">編輯</button>') +
+    '<button type="button" class="ui-btn ui-btn--action" data-act="rep-chart" data-id="' + esc(r.id) + '">設定圖表</button><button type="button" class="ui-btn ui-btn--flat" data-act="rep-copy-view" data-id="' + esc(r.id) + '">' + (ro ? '另存一份' : '複製') + '</button>' +
+    '<button type="button" class="ui-btn ui-btn--neutral" data-goto="screen-reports">返回我的報表</button>') +
+    '<div class="rp-page"><div class="ui-card rp-viewhead"><div><b>' + esc(r.name) + '</b> ' + (ro ? '<span class="ui-chip ui-chip--info">共用報表・唯讀</span>' : '') + '<div class="ui-note">資料主題：' + esc(topicName(r.topic)) + '　擁有者：' + esc(ownerText(r)) + '　' + esc(shareText(r)) + '　更新：' + esc(r.updatedAt) + '</div>' +
+    '<div class="ui-note">條件：' + esc(E.describeDef(r).join('')) + '</div>' + (ro ? '<div class="ui-note">共用報表只有管理員能修改；要調整請按「另存一份」。</div>' : '') + '</div></div><div id="view-body"></div></div>';
+  if (!VW.pv.loading && VW.pv.sig !== JSON.stringify(r)) loadView(); else renderViewBody();   // 第一次進來或報表被改過就重新查
+}
+function renderViewBody() { var r = rep(VW.id); if (r && $('#view-body')) $('#view-body').innerHTML = previewHtml(r, VW.pv, 'view'); }
+/* 取預覽資料：每次請求帶序號，只採用最新一次的回應（舊回應不可覆蓋新結果） */
+function fetchPV(pv, def, redraw) {
+  pv.loading = true; pv.res = null; pv.sig = JSON.stringify(def); pv.token++; var t = pv.token; redraw();
+  if (E.allErrors(def, []).length) { pv.loading = false; redraw(); return; }
+  dataApi('/api/run', { def: def, extra: [], sort: pv.sort }).then(function (res) {
+    if (pv.token !== t) return;
+    pv.loading = false; pv.res = res; redraw();
+  });
+}
+function loadView() {
+  var r = rep(VW.id); if (!r) return;
+  fetchPV(VW.pv, r, function () { if (UI.screen === 'screen-view') renderViewBody(); });
+}
+A['rep-copy-view'] = function (el) {
+  var r = rep(el.getAttribute('data-id')); if (!r) return;
+  crud('POST', '/api/reports', copyOfReport(r)).then(function (saved) {
+    S.reports.unshift(saved); VW.id = saved.id; VW.pv = newPV(10); toast('已複製為「' + saved.name + '」'); renderView();
+  }, fail);
+};
+/* ===== 畫面：報表設計器 ===== */
+var STEPS = [[1, '選擇資料', true], [2, '選擇欄位', true], [3, '設定條件', false], [4, '分組與彙總', false], [5, '預覽與儲存', false]];
+var TYPE_TAG = { text: '文字', number: '數值', date: '日期', enum: '選項' };
+function blankDraft() { return { id: null, name: '', topic: null, related: {}, columns: [], filters: { logic: 'all', rows: [] }, mode: 'detail', groups: [], metrics: [], shared: false, updatedAt: '' }; }
+function designerDirty() { return !!D && JSON.stringify(D.draft) !== D.orig; }
+function openDesigner(id, step) {
+  var r = id ? rep(id) : null;
+  go('screen-designer', function () {
+    var d = r ? clone(r) : blankDraft();
+    D = { draft: d, orig: JSON.stringify(d), step: step || (r ? 3 : 1), isNew: !r, pv: newPV(10), touched: {}, visited: {}, q: '', attempt: false };
+    if (D.step === 5) D.needLoad = true;
+  });
+}
+function stepState() {
+  var d = D.draft, ok1 = !!d.topic, ok2 = d.columns.length > 0, bad = E.validateConditions(d).length > 0;
+  var why2 = !ok1 ? '請先完成步驟 1：選擇資料主題' : '請先完成步驟 2：至少選一個欄位';
+  return [
+    { n: 1, label: '選擇資料', req: true, done: ok1, locked: false },
+    { n: 2, label: '選擇欄位', req: true, done: ok2, locked: !ok1, why: '請先完成步驟 1：選擇資料主題' },
+    { n: 3, label: '設定條件', req: false, done: !!D.visited[3] && !bad, locked: !ok2, why: why2 },
+    { n: 4, label: '分組與彙總', req: false, done: !!D.visited[4], locked: !ok2, why: why2 },
+    { n: 5, label: '預覽與儲存', req: false, done: false, locked: !ok2, why: why2 }];
+}
+function renderDesigner() {
+  if (!D) { openDesigner(null); return; }
+  var d = D.draft, st = stepState();
+  var bar = st.map(function (s) {
+    var cls = 'rp-step' + (D.step === s.n ? ' is-cur' : '') + (s.done ? ' is-done' : '') + (s.locked ? ' is-locked' : '');
+    return '<button type="button" class="' + cls + '" data-act="step" data-n="' + s.n + '"' + (s.locked ? ' aria-disabled="true" title="' + esc(s.why) + '"' : '') + '><span class="rp-step-no">' + (s.done && D.step !== s.n ? '✓' : s.n) + '</span><span class="rp-step-lb">' + s.label + '</span><span class="rp-step-tag ' + (s.req ? 'req' : '') + '">' + (s.req ? '必做' : '選做') + '</span></button>';
+  }).join('<span class="rp-step-sep"></span>');
+  $('#screen-designer').innerHTML = hdr('報表設計器', '<button type="button" class="ui-btn ui-btn--new" data-act="save-open">儲存…</button><button type="button" class="ui-btn ui-btn--neutral" data-act="d-exit">返回我的報表</button>',
+    '<div class="rp-hsub"><b id="d-nm"></b><span id="d-tag"></span></div>') +
+    '<div class="rp-page"><div class="rp-steps">' + bar + '</div><div class="rp-dgrid"><div class="ui-card rp-dmain" id="d-body"></div><aside class="ui-card rp-side" id="d-side"></aside></div></div>';
+  renderTag(); renderDBody(); renderSide();
+  if (D.needLoad) { D.needLoad = false; loadPreview(); }
+}
+function renderTag() {
+  var n = $('#d-nm'); if (!n) return;
+  n.textContent = D.draft.name || '（未命名報表）';
+  $('#d-tag').innerHTML = (D.isNew || designerDirty()) ? '<span class="ui-chip ui-chip--warning">尚未儲存</span>' : '<span class="ui-chip ui-chip--positive">已儲存</span>';
+}
+function setStep(n) {
+  var st = stepState()[n - 1];
+  if (st.locked) { toast(st.why); return; }
+  D.step = n; D.visited[n] = true; if (n === 3) D.attempt = false;
+  renderDesigner(); if (n === 5) loadPreview();
+}
+A.step = function (el) {
+  var n = +el.getAttribute('data-n');
+  if (UI.screen !== 'screen-designer') return;
+  setStep(n);
+};
+A['d-exit'] = function () { go('screen-reports'); };
+function renderDBody() {
+  var b = $('#d-body'); if (!b) return;
+  var f = { 1: s1, 2: s2, 3: s3, 4: s4, 5: s5 }[D.step];
+  var st = stepState(), n = D.step, why = '';
+  if (n === 1 && !D.draft.topic) why = '請先選擇資料主題';
+  if (n === 2 && !D.draft.columns.length) why = '請至少選一個欄位';
+  if (n === 3 && E.validateConditions(D.draft).length) why = '有條件還沒填完整，請處理標紅的列（或移除該列）';
+  var nav = '<div class="rp-dnav"><button type="button" class="ui-btn ui-btn--neutral" data-act="step" data-n="' + (n - 1) + '"' + (n === 1 ? ' disabled' : '') + '>‹ 上一步</button><span class="rp-sp"></span>' +
+    '<span class="rp-red" id="d-next-why">' + esc(why) + '</span>' +
+    (n < 5 ? '<button type="button" class="ui-btn ui-btn--action" data-act="d-next"' + (why ? ' disabled title="' + esc(why) + '"' : '') + '>下一步 ›</button>' : '') + '</div>';
+  b.innerHTML = '<div class="rp-stephead"><b>步驟 ' + n + '　' + STEPS[n - 1][1] + '</b> <span class="ui-chip ' + (STEPS[n - 1][2] ? 'ui-chip--negative' : 'ui-chip--info') + '">' + (STEPS[n - 1][2] ? '必做' : '選做') + '</span></div><div id="d-step">' + f() + '</div>' + nav;
+  D.visited[n] = true;
+}
+A['d-next'] = function () { if (D.step === 3) D.attempt = true; if (D.step === 3 && E.validateConditions(D.draft).length) { renderDBody(); return; } setStep(D.step + 1); };
+
+/* ----- 右側常駐說明 ----- */
+function rowMeaning(d) {
+  if (!d.topic) return '（先選資料主題）';
+  var t = E.TOPICS[d.topic];
+  if (d.mode !== 'summary') return t.rowText;
+  var gs = (d.groups || []).map(function (g) { var f = E.getField(d.topic, g.field); return f ? f.label + (f.type === 'date' ? (g.gran === 'day' ? '（日）' : '（月）') : '') : g.field; });
+  return gs.length ? gs.join(' × ') + ' 的每一種組合各一列（彙總）' : '全部資料合計成一列（彙總）';
+}
+function renderSide() {
+  var s = $('#d-side'); if (!s) return;
+  var d = D.draft, bad = E.validateConditions(d).length;
+  var cond = d.topic ? E.describeDef(d).map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') : '<li class="ui-note">尚未選資料</li>';
+  var t = d.topic ? E.TOPICS[d.topic] : null;
+  s.innerHTML = '<div class="rp-side-sec"><div class="rp-side-k">每一列代表</div><div class="rp-side-big">' + esc(rowMeaning(d)) + '</div>' +
+    (d.topic === 'orderLine' ? '<div class="ui-note">訂單層的金額（如訂單總額）一張訂單只有一份，直接加總會重複；要數訂單請用「不重複訂單數」（同一張訂單只算一次）。</div>' : '') +
+    (d.topic === 'shipment' ? '<div class="ui-note">訂購數量、明細金額是「訂單明細」的值，同一筆明細出貨多次會重複，所以不能加總。</div>' : '') + '</div>' +
+    '<div class="rp-side-sec"><div class="rp-side-k">條件摘要' + (bad ? ' <span class="ui-chip ui-chip--negative">' + bad + ' 個未填完</span>' : '') + '</div><ul>' + cond + '</ul>' + (d.topic ? '<div class="ui-note">已預先排除取消單。</div>' : '') + '</div>' +
+    '<div class="rp-side-sec"><div class="rp-side-k">已選</div><div>欄位 ' + d.columns.length + ' 個' + (d.mode === 'summary' ? '；分組 ' + d.groups.length + '／2；指標 ' + d.metrics.length + ' 個' : '；明細表') + '</div></div>';
+}
+
+/* ----- 步驟 1 ----- */
+function s1() {
+  var d = D.draft;
+  var cards = Object.keys(E.TOPICS).map(function (k) {
+    var t = E.TOPICS[k];
+    return '<button type="button" class="rp-topic' + (d.topic === k ? ' is-active' : '') + '" data-act="topic" data-k="' + k + '"><b>' + esc(t.label) + '</b><span>一列代表：' + esc(t.rowText) + '</span></button>';
+  }).join('');
+  var rel = '';
+  if (d.topic) {
+    var t = E.TOPICS[d.topic], rg = E.relGroups(d.topic);
+    rel = '<div class="rp-rel">' + Object.keys(t.groups).filter(function (g) { return g !== 'main'; }).map(function (g) {
+      var opt = rg.indexOf(g) >= 0, ratios = E.ratioAggs(d.topic).filter(function (a) { return (E.ratioOf(d.topic, a).groups || []).indexOf(g) >= 0; }).map(function (a) { return E.ratioOf(d.topic, a).label; });
+      return opt ? '<label class="rp-chk"><input type="checkbox" data-ch="rel" data-g="' + g + '"' + (d.related[g] ? ' checked' : '') + '> ' + esc(E.relLabel(d.topic, g)) + '<span class="ui-note">每列一個值，不影響列數' + (ratios.length ? '；要算' + esc(ratios.join('、')) + '必須加入' : '') + '</span></label>'
+        : '<label class="rp-chk"><input type="checkbox" checked disabled> ' + esc(E.relLabel(d.topic, g)) + '<span class="ui-note">必帶，不影響列數</span></label>';
+    }).join('') + '</div>';
+  }
+  return '<p class="ui-note">先決定「一列要代表什麼」。選好之後，到步驟 2 挑欄位。</p><div class="rp-topics">' + cards + '</div>' + (d.topic ? '<h4 class="rp-h4">相關資料</h4>' + rel : '<div class="ui-state-alert">請先選擇一個資料主題，才能進入下一步。</div>');
+}
+A.topic = function (el) {
+  var k = el.getAttribute('data-k'), d = D.draft;
+  if (d.topic === k) return;
+  var apply = function () { var keep = d.name; var nd = blankDraft(); nd.topic = k; nd.name = keep; nd.id = d.id; nd.shared = d.shared; nd.updatedAt = d.updatedAt; D.draft = nd; D.pv = newPV(10); D.touched = {}; renderDesigner(); };
+  if (d.topic && (d.columns.length || d.filters.rows.length || d.groups.length || d.metrics.length)) {
+    showConfirm({ title: '切換資料主題', body: '<p>切換成「' + esc(E.TOPICS[k].label) + '」會清除目前已選的欄位、條件、分組與指標。</p><p class="ui-note">兩個主題的欄位不同，無法沿用。</p>', okText: '切換並清除', okCls: 'ui-btn--delete', onOk: apply });
+  } else apply();
+};
+CH.rel = function (el) {
+  var d = D.draft, g = el.getAttribute('data-g'), nm = E.relLabel(d.topic, g);
+  if (!el.checked) {
+    var inG = function (c) { var f = E.getField(d.topic, c.field); return f && f.grp === g; };
+    var use = d.columns.some(inG) || d.filters.rows.some(inG) ||
+      d.metrics.some(function (m) { var r = E.ratioOf(d.topic, m.agg); return (r && r.groups.indexOf(g) >= 0) || (g === 'delivery' && m.agg === 'overdueCount'); });
+    if (use) { el.checked = true; showInfo('還不能移除「' + nm + '」', '<p>目前有欄位、條件或指標用到「' + esc(nm) + '」。請先把它們移除，再取消勾選。</p>'); return; }
+  }
+  d.related[g] = el.checked; renderDesigner();
+};
+
+/* ----- 步驟 2 ----- */
+function fieldRowAvail(f, d) {
+  var sel = d.columns.some(function (c) { return c.field === f.id; });
+  var tags = '<span class="rp-tag">' + TYPE_TAG[f.type] + '</span>' + (f.notSummable ? '<span class="ui-chip ui-chip--warning" title="' + esc(f.notSummable) + '">不可加總</span>' : '') + (f.displayOnly ? '<span class="ui-chip ui-chip--info" title="只能顯示，不參與達交判定、條件與分組">只能顯示</span>' : '');
+  return '<div class="rp-frow"><span class="rp-fname">' + esc(f.label) + '</span>' + tags + '<span class="rp-sp"></span>' +
+    (sel ? '<span class="ui-note">已加入</span>' : '<button type="button" class="ui-btn ui-btn--outline" data-act="col-add" data-f="' + f.id + '">＋ 加入</button>') + '</div>';
+}
+function availListHtml() {
+  var d = D.draft, q = D.q.trim(), t = E.TOPICS[d.topic], out = '';
+  Object.keys(t.groups).forEach(function (g) {
+    var on = E.relGroups(d.topic).indexOf(g) < 0 || !!d.related[g];
+    var fs = E.FIELDS[d.topic].filter(function (f) { return f.grp === g && (!q || f.label.indexOf(q) >= 0); });
+    out += '<div class="rp-fgrp"><div class="rp-fgrp-h">' + t.groups[g] + '</div>' + (on ? (fs.length ? fs.map(function (f) { return fieldRowAvail(f, d); }).join('') : '<div class="ui-note rp-pad">沒有符合的欄位</div>') : '<div class="ui-note rp-pad">未加入。要用這些欄位，請回步驟 1 勾選「' + esc(E.relLabel(d.topic, g)) + '」。</div>') + '</div>';
+  });
+  return out;
+}
+function selListHtml() {
+  var d = D.draft;
+  if (!d.columns.length) return '<div class="ui-empty-inline rp-empty">還沒有欄位。從左邊挑欄位加入；至少要 1 個才能往下走。</div>';
+  return d.columns.map(function (c, i) {
+    var f = E.getField(d.topic, c.field);
+    return '<div class="rp-frow"><span class="rp-no">' + (i + 1) + '</span><div class="rp-selname"><span class="ui-note">' + esc(f.label) + '</span><input class="ui-field rp-fld" data-in="col-label" data-i="' + i + '" value="' + esc(c.label) + '" placeholder="顯示名稱（預設：' + esc(f.label) + '）" aria-label="顯示名稱"></div>' +
+      '<button type="button" class="ui-btn ui-btn--outline" data-act="col-up" data-i="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="上移">↑</button><button type="button" class="ui-btn ui-btn--outline" data-act="col-down" data-i="' + i + '"' + (i === d.columns.length - 1 ? ' disabled' : '') + ' aria-label="下移">↓</button>' +
+      '<button type="button" class="ui-btn ui-btn--delete" data-act="col-del" data-i="' + i + '" aria-label="移除">✕</button></div>';
+  }).join('');
+}
+function s2() {
+  return '<div class="rp-two"><div><h4 class="rp-h4">可選欄位</h4><input class="ui-field rp-fld" data-in="d-search" id="d-search" placeholder="搜尋欄位名稱" value="' + esc(D.q) + '"><div id="avail" class="rp-flist">' + availListHtml() + '</div></div>' +
+    '<div><h4 class="rp-h4">已選欄位（<span id="sel-n">' + D.draft.columns.length + '</span>）</h4><div id="selcols" class="rp-flist">' + selListHtml() + '</div><p class="ui-note">明細表會依這個順序列出；彙總表的分組與指標也只能從這裡的欄位挑。</p></div></div>';
+}
+function redrawS2() { $('#avail').innerHTML = availListHtml(); $('#selcols').innerHTML = selListHtml(); $('#sel-n').textContent = D.draft.columns.length; renderTag(); renderSide(); refreshStepbar(); }
+function refreshStepbar() {
+  var st = stepState();
+  $$('.rp-step').forEach(function (b, i) {
+    var s = st[i]; b.classList.toggle('is-done', s.done); b.classList.toggle('is-locked', s.locked); b.classList.toggle('is-cur', D.step === s.n);
+    if (s.locked) { b.setAttribute('aria-disabled', 'true'); b.title = s.why; } else { b.removeAttribute('aria-disabled'); b.removeAttribute('title'); }
+    $('.rp-step-no', b).textContent = s.done && D.step !== s.n ? '✓' : s.n;
+  });
+  var nx = $('[data-act="d-next"]'); if (nx) { var d = D.draft, why = ''; if (D.step === 1 && !d.topic) why = '請先選擇資料主題'; if (D.step === 2 && !d.columns.length) why = '請至少選一個欄位'; nx.disabled = !!why; if (why) nx.title = why; else nx.removeAttribute('title'); var wy = $('#d-next-why'); if (wy) wy.textContent = why; }
+}
+IN['d-search'] = function (el) { D.q = el.value; $('#avail').innerHTML = availListHtml(); };
+A['col-add'] = function (el) { D.draft.columns.push({ field: el.getAttribute('data-f'), label: '' }); redrawS2(); };
+A['col-up'] = function (el) { var i = +el.getAttribute('data-i'), c = D.draft.columns; var t = c[i]; c[i] = c[i - 1]; c[i - 1] = t; redrawS2(); };
+A['col-down'] = function (el) { var i = +el.getAttribute('data-i'), c = D.draft.columns; var t = c[i]; c[i] = c[i + 1]; c[i + 1] = t; redrawS2(); };
+A['col-del'] = function (el) {
+  var d = D.draft, i = +el.getAttribute('data-i'), fid = d.columns[i].field, ng = d.groups.length, nm = d.metrics.length;
+  d.columns.splice(i, 1);
+  d.groups = d.groups.filter(function (g) { return g.field !== fid; });
+  d.metrics = d.metrics.filter(function (m) { return m.field !== fid; });
+  redrawS2();
+  if (ng !== d.groups.length || nm !== d.metrics.length) toast('同時移除了使用「' + E.fieldLabel(d.topic, fid) + '」的分組／指標');
+};
+IN['col-label'] = function (el) { D.draft.columns[+el.getAttribute('data-i')].label = el.value; renderTag(); };
+
+/* ----- 步驟 3 ----- */
+function condErr(c) { var e = E.validateConditions(D.draft).filter(function (x) { return x.condId === c.id; })[0]; return e && (D.touched[c.id] || D.attempt) ? e.short : ''; }
+function condValueHtml(c, f) {
+  var h = '';
+  if (f.type === 'text') { if (c.op === 'contains' || c.op === 'eq') h = '<input class="ui-field rp-fld rp-w200" data-in="cond-val" data-cid="' + esc(c.id) + '" value="' + esc(c.value) + '" placeholder="輸入文字" aria-label="比對文字">'; }
+  else if (f.type === 'number') {
+    h = '<input type="number" class="ui-field rp-fld rp-w120" data-in="cond-val" data-cid="' + esc(c.id) + '" value="' + esc(c.value) + '" aria-label="數值">';
+    if (c.op === 'between') h += '<span>～</span><input type="number" class="ui-field rp-fld rp-w120" data-in="cond-val2" data-cid="' + esc(c.id) + '" value="' + esc(c.value2) + '" aria-label="迄值">';
+  } else if (f.type === 'date') {
+    if (c.op === 'custom') h = '<input type="date" class="ui-field rp-fld rp-w160" data-in="cond-from" data-cid="' + esc(c.id) + '" value="' + esc(c.from) + '" aria-label="起日"><span>～</span><input type="date" class="ui-field rp-fld rp-w160" data-in="cond-to" data-cid="' + esc(c.id) + '" value="' + esc(c.to) + '" aria-label="迄日">';
+    else if (c.op !== 'empty') { var r = E.resolveRange(c.op); h = '<span class="ui-note">' + r.from + ' ～ ' + r.to + '（今日 ' + E.TODAY + '）</span>'; }
+  } else h = '<span class="rp-enum">' + f.opts.map(function (o) { return '<label class="rp-chk2"><input type="checkbox" data-ch="cond-enum" data-cid="' + esc(c.id) + '" value="' + esc(o) + '"' + (c.values.indexOf(o) >= 0 ? ' checked' : '') + '> ' + esc(o) + '</label>'; }).join('') + '</span>';
+  return h;
+}
+function condRowHtml(c, i) {
+  var d = D.draft, f = E.getField(d.topic, c.field), err = condErr(c), t = E.TOPICS[d.topic];
+  var fsel = '<select class="ui-field rp-fld rp-w200" data-ch="cond-field" data-cid="' + esc(c.id) + '" aria-label="欄位">' + Object.keys(t.groups).map(function (g) {
+    var fs = E.FIELDS[d.topic].filter(function (x) { return x.grp === g && !x.displayOnly && E.fieldAvail(d, x); });
+    return fs.length ? '<optgroup label="' + esc(t.groups[g]) + '">' + fs.map(function (x) { return '<option value="' + esc(x.id) + '"' + (x.id === c.field ? ' selected' : '') + '>' + esc(x.label) + '</option>'; }).join('') + '</optgroup>' : '';
+  }).join('') + '</select>';
+  var osel = '<select class="ui-field rp-fld rp-w160" data-ch="cond-op" data-cid="' + esc(c.id) + '" aria-label="運算子">' + E.OPS[f.type].map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === c.op ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select>';
+  return '<div class="rp-cond' + (err ? ' is-bad' : '') + '" data-cid="' + esc(c.id) + '"><span class="rp-no">' + (i + 1) + '</span>' + fsel + osel + '<span class="rp-cv">' + condValueHtml(c, f) + '</span>' +
+    '<button type="button" class="ui-btn ui-btn--delete" data-act="cond-del" data-cid="' + esc(c.id) + '" aria-label="移除條件">✕</button><div class="rp-cond-err">' + esc(err) + '</div></div>';
+}
+function s3() {
+  var d = D.draft, rows = d.filters.rows;
+  return '<p class="ui-note">不設條件＝全部資料（取消單與已刪除資料已預先排除）。日期的「本月」以今日 ' + E.TODAY + ' 計算。</p>' +
+    '<div class="rp-toolbar"><span>符合</span><div class="ui-seg"><button type="button" class="' + (d.filters.logic === 'all' ? 'active' : '') + '" data-act="logic" data-v="all">全部條件</button><button type="button" class="' + (d.filters.logic === 'any' ? 'active' : '') + '" data-act="logic" data-v="any">任一條件</button></div></div>' +
+    '<div id="conds">' + (rows.length ? rows.map(condRowHtml).join('') : '<div class="ui-empty-inline rp-empty">目前沒有條件，會列出全部資料。</div>') + '</div>' +
+    '<button type="button" class="ui-btn ui-btn--outline" data-act="cond-add">＋ 新增條件</button>';
+}
+function redrawConds() { $('#conds').innerHTML = D.draft.filters.rows.length ? D.draft.filters.rows.map(condRowHtml).join('') : '<div class="ui-empty-inline rp-empty">目前沒有條件，會列出全部資料。</div>'; renderTag(); renderSide(); renderDBody_nav(); }
+function renderDBody_nav() { var why = ''; if (D.step === 3 && E.validateConditions(D.draft).length) why = '有條件還沒填完整，請處理標紅的列（或移除該列）'; var nx = $('[data-act="d-next"]'); if (nx) { nx.disabled = !!why; } var w = $('.rp-dnav .rp-red'); if (w) w.textContent = why; }
+function getCond(el) { var id = el.getAttribute('data-cid'); return D.draft.filters.rows.filter(function (c) { return c.id === id; })[0]; }
+function patchCondErr(c) {
+  var row = $('.rp-cond[data-cid="' + esc(c.id) + '"]'); if (!row) return; var e = condErr(c);
+  row.classList.toggle('is-bad', !!e); $('.rp-cond-err', row).textContent = e; renderSide(); renderDBody_nav();
+}
+A['cond-add'] = function () {
+  var d = D.draft;
+  var cf = d.topic === 'orderLine' ? 'orderDate' : 'shipDate'; var c = E.newCond(d.topic, cf); d.filters.rows.push(c); redrawConds();
+};
+A['cond-del'] = function (el) { var d = D.draft; d.filters.rows = d.filters.rows.filter(function (c) { return c.id !== el.getAttribute('data-cid'); }); redrawConds(); };
+A.logic = function (el) { D.draft.filters.logic = el.getAttribute('data-v'); $$('.rp-toolbar .ui-seg button').forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-v') === D.draft.filters.logic); }); renderTag(); renderSide(); };
+CH['cond-field'] = function (el) {
+  var c = getCond(el), f = E.getField(D.draft.topic, el.value); c.field = f.id; c.op = E.defaultOp(f.type); c.value = ''; c.value2 = ''; c.values = []; c.from = ''; c.to = ''; D.touched[c.id] = true; redrawConds();
+};
+CH['cond-op'] = function (el) { var c = getCond(el); c.op = el.value; D.touched[c.id] = true; redrawConds(); };
+CH['cond-enum'] = function (el) {
+  var c = getCond(el), v = el.value, i = c.values.indexOf(v);
+  if (el.checked && i < 0) c.values.push(v); if (!el.checked && i >= 0) c.values.splice(i, 1);
+  D.touched[c.id] = true; patchCondErr(c); renderTag();
+};
+['val', 'val2', 'from', 'to'].forEach(function (k) {
+  IN['cond-' + k] = function (el) { var c = getCond(el); c[{ val: 'value', val2: 'value2', from: 'from', to: 'to' }[k]] = el.value; D.touched[c.id] = true; patchCondErr(c); renderTag(); };
+});
+
+/* ----- 步驟 4 ----- */
+function eligibleGroupFields(d) { return d.columns.map(function (c) { return E.getField(d.topic, c.field); }).filter(function (f) { return f && f.type !== 'number' && !f.displayOnly; }); }
+function aggOptions(d) {
+  var cols = d.columns.map(function (c) { return E.getField(d.topic, c.field); }), hasNum = cols.some(function (f) { return f.type === 'number' && !f.notSummable; });
+  var del = d.topic === 'orderLine' && !!d.related.delivery;
+  var noNum = '已選欄位裡沒有可計算的數值欄位，請回步驟 2 加入';
+  var l = [['count', E.TOPICS[d.topic].countLabel + '（資料列數）', '', true], ['distinctOrders', '不重複訂單數（同一張訂單只算一次）', '', true]];
+  l.push(d.topic === 'shipment' ? ['distinctShips', '不重複出貨單數', '', true] : ['distinctLines', '不重複明細數', '', true]);
+  ['sum', 'avg', 'max', 'min'].forEach(function (a) { l.push([a, { sum: '加總', avg: '平均', max: '最大', min: '最小' }[a], hasNum ? '' : noNum, hasNum]); });
+  E.ratioAggs(d.topic).forEach(function (a) {
+    var r = E.ratioOf(d.topic, a), miss = E.ratioMissing(d, a);
+    l.push([a, r.label + (r.note ? '（' + r.note + '）' : ''), miss ? '需要先在步驟 1 加入「' + miss + '」' : '', !miss]);
+  });
+  if (d.topic === 'orderLine') l.push(['overdueCount', '逾期未交明細數（屬延誤的一部分）', del ? '' : '需要先在步驟 1 加入「交期結果」', del]);
+  return l;
+}
+function metricRowHtml(m, i) {
+  var d = D.draft, needF = ['sum', 'avg', 'max', 'min'].indexOf(m.agg) >= 0;
+  var aopts = aggOptions(d).map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === m.agg ? ' selected' : '') + (o[3] ? '' : ' disabled') + (o[2] ? ' title="' + esc(o[2]) + '"' : '') + '>' + esc(o[1]) + (o[3] ? '' : '（不可用）') + '</option>'; }).join('');
+  var nums = d.columns.map(function (c) { return E.getField(d.topic, c.field); }).filter(function (f) { return f.type === 'number'; });
+  var fsel = needF ? '<select class="ui-field rp-fld rp-w200" data-ch="met-field" data-i="' + i + '" aria-label="計算欄位"><option value="">— 選欄位 —</option>' + nums.map(function (f) { return '<option value="' + f.id + '"' + (f.id === m.field ? ' selected' : '') + (f.notSummable ? ' disabled title="' + esc(f.notSummable) + '"' : '') + '>' + esc(f.label) + (f.notSummable ? '（不可加總）' : '') + '</option>'; }).join('') + '</select>' : '';
+  var bad = aggOptions(d).filter(function (o) { return o[0] === m.agg && !o[3]; })[0];
+  return '<div class="rp-metric-row" data-mi="' + i + '"><span class="rp-no">' + (i + 1) + '</span><select class="ui-field rp-fld rp-w260" data-ch="met-agg" data-i="' + i + '" aria-label="計算方式">' + aopts + '</select>' + fsel +
+    '<input class="ui-field rp-fld rp-w200" data-in="met-label" data-i="' + i + '" value="' + esc(m.label) + '" placeholder="顯示名稱（預設：' + esc(E.metricDefaultLabel(d.topic, m)) + '）" aria-label="指標顯示名稱">' +
+    '<button type="button" class="ui-btn ui-btn--delete" data-act="met-del" data-i="' + i + '" aria-label="移除指標">✕</button>' + (bad ? '<div class="rp-cond-err" style="display:block">' + esc(bad[2]) + '</div>' : '') + '</div>';
+}
+function s4() {
+  var d = D.draft;
+  var mode = '<div class="rp-toolbar"><span>報表型態</span><div class="ui-seg"><button type="button" class="' + (d.mode === 'detail' ? 'active' : '') + '" data-act="mode" data-v="detail">明細表</button><button type="button" class="' + (d.mode === 'summary' ? 'active' : '') + '" data-act="mode" data-v="summary">彙總表</button></div></div>';
+  if (d.mode === 'detail') return mode + '<div class="ui-state-alert">明細表：依步驟 2 的欄位逐筆列出，不分組。要看加總、筆數、達交率，請切換成「彙總表」。排序與分頁在預覽進行。</div>';
+  var gcands = eligibleGroupFields(d);
+  var grows = d.groups.map(function (g, i) {
+    var f = E.getField(d.topic, g.field);
+    return '<div class="rp-metric-row"><span class="rp-no">' + (i + 1) + '</span><select class="ui-field rp-fld rp-w200" data-ch="grp-field" data-i="' + i + '" aria-label="分組欄位">' + gcands.map(function (x) { return '<option value="' + esc(x.id) + '"' + (x.id === g.field ? ' selected' : '') + '>' + esc(x.label) + '</option>'; }).join('') + '</select>' +
+      (f && f.type === 'date' ? '<div class="ui-seg"><button type="button" class="' + (g.gran === 'day' ? 'active' : '') + '" data-act="grp-gran" data-i="' + i + '" data-v="day">依日</button><button type="button" class="' + ((g.gran || 'month') === 'month' ? 'active' : '') + '" data-act="grp-gran" data-i="' + i + '" data-v="month">依月</button></div>' : '') +
+      '<button type="button" class="ui-btn ui-btn--delete" data-act="grp-del" data-i="' + i + '" aria-label="移除分組">✕</button></div>';
+  }).join('');
+  var nsCols = d.columns.map(function (c) { return E.getField(d.topic, c.field); }).filter(function (f) { return f.type === 'number' && f.notSummable; });
+  var errs = E.validateDef(d, []);
+  return mode + '<h4 class="rp-h4">分組（最多 2 個）</h4><div id="grps">' + (grows || '<div class="ui-note rp-pad">不分組＝全部資料合計成一列。</div>') + '</div>' +
+    '<button type="button" class="ui-btn ui-btn--outline" data-act="grp-add"' + (d.groups.length >= 2 ? ' disabled title="分組欄位最多 2 個"' : (gcands.length ? '' : ' disabled title="已選欄位裡沒有可分組的欄位，請回步驟 2 加入"')) + '>＋ 新增分組</button>' +
+    '<h4 class="rp-h4">指標</h4><div id="mets">' + d.metrics.map(metricRowHtml).join('') + '</div><button type="button" class="ui-btn ui-btn--outline" data-act="met-add">＋ 新增指標</button>' +
+    (nsCols.length ? '<div class="ui-note rp-pad">這些已選欄位不能加總／平均／最大／最小：' + nsCols.map(function (f) { return esc(f.label) + '（' + esc(f.notSummable) + '）'; }).join('；') + '</div>' : '') +
+    '<div id="s4-errs">' + (errs.length ? errorsHtml(errs, 'designer') : '') + '</div>';
+}
+function redrawS4() { $('#d-step').innerHTML = s4(); renderTag(); renderSide(); refreshStepbar(); }
+A.mode = function (el) {
+  var d = D.draft; d.mode = el.getAttribute('data-v');
+  if (d.mode === 'summary' && !d.metrics.length) d.metrics.push({ id: 'm' + Math.random().toString(36).slice(2, 6), agg: 'count', field: null, label: '' });
+  D.pv.page = 1; D.pv.sort = null; redrawS4();
+};
+A['grp-add'] = function () { var d = D.draft, c = eligibleGroupFields(d)[0]; if (!c) return; d.groups.push({ field: c.id, gran: c.type === 'date' ? 'month' : undefined }); redrawS4(); };
+A['grp-del'] = function (el) { D.draft.groups.splice(+el.getAttribute('data-i'), 1); redrawS4(); };
+A['grp-gran'] = function (el) { D.draft.groups[+el.getAttribute('data-i')].gran = el.getAttribute('data-v'); redrawS4(); };
+CH['grp-field'] = function (el) { var g = D.draft.groups[+el.getAttribute('data-i')], f = E.getField(D.draft.topic, el.value); g.field = f.id; g.gran = f.type === 'date' ? 'month' : undefined; redrawS4(); };
+A['met-add'] = function () { D.draft.metrics.push({ id: 'm' + Math.random().toString(36).slice(2, 6), agg: 'count', field: null, label: '' }); redrawS4(); };
+A['met-del'] = function (el) { D.draft.metrics.splice(+el.getAttribute('data-i'), 1); redrawS4(); };
+CH['met-agg'] = function (el) { var m = D.draft.metrics[+el.getAttribute('data-i')]; m.agg = el.value; if (['sum', 'avg', 'max', 'min'].indexOf(m.agg) < 0) m.field = null; redrawS4(); };
+CH['met-field'] = function (el) { D.draft.metrics[+el.getAttribute('data-i')].field = el.value || null; redrawS4(); };
+IN['met-label'] = function (el) { D.draft.metrics[+el.getAttribute('data-i')].label = el.value; renderTag(); };
+function ensureColumn(f) { var d = D.draft; if (!d.columns.some(function (c) { return c.field === f; })) d.columns.push({ field: f, label: '' }); }
+A.fix = function (el) {
+  var d = D.draft, e = E.allErrors(d, [])[+el.getAttribute('data-ei')]; if (!e || !e.fixes) return;
+  var fx = e.fixes[+el.getAttribute('data-fi')];
+  if (fx.type === 'addGroup') {
+    if (d.groups.length >= 2 && !d.groups.some(function (g) { return g.field === fx.field; })) { toast('分組已有 2 個，請先移除一個再加入「' + E.fieldLabel(d.topic, fx.field) + '」'); setStep(4); return; }
+    if (!d.groups.some(function (g) { return g.field === fx.field; })) { ensureColumn(fx.field); d.groups.push({ field: fx.field }); }
+    toast('已加入「' + E.fieldLabel(d.topic, fx.field) + '」分組'); renderDesigner(); if (D.step === 5) loadPreview();
+  } else {
+    var field = fx.type === 'filterCurrency' ? 'currency' : 'unit', c = E.newCond(d.topic, field); c.op = 'in'; c.values = [];
+    if (d.filters.logic === 'any') { d.filters.logic = 'all'; toast('已把條件改成「全部條件」，單一幣別／單位才算數'); }
+    d.filters.rows.push(c); D.touched[c.id] = true; D.visited[3] = true; D.step = 3; renderDesigner();
+  }
+};
+
+/* ----- 步驟 5 ----- */
+function s5() {
+  var d = D.draft;
+  return '<div class="rp-toolbar"><button type="button" class="ui-btn ui-btn--outline" data-act="pv-reload">重新整理預覽</button><span class="rp-sp"></span>' +
+    '<button type="button" class="ui-btn ui-btn--action" data-act="d-chart">設定圖表</button><button type="button" class="ui-btn ui-btn--new" data-act="save-open">儲存報表…</button></div>' +
+    '<div id="d-preview"></div><p class="ui-note">預覽與日後儀表板用的是同一個計算函式；改了條件，預覽立刻跟著變。</p>';
+}
+function renderDesignerPreview() { var p = $('#d-preview'); if (p) p.innerHTML = previewHtml(D.draft, D.pv, 'designer'); }
+function loadPreview() {
+  var dv = D;
+  fetchPV(D.pv, D.draft, function () { if (D === dv && D.step === 5 && UI.screen === 'screen-designer') renderDesignerPreview(); });
+}
+A['pv-reload'] = function () { loadPreview(); };
+A['d-chart'] = function () {
+  if (D.isNew || designerDirty()) { toast('請先儲存報表，才能設定圖表'); return; }
+  openChart(D.draft.id);
+};
+
+/* ----- 儲存 ----- */
+A['save-open'] = function () { saveFlow(); };
+function saveFlow(done) {
+  var d = D.draft;
+  if (!d.topic) { toast('還沒選資料主題'); setStep(1); return; }
+  var errs = E.allErrors(d, []);
+  if (errs.length) { showInfo('還不能儲存', '<p>報表目前有下列問題，請先處理：</p><ul>' + errs.map(function (e) { return '<li>' + esc(e.msg) + '</li>'; }).join('') + '</ul>'); if (errs[0].step && errs[0].step <= 4 && stepState()[errs[0].step - 1] && !stepState()[errs[0].step - 1].locked) { D.step = errs[0].step; renderDesigner(); } return; }
+  var body = '<div class="ui-ffield is-editable"><label class="ui-ffield__label">報表名稱<span class="ui-req">*</span></label><input class="ui-ffield__value" id="sv-name" value="' + esc(d.name) + '" placeholder="例：本月逾期未交明細"></div><div class="rp-cond-err" id="sv-err" style="display:none"></div>' +
+    (isAdmin() ? '<label class="rp-chk2" style="margin-top:12px"><input type="checkbox" id="sv-shared"' + (d.shared === true ? ' checked' : '') + '> 設為共用報表</label><p class="ui-note">共用報表所有角色都看得到，可放進角色儀表板；只有管理員能修改，其他人要調整時另存一份。</p>'
+      : '<p class="ui-note">這份報表只有你看得到。</p>');
+  openModal({ title: '儲存報表', size: 'ui-dialog--lg', body: body, buttons: [
+    { label: '取消', cls: 'ui-btn--neutral' },
+    { label: '儲存', cls: 'ui-btn--new', act: function (ov) {
+      var name = $('#sv-name', ov).value.trim(), err = $('#sv-err', ov);
+      if (!name) { err.style.display = 'block'; err.textContent = '請輸入報表名稱'; $('#sv-name', ov).focus(); return false; }
+      var draft = clone(d); draft.name = name; draft.shared = isAdmin() ? $('#sv-shared', ov).checked : d.shared === true;
+      var imp = draft.id ? E.impactedWidgets(S, draft) : [];
+      if (imp.length) {
+        setTimeout(function () {
+          openModal({ title: '這次改版會讓部分圖表失效', size: 'ui-dialog--lg', body: '<p>下列儀表板圖表引用這份報表，改版後會因為欄位被移除而無法顯示（圖表設定會保留，之後可修復或移除）：</p><ul>' +
+            imp.map(function (x) { return '<li><b>' + esc(x.dashName) + '</b>「' + esc(x.title) + '」— ' + esc(x.reason) + '</li>'; }).join('') + '</ul>',
+            buttons: [{ label: '取消，回去調整', cls: 'ui-btn--neutral' }, { label: '仍然儲存', cls: 'ui-btn--delete', act: function (ov2) { commitReport(draft, done, ov2, null); return false; } }] });
+        }, 0);
+        return true;
+      }
+      commitReport(draft, done, ov, err);
+      return false;   // 等後端存完才關視窗
+    } }] });
+}
+function commitReport(draft, done, ov, errEl) {
+  if (ov && ov._busy) return;
+  if (ov) ov._busy = true;
+  delete draft.readonly;
+  var isNew = !draft.id;
+  (isNew ? crud('POST', '/api/reports', draft) : crud('PUT', '/api/reports/' + encodeURIComponent(draft.id), draft)).then(function (saved) {
+    if (isNew) S.reports.unshift(saved); else put(S.reports, saved);
+    D.draft = clone(saved); D.orig = JSON.stringify(D.draft); D.isNew = false;
+    if (ov) closeModal(ov);
+    toast('已儲存「' + saved.name + '」'); renderTag(); if (UI.screen === 'screen-designer') { renderSide(); }
+    if (done) done();
+  }, function (e) {
+    if (ov) ov._busy = false;
+    if (errEl) { errEl.style.display = 'block'; errEl.textContent = '儲存失敗：' + e.message; } else fail(e);
+  });
+}
+/* ===== 圖表選項（圖表設定畫面與儀表板編輯共用） ===== */
+var OPT_RANGES = ['thisWeek', 'lastWeek', 'last8w', 'thisMonth', 'lastMonth', 'last3m', 'last12m', 'thisYear'];
+function optsFor(type, o) {
+  o = o || {}; var r = {};
+  if (type === 'bar') { if (o.sort) r.sort = o.sort; if (o.limit) r.limit = o.limit; if (o.cumulative) r.cumulative = true; }
+  if (type === 'metric' && o.compare) r.compare = o.compare;
+  if (o.range) r.range = o.range;
+  if (o.linkDashboardId) r.linkDashboardId = o.linkDashboardId;
+  return r;
+}
+function optsFormHtml(type, o, ctx) {
+  o = o || {}; var h = '', sel = function (v, cur) { return v === cur ? ' selected' : ''; };
+  if (type === 'bar') {
+    h += '<div class="rp-toolbar"><label class="rp-inline">排序 <select class="ui-field rp-fld rp-w160" name="opt-sort" data-ch="opt"><option value="">依分類</option><option value="desc"' + sel('desc', o.sort) + '>由大到小</option><option value="asc"' + sel('asc', o.sort) + '>由小到大</option></select></label>' +
+      '<label class="rp-inline">只顯示前 <input type="number" min="1" max="50" class="ui-field rp-fld rp-w80" name="opt-limit" data-ch="opt" value="' + (o.limit || '') + '" placeholder="全部"> 項</label>' +
+      '<label class="rp-chk2"><input type="checkbox" name="opt-cum" data-ch="opt"' + (o.cumulative ? ' checked' : '') + '> 顯示累計占比</label></div>' +
+      '<p class="ui-note">由小到大＋前 N 項＝後 N 名。累計占比的分母是全部分類，不只顯示的這幾項。</p>';
+  }
+  if (type === 'metric') {
+    var c = o.compare || { periods: 4, gran: 'week' };
+    h += '<div class="rp-toolbar"><label class="rp-chk2"><input type="checkbox" name="opt-cmp" data-ch="opt"' + (o.compare ? ' checked' : '') + '> 與前</label><input type="number" min="1" max="12" class="ui-field rp-fld rp-w80" name="opt-cmpn" data-ch="opt" value="' + c.periods + '" aria-label="期數">' +
+      '<select class="ui-field rp-fld rp-w120" name="opt-cmpg" data-ch="opt" aria-label="期別"><option value="week"' + sel('week', c.gran) + '>週</option><option value="month"' + sel('month', c.gran) + '>個月</option></select><span>平均比較</span></div>';
+  }
+  h += '<div class="rp-toolbar"><label class="rp-inline">卡片期間 <select class="ui-field rp-fld rp-w160" name="opt-range" data-ch="opt"><option value="">跟隨儀表板篩選</option>' + OPT_RANGES.map(function (k) { return '<option value="' + k + '"' + sel(k, o.range) + '>' + esc(E.RANGE_LABELS[k] || k) + '</option>'; }).join('') + '</select></label>' +
+    '<label class="rp-inline">點了開啟儀表板 <select class="ui-field rp-fld rp-w200" name="opt-link" data-ch="opt"><option value="">不連結</option>' + S.dashboards.map(function (x) { return '<option value="' + esc(x.id) + '"' + sel(x.id, o.linkDashboardId) + '>' + esc(x.name) + '</option>'; }).join('') + '</select></label></div>';
+  return '<div class="rp-opts" data-ctx="' + ctx + '">' + h + '</div>';
+}
+function readOpts(box) {
+  var q = function (n) { return $('[name="' + n + '"]', box); }, o = {}, x;
+  if ((x = q('opt-sort')) && x.value) o.sort = x.value;
+  if ((x = q('opt-limit')) && x.value) { var n = parseInt(x.value, 10); if (n >= 1 && n <= 50) o.limit = n; }
+  if ((x = q('opt-cum')) && x.checked) o.cumulative = true;
+  if ((x = q('opt-cmp')) && x.checked) { var p = parseInt(q('opt-cmpn').value, 10); o.compare = { periods: p >= 1 && p <= 12 ? p : 4, gran: q('opt-cmpg').value === 'month' ? 'month' : 'week' }; }
+  if ((x = q('opt-range')) && x.value) o.range = x.value;
+  if ((x = q('opt-link')) && x.value) o.linkDashboardId = x.value;
+  return o;
+}
+CH.opt = function (el) { var box = el.closest('.rp-opts'); if (box && box.getAttribute('data-ctx') === 'ch' && C) { C.options = readOpts(box); renderChartPrev(); } };
+
+/* ===== 畫面：圖表設定 ===== */
+var NOFILTER = { filters: { range: 'all', from: '', to: '', customers: [], orderTypes: [] } };
+function mKey(m) { return m.agg + '|' + (m.field || ''); }
+function initChart(r, dashId) {
+  var cats = E.categoryOptions(r), cat = '', gran = 'month', metric = null, chs = E.metricChoices(r);
+  if (r.mode === 'summary') {
+    var g = (r.groups || []).filter(function (x) { return cats.some(function (c) { return c.id === x.field; }); })[0];
+    if (g) { cat = g.field; gran = g.gran || 'month'; }
+    var m0 = (r.metrics || []).filter(function (m) { return chs.some(function (c) { return mKey(c) === mKey(m); }); })[0];
+    if (m0) metric = { agg: m0.agg, field: m0.field || null };
+  }
+  if (!cat && cats.length) cat = cats[0].id;
+  if (!metric) metric = { agg: chs[0].agg, field: chs[0].field };
+  var df = E.DATE_FIELDS[r.topic][0];
+  // opts／optsKey：POST /api/chart-options 的結果（圓餅檢查要查資料）；fb：選項回來後要不要把不適用的類型換掉（'init' 靜默、'change' 會提示）
+  return { reportId: r.id, type: 'bar', cat: cat, gran: gran, metric: metric, metricName: '', unit: null, dateField: df, title: r.name, dashId: dashId || null, options: {}, opts: null, optsKey: '', optsSeq: 0, prevSeq: 0, fb: 'init' };
+}
+function openChart(rid, dashId) {
+  var r = rep(rid); if (!r) return;
+  go('screen-chart', function () { C = initChart(r, dashId); });
+}
+function cw() {
+  var r = rep(C.reportId);
+  var w = { id: 'preview', title: C.title, type: C.type, size: 'M', reportId: C.reportId, topic: r.topic,
+    category: C.type === 'metric' || C.type === 'table' || !C.cat ? null : { field: C.cat, gran: C.gran },
+    metric: C.type === 'table' ? null : { agg: C.metric.agg, field: C.metric.field, label: '' }, metricName: C.metricName, unit: C.unit, dateField: C.dateField };
+  var o = optsFor(C.type, C.options); if (Object.keys(o).length) w.options = o;
+  return w;
+}
+function metricChoiceText(r, m) {
+  var f = m.field ? E.getField(r.topic, m.field) : null;
+  return f ? f.label + '　' + E.AGG_LABELS[m.agg] : E.aggLabel(r.topic, m.agg);
+}
+function renderChart() {
+  var r = rep(C && C.reportId);
+  if (!r) { $('#screen-chart').innerHTML = hdr('圖表設定', '') + '<div class="rp-page"><div class="ui-card"><div class="ui-empty"><p style="margin:0">請從「我的報表」或報表預覽選一份報表來設定圖表。</p><button type="button" class="ui-btn ui-btn--action" data-goto="screen-reports">到我的報表</button></div></div></div>'; return; }
+  var key = JSON.stringify([r, C.cat, C.metric, C.gran]);
+  if (C.optsKey !== key) { loadChartOpts(r, key); return; }
+  var opts = C.opts;
+  var cats = E.categoryOptions(r), chs = E.metricChoices(r), catF = C.cat ? E.getField(r.topic, C.cat) : null;
+  var seg = opts.map(function (o) { return '<button type="button" class="' + (C.type === o.type ? 'active ' : '') + (o.enabled ? '' : 'is-off') + '" data-act="ch-type" data-t="' + o.type + '"' + (o.enabled ? '' : ' aria-disabled="true" title="' + esc(o.reason) + '"') + '>' + TYPE_NAME[o.type] + '</button>'; }).join('');
+  var why = opts.filter(function (o) { return !o.enabled; }).map(function (o) {
+    var fix = !r.readonly && o.remedy === 'step4' ? '<button type="button" class="ui-btn ui-btn--outline" data-act="ch-fix" data-s="4">回報表步驟 4</button>' : (!r.readonly && o.remedy === 'step2' ? '<button type="button" class="ui-btn ui-btn--outline" data-act="ch-fix" data-s="2">回報表步驟 2</button>' : '');
+    return '<li><b>' + TYPE_NAME[o.type] + '</b>：' + esc(o.reason) + ' ' + fix + '</li>';
+  }).join('');
+  var needCat = C.type === 'bar' || C.type === 'line' || C.type === 'pie';
+  var form = '<div class="ui-ffield is-editable"><label class="ui-ffield__label">圖表標題</label><input class="ui-ffield__value" data-in="ch-title" value="' + esc(C.title) + '"></div>' +
+    '<h4 class="rp-h4">圖表類型</h4><div class="ui-seg rp-segwrap">' + seg + '</div>' + (why ? '<ul class="rp-why">' + why + '</ul>' : '') +
+    (needCat ? '<h4 class="rp-h4">分類欄位</h4><div class="rp-toolbar"><select class="ui-field rp-fld rp-w200" data-ch="ch-cat" aria-label="分類欄位">' + (cats.length ? cats.map(function (c) { return '<option value="' + c.id + '"' + (c.id === C.cat ? ' selected' : '') + '>' + esc(c.label) + '</option>'; }).join('') : '<option value="">（已選欄位沒有可分類的欄位）</option>') + '</select>' +
+      (catF && catF.type === 'date' ? '<div class="ui-seg">' + [['day', '依日'], ['week', '依週'], ['month', '依月']].map(function (g) { return '<button type="button" class="' + (C.gran === g[0] ? 'active' : '') + '" data-act="ch-gran" data-v="' + g[0] + '">' + g[1] + '</button>'; }).join('') + '</div>' : '') + '</div>' : '') +
+    (C.type !== 'table' ? '<h4 class="rp-h4">數值指標（彙總方式）</h4><select class="ui-field rp-fld rp-w300" data-ch="ch-metric" aria-label="數值指標">' + chs.map(function (m) { return '<option value="' + esc(mKey(m)) + '"' + (mKey(m) === mKey(C.metric) ? ' selected' : '') + '>' + esc(metricChoiceText(r, m)) + '</option>'; }).join('') + '</select>' : '') +
+    (C.type === 'metric' ? '<div class="rp-toolbar"><div class="ui-ffield is-editable rp-w260"><label class="ui-ffield__label">指標卡名稱</label><input class="ui-ffield__value" data-in="ch-mname" value="' + esc(C.metricName) + '" placeholder="預設：' + esc(E.metricDefaultLabel(r.topic, C.metric)) + '"></div><div class="ui-ffield is-editable rp-w160"><label class="ui-ffield__label">單位</label><input class="ui-ffield__value" data-in="ch-unit" value="' + esc(C.unit == null ? '' : C.unit) + '" placeholder="預設：' + esc(E.metricUnit(r.topic, { agg: C.metric.agg, field: C.metric.field })) + '"></div></div>' : '') +
+    '<h4 class="rp-h4">套用儀表板日期篩選的日期欄位</h4><select class="ui-field rp-fld rp-w260" data-ch="ch-df" aria-label="日期欄位">' + E.DATE_FIELDS[r.topic].map(function (f) { return '<option value="' + f + '"' + (f === C.dateField ? ' selected' : '') + '>' + esc(E.fieldLabel(r.topic, f)) + '</option>'; }).join('') + '<option value=""' + (!C.dateField ? ' selected' : '') + '>不套用日期篩選</option></select>' +
+    '<p class="ui-note">選了「不套用」，儀表板上這張圖會標示「未套用：日期」。</p>' +
+    '<h4 class="rp-h4">進階選項</h4>' + optsFormHtml(C.type, C.options, 'ch');
+  $('#screen-chart').innerHTML = hdr('圖表設定', '<button type="button" class="ui-btn ui-btn--new" data-act="chart-add">加入儀表板…</button><button type="button" class="ui-btn ui-btn--neutral" data-goto="screen-reports">返回我的報表</button>',
+    '<div class="rp-hsub">來源報表：<b>' + esc(r.name) + '</b>' + (r.readonly ? ' <span class="ui-chip ui-chip--info">唯讀</span>' : '') + '</div>') +
+    '<div class="rp-page"><div class="rp-cgrid"><div class="ui-card">' + form + '</div><div class="ui-card"><div class="rp-cardhead"><b id="ch-ttl"></b><span class="ui-note">預覽（未套儀表板篩選）</span></div><div id="ch-prev"></div><p class="ui-note">圖表只存「引用哪份報表＋怎麼呈現」，每次都從報表定義重算：報表改了，圖表跟著變。</p></div></div></div>';
+  renderChartPrev();
+}
+function loadChartOpts(r, key) {
+  var cc = C, t = ++C.optsSeq;
+  $('#screen-chart').innerHTML = hdr('圖表設定', '', '<div class="rp-hsub">來源報表：<b>' + esc(r.name) + '</b></div>') + '<div class="rp-page"><div class="ui-card">' + LOADING + '</div></div>';
+  dataApi('/api/chart-options', { report: r, category: C.cat || null, metric: { agg: C.metric.agg, field: C.metric.field, label: '' }, gran: C.gran }).then(function (res) {
+    if (C !== cc || cc.optsSeq !== t || UI.screen !== 'screen-chart') return;
+    if (!res.ok) {
+      $('#screen-chart').innerHTML = hdr('圖表設定', '<button type="button" class="ui-btn ui-btn--neutral" data-goto="screen-reports">返回我的報表</button>', '<div class="rp-hsub">來源報表：<b>' + esc(r.name) + '</b></div>') +
+        '<div class="rp-page"><div class="rp-err-box"><b>目前無法載入圖表選項</b>' + errorsHtml(res.errors || [{ msg: '查詢失敗' }], 'chart') + '<div class="rp-err-act"><button type="button" class="ui-btn ui-btn--action" data-act="ch-retry">重試</button></div></div></div>';
+      return;
+    }
+    C.opts = res.options; C.optsKey = key;
+    applyChartFallback();
+    renderChart();
+  });
+}
+A['ch-retry'] = function () { if (C) { C.optsKey = ''; renderChart(); } };
+function applyChartFallback() {
+  var mode = C.fb; C.fb = null;
+  var opts = C.opts, cur = opts.filter(function (o) { return o.type === C.type; })[0];
+  if (!mode || !cur || cur.enabled) return;
+  if (mode === 'init') { C.type = opts.some(function (o) { return o.type === 'metric' && o.enabled; }) ? 'metric' : 'table'; return; }
+  var nx = opts.filter(function (o) { return o.enabled && o.type !== 'table'; })[0] || opts[0];
+  toast('「' + TYPE_NAME[C.type] + '」在這個設定下不適用，已改成「' + TYPE_NAME[nx.type] + '」'); C.type = nx.type;
+}
+/* 預覽圖：打 POST /api/chart；帶序號只採用最新回應；打字類輸入 delay 350ms 避免每個字都查一次 */
+var prevTimer = null;
+function renderChartPrev(delay) {
+  var r = rep(C.reportId), w = cw(), cc = C, t = ++C.prevSeq;
+  $('#ch-ttl').textContent = C.title || '（未命名）';
+  clearTimeout(prevTimer);
+  prevTimer = setTimeout(function () {
+    if (C !== cc || cc.prevSeq !== t || !$('#ch-prev')) return;
+    $('#ch-prev').innerHTML = LOADING;
+    dataApi('/api/chart', { widget: w, report: r, dash: NOFILTER }).then(function (d) {
+      if (C !== cc || cc.prevSeq !== t || !$('#ch-prev')) return;
+      $('#ch-prev').innerHTML = d.invalid ? '<div class="rp-inline-err">' + esc(d.reason) + '</div>' : chartBody(d, w, false);
+    });
+  }, delay || 0);
+}
+A['ch-type'] = function (el) { if (el.getAttribute('aria-disabled')) { toast(el.title); return; } C.type = el.getAttribute('data-t'); renderChart(); };
+A['ch-gran'] = function (el) { C.gran = el.getAttribute('data-v'); C.fb = 'change'; renderChart(); };
+A['ch-fix'] = function (el) { var r = rep(C.reportId); openDesigner(r.id, +el.getAttribute('data-s')); };
+CH['ch-cat'] = function (el) { C.cat = el.value; var f = E.getField(rep(C.reportId).topic, C.cat); if (f && f.type === 'date' && !C.gran) C.gran = 'month'; C.fb = 'change'; renderChart(); };
+CH['ch-metric'] = function (el) { var p = el.value.split('|'); C.metric = { agg: p[0], field: p[1] || null }; C.fb = 'change'; renderChart(); };
+CH['ch-df'] = function (el) { C.dateField = el.value || null; renderChartPrev(); };
+IN['ch-title'] = function (el) { C.title = el.value; $('#ch-ttl').textContent = C.title || '（未命名）'; };
+IN['ch-mname'] = function (el) { C.metricName = el.value; renderChartPrev(350); };
+IN['ch-unit'] = function (el) { C.unit = el.value === '' ? null : el.value; renderChartPrev(350); };
+A['chart-add'] = function () {
+  var r = rep(C.reportId), cc = C;
+  dataApi('/api/chart', { widget: cw(), report: r, dash: NOFILTER }).then(function (d) {
+    if (C !== cc || UI.screen !== 'screen-chart') return;
+    if (!d.ok) { showInfo('這張圖還不能加入', '<p>' + esc(d.typeError || (d.errors && d.errors[0] && d.errors[0].msg) || d.reason || '設定有誤') + '</p><p class="ui-note">請先調整圖表設定。</p>'); return; }
+    addChartModal(r);
+  });
+};
+function addChartModal(r) {
+  var sel = C.dashId && dashById(C.dashId) ? C.dashId : homeId();
+  var body = '<div class="ui-ffield is-editable ui-ffield--select"><label class="ui-ffield__label">加入哪個儀表板</label><select class="ui-ffield__value" id="ad-dash">' + S.dashboards.map(function (x) { return '<option value="' + esc(x.id) + '"' + (x.id === sel ? ' selected' : '') + '>' + esc(x.name) + '</option>'; }).join('') + '<option value="__new">＋ 新增儀表板…</option></select></div>' +
+    '<div class="ui-ffield is-editable" id="ad-newwrap" style="display:none;margin-top:8px"><label class="ui-ffield__label">新儀表板名稱</label><input class="ui-ffield__value" id="ad-newname" placeholder="例：生管週會看板"></div>' +
+    '<div class="ui-ffield is-editable" style="margin-top:8px"><label class="ui-ffield__label">卡片標題</label><input class="ui-ffield__value" id="ad-title" value="' + esc(C.title) + '"></div>' +
+    '<h4 class="rp-h4">尺寸</h4><label class="rp-chk2"><input type="radio" name="ad-size" value="S"> 小（3 欄）</label> <label class="rp-chk2"><input type="radio" name="ad-size" value="M" checked> 中（6 欄）</label> <label class="rp-chk2"><input type="radio" name="ad-size" value="L"> 大（12 欄）</label>' +
+    '<div class="rp-cond-err" id="ad-err" style="display:none"></div><p class="ui-note">加入後，這張卡片只保存「引用報表＋呈現設定」；同一份報表可加進不同儀表板，各自保留設定。</p>';
+  var ov = openModal({ title: '加入儀表板', size: 'ui-dialog--lg', body: body, buttons: [{ label: '取消', cls: 'ui-btn--neutral' },
+    { label: '加入', cls: 'ui-btn--new', act: function (ov) {
+      var id = $('#ad-dash', ov).value, title = $('#ad-title', ov).value.trim(), err = $('#ad-err', ov);
+      if (!title) { err.style.display = 'block'; err.textContent = '請輸入卡片標題'; return false; }
+      var dash, isNew = id === '__new';
+      if (isNew) {
+        var nm = $('#ad-newname', ov).value.trim(); if (!nm) { err.style.display = 'block'; err.textContent = '請輸入新儀表板的名稱'; return false; }
+        dash = blankDash(nm, null);
+      } else dash = clone(dashById(id));
+      if (ov._busy) return false;
+      var w = cw(); w.id = uid('w'); w.title = title; w.size = $('input[name="ad-size"]:checked', ov).value;
+      dash.widgets.push(w);
+      ov._busy = true;
+      (isNew ? crud('POST', '/api/dashboards', dash).then(function (s) { return reloadState().then(function () { return s; }); }) : putDash(dash)).then(function (saved) {
+        if (!(dash.kind === 'role' && !isAdmin())) toast('已加入「' + saved.name + '」'); C.dashId = saved.id; closeModal(ov); renderNav();
+      }, function (e) { ov._busy = false; err.style.display = 'block'; err.textContent = '加入失敗：' + e.message; });
+      return false;
+    } }] });
+  $('#ad-dash', ov).addEventListener('change', function (e) { $('#ad-newwrap', ov).style.display = e.target.value === '__new' ? 'block' : 'none'; });
+}
+
+/* ===== 畫面：我的 Dashboard 列表 ===== */
+function roleDashes() { return S.dashboards.filter(function (d) { return d.kind === 'role'; }); }
+function renderDashboards() {
+  var list = roleDashes();
+  var rows = list.map(function (d) {
+    var homes = ASSIGNABLE.filter(function (r) { return S.roleHome && S.roleHome[r] === d.id; }).map(function (r) { return ROLE_NAMES[r]; });
+    return '<tr><td><a class="ui-link" href="#" data-act="dash-open" data-id="' + esc(d.id) + '">' + esc(d.name) + '</a>' + (homes.length ? ' <span class="ui-chip ui-chip--positive" title="這些角色的首頁">★ ' + esc(homes.join('、')) + '</span>' : '') + '</td>' +
+      '<td>' + ASSIGNABLE.map(function (r) { return '<label class="rp-chk2"><input type="checkbox" data-ch="dash-role" data-id="' + esc(d.id) + '" value="' + r + '"' + ((d.roles || []).indexOf(r) >= 0 ? ' checked' : '') + '> ' + ROLE_NAMES[r] + '</label>'; }).join(' ') + '</td>' +
+      '<td class="num">' + d.widgets.length + '</td><td>' + esc(d.updatedAt) + '</td>' +
+      '<td class="rp-actions"><button type="button" class="ui-btn ui-btn--outline" data-act="dash-open" data-id="' + esc(d.id) + '">開啟</button><button type="button" class="ui-btn ui-btn--outline" data-act="dash-edit" data-id="' + esc(d.id) + '">編輯</button>' +
+      '<button type="button" class="ui-btn ui-btn--outline" data-act="dash-rename" data-id="' + esc(d.id) + '">改名</button><button type="button" class="ui-btn ui-btn--outline" data-act="dash-copy" data-id="' + esc(d.id) + '">複製</button><button type="button" class="ui-btn ui-btn--delete" data-act="dash-del" data-id="' + esc(d.id) + '">刪除</button></td></tr>';
+  }).join('');
+  var homeRows = ASSIGNABLE.map(function (r) {
+    var cands = list.filter(function (d) { return (d.roles || []).indexOf(r) >= 0; }), cur = S.roleHome && S.roleHome[r];
+    return '<label class="rp-inline">' + ROLE_NAMES[r] + ' <select class="ui-field rp-fld rp-w200" data-ch="role-home" data-r="' + r + '"><option value=""' + (cur ? '' : ' selected') + ' disabled>（未設定）</option>' +
+      cands.map(function (d) { return '<option value="' + esc(d.id) + '"' + (d.id === cur ? ' selected' : '') + '>' + esc(d.name) + '</option>'; }).join('') + '</select></label>';
+  }).join('');
+  $('#screen-dashboards').innerHTML = hdr('角色儀表板管理', '<button type="button" class="ui-btn ui-btn--new" data-act="dash-new">＋ 新增角色儀表板</button>') +
+    '<div class="rp-page"><p class="ui-note">角色儀表板派給哪些角色，那些角色就看得到。主管可以自己調整，調整只存成他的個人版；你在這裡修改不會蓋掉主管的個人版，主管會看到「角色儀表板已更新」並可自行還原。</p>' +
+    '<div class="ui-card"><div class="rp-side-k">各角色的首頁</div><div class="rp-toolbar">' + homeRows + '</div></div>' +
+    (list.length ? '<div class="ui-table-wrap"><table class="ui-table rp-compact"><thead><tr><th>名稱</th><th>派給角色</th><th class="num">卡片數</th><th>更新時間</th><th>操作</th></tr></thead><tbody>' + rows + '</tbody></table></div>'
+      : '<div class="ui-card"><div class="ui-empty"><p style="margin:0">還沒有角色儀表板</p><button type="button" class="ui-btn ui-btn--new" data-act="dash-new">＋ 新增角色儀表板</button></div></div>') + '</div>';
+  renderNav();
+}
+CH['dash-role'] = function (el) {
+  var d = clone(dashById(el.getAttribute('data-id'))), r = el.value;
+  d.roles = (d.roles || []).filter(function (x) { return x !== r; }); if (el.checked) d.roles.push(r);
+  if (!d.roles.length) { el.checked = true; toast('角色儀表板至少要派給一個角色'); return; }
+  crud('PUT', '/api/dashboards/' + encodeURIComponent(d.id), d).then(function () { return reloadState(); }).then(function () { toast('已更新「' + d.name + '」的派發角色'); renderDashboards(); }, function (e) { fail(e); renderDashboards(); });
+};
+CH['role-home'] = function (el) {
+  var r = el.getAttribute('data-r'), id = el.value;
+  crud('PUT', '/api/role-home', { role: r, id: id }).then(function () { S.roleHome[r] = id; toast(ROLE_NAMES[r] + '的首頁已設為「' + dashById(id).name + '」'); renderDashboards(); }, fail);
+};
+function rolePickHtml(sel) {
+  return '<h4 class="rp-h4">派給角色</h4><div>' + ASSIGNABLE.map(function (r) { return '<label class="rp-chk2"><input type="checkbox" name="nm-role" value="' + r + '"' + (sel.indexOf(r) >= 0 ? ' checked' : '') + '> ' + ROLE_NAMES[r] + '</label>'; }).join(' ') + '</div>';
+}
+function nameModal(title, label, val, okText, cb, note) {
+  openModal({ title: title, size: 'ui-dialog--md', body: '<div class="ui-ffield is-editable"><label class="ui-ffield__label">' + label + '<span class="ui-req">*</span></label><input class="ui-ffield__value" id="nm-in" value="' + esc(val) + '"></div><div class="rp-cond-err" id="nm-err" style="display:none"></div>' + (note || ''),
+    buttons: [{ label: '取消', cls: 'ui-btn--neutral' }, { label: okText, cls: 'ui-btn--new', act: function (ov) {
+      var e = $('#nm-err', ov), v = $('#nm-in', ov).value.trim(); if (!v) { e.style.display = 'block'; e.textContent = '請輸入名稱'; return false; }
+      var roles = $$('input[name="nm-role"]', ov).length ? $$('input[name="nm-role"]:checked', ov).map(function (x) { return x.value; }) : null;
+      if (roles && !roles.length) { e.style.display = 'block'; e.textContent = '請至少勾選一個角色'; return false; }
+      cb(v, roles); } }] });
+}
+function blankDash(nm, roles) {
+  var d = { name: nm, filters: { range: 'last12m', from: '', to: '', customers: [], orderTypes: [] }, widgets: [] };
+  if (roles) { d.kind = 'role'; d.roles = roles; }
+  return d;
+}
+A['dash-new'] = function () {
+  var admin = isAdmin();
+  nameModal(admin ? '新增角色儀表板' : '新增儀表板', '儀表板名稱', '', '建立並編輯', function (nm, roles) {
+    crud('POST', '/api/dashboards', blankDash(nm, roles)).then(function (saved) { return reloadState().then(function () { V.dashId = saved.id; go('screen-dash', function () { enterEdit(); }); }); }, fail);
+  }, admin ? rolePickHtml([]) : '<p class="ui-note">這個儀表板只有你看得到。</p>');
+};
+A['dash-open'] = function (el) { V.dashId = el.getAttribute('data-id'); go('screen-dash', function () { leaveDash(); }); };
+A['dash-edit'] = function (el) { V.dashId = el.getAttribute('data-id'); go('screen-dash', function () { enterEdit(); }); };
+A['dash-copy'] = function (el) {
+  var src = dashById(el.getAttribute('data-id'));
+  nameModal('複製儀表板', '新儀表板名稱', src.name + '（複本）', '複製', function (nm, roles) {
+    var c = blankDash(nm, roles); c.filters = clone(src.filters); c.widgets = clone(src.widgets); c.widgets.forEach(function (w) { w.id = uid('w'); });
+    crud('POST', '/api/dashboards', c).then(function () { return reloadState(); }).then(function () { toast('已複製「' + src.name + '」'); renderDashboards(); }, fail);
+  }, (isAdmin() ? rolePickHtml(src.roles || []) : '') + '<p class="ui-note">版面與每張卡片的設定會一起複製（互相獨立）。<b>來源報表仍是共用的：改報表，兩邊的圖表都會跟著變。</b></p>');
+};
+A['dash-rename'] = function (el) {
+  var d = dashById(el.getAttribute('data-id'));
+  var note = d.kind === 'role' ? (isAdmin() ? '<p class="ui-note">已調整過的主管會看到「角色儀表板已更新」提示一次。</p>' : '<p class="ui-note"><b>改名後會存成你的個人版，不影響其他人。</b></p>') : '';
+  nameModal('儀表板改名', '儀表板名稱', d.name, '改名', function (nm) {
+    if (nm === d.name) return;
+    var c = clone(d); c.name = nm;
+    putDash(c).then(function () { toast('已改名為「' + nm + '」'); if (UI.screen === 'screen-dashboards') renderDashboards(); else renderDash(); }, fail);
+  }, note);
+};
+A['dash-del'] = function (el) {
+  var d = dashById(el.getAttribute('data-id'));
+  var roleNote = d.kind === 'role' ? '<p class="ui-note">派給的角色從此看不到這份儀表板；<b>主管已調整過的個人版會保留</b>，變成他們自己的儀表板。</p>' : '';
+  showConfirm({ title: '刪除儀表板', body: '<p>確定要刪除「' + esc(d.name) + '」（' + d.widgets.length + ' 張卡片）嗎？</p>' + roleNote + '<p class="ui-note"><b>只會刪除這個儀表板的版面與卡片設定，不會刪除任何報表。</b></p>', okText: '確定刪除', okCls: 'ui-btn--delete',
+    onOk: function () { crud('DELETE', '/api/dashboards/' + encodeURIComponent(d.id)).then(function () { return reloadState(); }).then(function () { toast('已刪除儀表板'); if (UI.screen === 'screen-dashboards') renderDashboards(); else { V.dashId = homeId(); renderDash(); renderNav(); } }, fail); } });
+};
+
+/* ===== 畫面：Dashboard 檢視／編輯 ===== */
+function enterEdit() { var d = dashById(V.dashId); V.buf = clone(d); V.orig = JSON.stringify(V.buf); V.edit = true; }
+function commitDash() {
+  if (!V.buf) return Promise.resolve();
+  return putDash(clone(V.buf));
+}
+A['dash-enter-edit'] = function () { enterEdit(); renderDash(); };
+A['dash-done'] = function () {
+  var toPersonal = V.buf && V.buf.kind === 'role' && !isAdmin();
+  commitDash().then(function () { leaveDash(); if (!toPersonal) toast('已儲存儀表板'); renderDash(); }, fail);
+};
+A['dash-restore'] = function () {
+  var d = dashById(V.dashId); if (!d || !d.baseId) return;
+  showConfirm({ title: '還原成角色預設', body: '<p>你對「' + esc(d.name) + '」做的調整（卡片、排序、篩選）會全部捨棄，改回管理員派給你的角色版本。</p>', okText: '還原', okCls: 'ui-btn--delete',
+    onOk: function () {
+      crud('POST', '/api/dashboards/' + encodeURIComponent(d.baseId) + '/restore').then(function () { return reloadState(); }).then(function () {
+        V.dashId = dashById(d.baseId) ? d.baseId : homeId(); chartCache = {}; toast('已還原成角色預設'); renderDash(); renderNav();
+      }, fail);
+    } });
+};
+A['dash-cancel'] = function () {
+  if (V.buf && JSON.stringify(V.buf) !== V.orig) { showConfirm({ title: '取消編輯', body: '<p>這次編輯的變更（排序、尺寸、移除、篩選）會全部還原。</p>', okText: '還原並離開編輯', okCls: 'ui-btn--delete', onOk: function () { leaveDash(); renderDash(); } }); }
+  else { leaveDash(); renderDash(); }
+};
+var RANGE_OPTS = ['thisMonth', 'lastMonth', 'last3m', 'last12m', 'thisYear', 'custom', 'all'];
+function ddHtml(id, label, all, sel, act) {
+  return '<details class="rp-dd" id="' + id + '"><summary>' + esc(ddLabel(label, sel)) + '</summary><div class="rp-dd-p">' + all.map(function (o) { return '<label class="rp-chk2"><input type="checkbox" data-ch="' + act + '" value="' + esc(o) + '"' + (sel.indexOf(o) >= 0 ? ' checked' : '') + '> ' + esc(o) + '</label>'; }).join('') + '</div></details>';
+}
+function ddLabel(label, sel) { return label + '：' + (sel.length ? (sel.length <= 2 ? sel.join('、') : sel.length + ' 項') : '全部'); }
+function filterBarHtml(d) {
+  var f = d.filters;
+  return '<div class="ui-card rp-fbar"><label class="rp-inline">日期區間 <select class="ui-field rp-fld rp-w160" data-ch="df-range" aria-label="日期區間">' + RANGE_OPTS.map(function (k) { return '<option value="' + k + '"' + (f.range === k ? ' selected' : '') + '>' + (k === 'all' ? '不限' : E.RANGE_LABELS[k]) + '</option>'; }).join('') + '</select></label>' +
+    (f.range === 'custom' ? '<input type="date" class="ui-field rp-fld rp-w160" data-in="df-from" value="' + esc(f.from) + '" aria-label="起日"><span>～</span><input type="date" class="ui-field rp-fld rp-w160" data-in="df-to" value="' + esc(f.to) + '" aria-label="迄日">' : '') +
+    ddHtml('dd-cust', '客戶', E.CUSTOMERS, f.customers, 'df-cust') + ddHtml('dd-type', '訂單類型', E.TYPES, f.orderTypes, 'df-type') +
+    '<button type="button" class="ui-btn ui-btn--neutral" data-act="df-clear">清除篩選</button><span class="ui-note">共用篩選與每張報表自己的條件取交集，不會改動報表定義。</span></div>';
+}
+/* 檢視模式改篩選會存回 Dashboard；用佇列讓 PUT 依序送出，避免先後顛倒 */
+var saveChain = Promise.resolve();
+function dfChanged() {
+  var cur = dashById(V.dashId);
+  if (!V.edit && cur && cur.kind === 'role') { redrawGrid(); return; }   // 角色儀表板的篩選只在這次瀏覽有效；管理員要改預設篩選請進編輯模式
+  if (!V.edit) {
+    var id = V.dashId; dashById(id).filters = clone(curDash().filters);
+    saveChain = saveChain.then(function () { var d = dashById(id); return d ? crud('PUT', '/api/dashboards/' + encodeURIComponent(id), d) : null; }).then(null, fail);
+  }
+  redrawGrid();
+}
+CH['df-range'] = function (el) { curDash().filters.range = el.value; $('#dfbar').innerHTML = filterBarHtml(curDash()); dfChanged(); };
+IN['df-from'] = function (el) { curDash().filters.from = el.value; dfChanged(); };
+IN['df-to'] = function (el) { curDash().filters.to = el.value; dfChanged(); };
+function toggleIn(arr, v, on) { var i = arr.indexOf(v); if (on && i < 0) arr.push(v); if (!on && i >= 0) arr.splice(i, 1); }
+CH['df-cust'] = function (el) { var f = curDash().filters; toggleIn(f.customers, el.value, el.checked); $('#dd-cust summary').textContent = ddLabel('客戶', f.customers); dfChanged(); };
+CH['df-type'] = function (el) { var f = curDash().filters; toggleIn(f.orderTypes, el.value, el.checked); $('#dd-type summary').textContent = ddLabel('訂單類型', f.orderTypes); dfChanged(); };
+A['df-clear'] = function () { var f = curDash().filters; f.range = 'all'; f.from = ''; f.to = ''; f.customers = []; f.orderTypes = []; $('#dfbar').innerHTML = filterBarHtml(curDash()); dfChanged(); toast('已清除篩選（日期改為不限）'); };
+
+function renderDash() {
+  var d = curDash();
+  if (!d) {
+    var hm = homeId();
+    $('#screen-dash').innerHTML = hdr('儀表板', '') + '<div class="rp-page"><div class="ui-card"><div class="ui-empty"><p style="margin:0">' + (hm ? '找不到這個儀表板' : '目前沒有可看的儀表板') + '</p>' + (hm ? '<button type="button" class="ui-btn ui-btn--action" data-act="dash-open" data-id="' + esc(hm) + '">前往首頁</button>' : '<button type="button" class="ui-btn ui-btn--new" data-act="dash-new">＋ 新增儀表板</button>') + '</div></div></div>'; return;
+  }
+  var isDef = !!S.home && d.id === homeId(), acts = V.edit ? '<button type="button" class="ui-btn ui-btn--new" data-act="w-add">＋ 新增圖表</button><button type="button" class="ui-btn ui-btn--action" data-act="dash-done">完成</button><button type="button" class="ui-btn ui-btn--neutral" data-act="dash-cancel">取消</button>'
+    : (d.baseId ? '<button type="button" class="ui-btn ui-btn--flat" data-act="dash-restore">還原成角色預設</button>' : '') + '<button type="button" class="ui-btn ui-btn--flat" data-act="dash-rename" data-id="' + esc(d.id) + '">改名</button><button type="button" class="ui-btn ui-btn--flat" data-act="dash-enter-edit">編輯</button>';
+  var kindChip = d.kind === 'role' ? (isAdmin() ? '<span class="ui-chip ui-chip--info">角色儀表板：' + esc((d.roles || []).map(function (r) { return ROLE_NAMES[r] || r; }).join('、')) + '</span>' : '')
+    : (d.baseId ? '<span class="ui-chip ui-chip--warning">已調整（個人版）</span>' : '<span class="ui-chip ui-chip--info">個人儀表板</span>');
+  var notice = !V.edit && d.roleUpdated ? '<div class="ui-state-alert">角色儀表板已更新：管理員改過這份儀表板，你看的是自己調整過的個人版。要改用新版，請按「還原成角色預設」（你的調整會捨棄）。</div>' : '';
+  var editNote = V.edit ? '<div class="ui-state-alert">編輯模式：可拖曳卡片排序（或用 ↑ ↓）、改尺寸、選項、移除。按「完成」才存檔；「取消」會全部還原。' + (d.kind === 'role' && !isAdmin() ? '<b>存檔後會變成你的個人版，不影響其他人。</b>' : '') + '</div>' : '';
+  $('#screen-dash').innerHTML = hdr('儀表板', acts, '<div class="rp-hsub"><b>' + esc(d.name) + '</b>' + (isDef ? '<span class="ui-chip ui-chip--positive">★ 首頁</span>' : '') + kindChip + (V.edit ? '<span class="ui-chip ui-chip--warning">編輯中・尚未存檔</span>' : '') + '</div>') +
+    '<div class="rp-page">' + notice + '<div id="dfbar">' + filterBarHtml(d) + '</div>' + editNote + '<div class="rp-grid" id="dgrid"></div></div>';
+  redrawGrid();
+}
+var gridSeq = 0, chartCache = {};
+function redrawGrid() {
+  var d = curDash(), g = $('#dgrid'); if (!g) return;
+  UI.dataTimes = []; renderHdrInfo();
+  g.innerHTML = d.widgets.length ? d.widgets.map(function (w, i) { return widgetHtml(w, d, i); }).join('') :
+    '<div class="rp-span12"><div class="ui-card"><div class="ui-empty"><p style="margin:0">這個儀表板還沒有任何圖表</p><p class="ui-note" style="margin:0">先到「我的報表」開一份報表 → 設定圖表 → 加入儀表板。' + (V.edit ? '' : '要從已儲存的報表新增，請按「編輯」→「新增圖表」。') + '</p></div></div></div>';
+  var seq = ++gridSeq;
+  d.widgets.forEach(function (w, i) { fillWidget(w, d, i, seq); });
+}
+/* 同一組（卡片＋報表定義＋篩選）的結果在停留於 Dashboard 期間快取，重排／切換編輯不重查；失敗不快取 */
+function widgetChart(w, d, r) {
+  var req = { widget: w, dash: { filters: d.filters } };
+  if (r) req.report = r; else req.reportId = w.reportId;
+  var key = JSON.stringify(req), refresh = !!UI.refreshNext;
+  if (!chartCache[key]) chartCache[key] = dataApi('/api/chart', req, refresh).then(function (res) {
+    if (!(res.ok || res.invalid || res.typeError)) delete chartCache[key];
+    if (refresh && res.meta && res.meta.refreshIgnored && !UI.ignoredToast) { UI.ignoredToast = true; toast('資料剛更新過，這次沿用最近一次查詢的結果'); setTimeout(function () { UI.ignoredToast = false; }, 3000); }
+    return res;
+  });
+  return chartCache[key];
+}
+function fillWidget(w, d, i, seq) {
+  var r = rep(w.reportId); if (!E.widgetStatus(w, r).ok) return;
+  var edit = V.edit;
+  widgetChart(w, d, r).then(function (cd) {
+    if (seq !== gridSeq) return;   // 已經重畫過，舊回應丟掉
+    var el = $('.rp-w[data-wid="' + CSS.escape(w.id) + '"]'); if (!el) return;
+    $('.rp-wbody', el).innerHTML = chartBody(cd, w, !edit);
+    var ex = cd.ex, chips = ex ? (ex.notApplied || []).map(function (x) { return '<span class="ui-chip ui-chip--warning" title="這張圖不依這個篩選過濾">未套用：' + esc(x) + '</span>'; }).join('') : '';
+    noteDataTime(cd.meta);
+    var lk = w.options && w.options.linkDashboardId && dashById(w.options.linkDashboardId);
+    el.insertAdjacentHTML('beforeend', '<div class="rp-wfoot"><span class="ui-note">' + (ex ? (ex.dateFieldLabel ? '本圖依「' + esc(ex.dateFieldLabel) + '」' : '本圖不依日期') : '') + (cd.meta && cd.meta.dataTime ? '・資料時間 ' + esc(hhmm(cd.meta.dataTime)) : '') + '</span>' + chips + '<span class="rp-sp"></span>' +
+      (lk && !edit ? '<a class="ui-link" href="#" data-act="dash-open" data-id="' + esc(lk.id) + '">開啟「' + esc(lk.name) + '」→</a>' : '') +
+      '<a class="ui-link" href="#" data-act="w-src-view" data-i="' + i + '">來源：' + esc(r.name) + '</a></div>');
+  });
+}
+function widgetHtml(w, d, i) {
+  var r = rep(w.reportId), cd = E.widgetStatus(w, r), edit = V.edit, n = d.widgets.length;
+  var tools = edit ? '<div class="rp-wtools"><span class="rp-drag" title="拖曳排序" aria-hidden="true">⠿</span>' +
+    '<button type="button" class="ui-btn ui-btn--outline" data-act="w-up" data-i="' + i + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="上移">↑</button><button type="button" class="ui-btn ui-btn--outline" data-act="w-down" data-i="' + i + '"' + (i === n - 1 ? ' disabled' : '') + ' aria-label="下移">↓</button>' +
+    '<div class="ui-seg">' + ['S', 'M', 'L'].map(function (s) { return '<button type="button" class="' + (w.size === s ? 'active' : '') + '" data-act="w-size" data-i="' + i + '" data-v="' + s + '">' + { S: '小', M: '中', L: '大' }[s] + '</button>'; }).join('') + '</div>' +
+    '<button type="button" class="ui-btn ui-btn--outline" data-act="w-opts" data-i="' + i + '">選項</button>' +
+    '<button type="button" class="ui-btn ui-btn--outline" data-act="w-src" data-i="' + i + '"' + (r ? '' : ' disabled title="來源報表已不存在"') + '>回來源報表</button><button type="button" class="ui-btn ui-btn--delete" data-act="w-del" data-i="' + i + '">移除</button></div>' : '';
+  var body;
+  if (!cd.ok) {
+    body = '<div class="rp-invalid"><b>這張圖目前無法顯示</b><p>' + esc(cd.reason) + '</p><p class="ui-note">圖表設定已保留。可以移除這張圖，或回來源報表補回欄位。</p><div class="rp-wtools">' +
+      '<button type="button" class="ui-btn ui-btn--outline" data-act="w-src" data-i="' + i + '"' + (r ? '' : ' disabled title="來源報表已不存在"') + '>回來源報表</button><button type="button" class="ui-btn ui-btn--delete" data-act="w-del" data-i="' + i + '">移除</button></div></div>';
+  } else body = LOADING;
+  return '<div class="rp-w rp-' + esc(w.size) + (!cd.ok ? ' is-invalid' : '') + '" data-wid="' + esc(w.id) + '"' + (edit ? ' draggable="true"' : '') + '><div class="rp-whead"><b>' + esc(w.title) + '</b><span class="ui-chip ui-chip--info">' + TYPE_NAME[w.type] + '</span></div>' + tools + '<div class="rp-wbody">' + body + '</div></div>';
+}
+function wIdx(el) { return +el.getAttribute('data-i'); }
+A['w-up'] = function (el) { var ws = V.buf.widgets, i = wIdx(el), t = ws[i]; ws[i] = ws[i - 1]; ws[i - 1] = t; redrawGrid(); };
+A['w-down'] = function (el) { var ws = V.buf.widgets, i = wIdx(el), t = ws[i]; ws[i] = ws[i + 1]; ws[i + 1] = t; redrawGrid(); };
+A['w-size'] = function (el) { V.buf.widgets[wIdx(el)].size = el.getAttribute('data-v'); redrawGrid(); };
+A['w-opts'] = function (el) {
+  var w = V.buf.widgets[wIdx(el)];
+  openModal({ title: '圖表選項：' + w.title, size: 'ui-dialog--lg', body: optsFormHtml(w.type, w.options, 'modal'), buttons: [{ label: '取消', cls: 'ui-btn--neutral' },
+    { label: '套用', cls: 'ui-btn--action', act: function (ov) { var o = optsFor(w.type, readOpts($('.rp-opts', ov))); if (Object.keys(o).length) w.options = o; else delete w.options; redrawGrid(); } }] });
+};
+A['w-del'] = function (el) {
+  var d = curDash(), w = d.widgets[wIdx(el)], r = rep(w.reportId);
+  showConfirm({ title: '從儀表板移除圖表', body: '<p>移除「' + esc(w.title) + '」？</p><p class="ui-note"><b>只是把這張卡片從儀表板拿掉，來源報表' + (r ? '「' + esc(r.name) + '」' : '') + '不會被刪除</b>，其他儀表板的圖表也不受影響。' + (V.edit ? '按「取消」編輯可還原。' : '') + '</p>', okText: '移除', okCls: 'ui-btn--delete',
+    onOk: function () {
+      if (V.edit) { d.widgets = d.widgets.filter(function (x) { return x.id !== w.id; }); toast('已移除圖表'); redrawGrid(); return; }
+      var nd = clone(dashById(d.id)); nd.widgets = nd.widgets.filter(function (x) { return x.id !== w.id; });
+      putDash(nd).then(function () { if (nd.kind !== 'role' || isAdmin()) toast('已移除圖表'); renderDash(); }, fail);
+    } });
+};
+A['w-src'] = function (el) {
+  var w = curDash().widgets[wIdx(el)], r = rep(w.reportId); if (!r) return;
+  if (r.readonly) { go('screen-view', function () { VW.id = r.id; VW.pv = newPV(10); }); return; }
+  openDesigner(r.id, 3);
+};
+A['w-src-view'] = function (el) { var w = curDash().widgets[wIdx(el)]; go('screen-view', function () { VW.id = w.reportId; VW.pv = newPV(10); }); };
+A['w-add'] = function () {
+  var list = S.reports.map(function (r) { return '<label class="rp-radio"><input type="radio" name="wa-r" value="' + esc(r.id) + '"> <b>' + esc(r.name) + '</b> <span class="ui-note">' + esc(topicName(r.topic)) + (r.readonly ? '・唯讀' : '') + '</span></label>'; }).join('');
+  openModal({ title: '從已儲存報表新增圖表', size: 'ui-dialog--md', body: '<p class="ui-note">選一份報表，接著到圖表設定選類型與欄位，最後「加入儀表板」。</p>' + (list || '<p>還沒有報表</p>') + '<div class="rp-cond-err" id="wa-err" style="display:none">請先選一份報表</div>',
+    buttons: [{ label: '取消', cls: 'ui-btn--neutral' }, { label: '前往圖表設定', cls: 'ui-btn--action', act: function (ov) {
+      var x = $('input[name="wa-r"]:checked', ov); if (!x) { $('#wa-err', ov).style.display = 'block'; return false; }
+      var did = V.dashId, rid = x.value; setTimeout(function () { openChart(rid, did); }, 0); } }] });
+};
+/* 拖曳排序（HTML5 DnD） */
+var dragId = null;
+document.addEventListener('dragstart', function (e) { var w = e.target.closest && e.target.closest('.rp-w[draggable="true"]'); if (!w) return; dragId = w.getAttribute('data-wid'); w.classList.add('is-drag'); try { e.dataTransfer.setData('text/plain', dragId); e.dataTransfer.effectAllowed = 'move'; } catch (x) { } });
+document.addEventListener('dragover', function (e) { var w = e.target.closest && e.target.closest('.rp-w[draggable="true"]'); if (!w || !dragId) return; e.preventDefault(); $$('.rp-w.is-over').forEach(function (x) { x.classList.remove('is-over'); }); if (w.getAttribute('data-wid') !== dragId) w.classList.add('is-over'); });
+document.addEventListener('drop', function (e) {
+  var w = e.target.closest && e.target.closest('.rp-w[draggable="true"]'); if (!w || !dragId) return; e.preventDefault();
+  var to = w.getAttribute('data-wid'); if (to !== dragId) moveWidget(dragId, to); dragId = null;
+});
+document.addEventListener('dragend', function () { dragId = null; $$('.rp-w.is-drag,.rp-w.is-over').forEach(function (x) { x.classList.remove('is-drag'); x.classList.remove('is-over'); }); });
+function moveWidget(fromId, toId) {
+  var ws = V.buf.widgets, fi = ws.map(function (x) { return x.id; }).indexOf(fromId), ti = ws.map(function (x) { return x.id; }).indexOf(toId);
+  if (fi < 0 || ti < 0) return; var it = ws.splice(fi, 1)[0]; ws.splice(ti, 0, it); redrawGrid();
+}
+window.__moveWidget = moveWidget;
+
+/* ===== 畫面：下鑽明細 ===== */
+A.drill = function (el) {
+  if (V.edit) return;
+  var key = el.getAttribute('data-key');
+  R = { dashId: V.dashId, wid: el.getAttribute('data-wid'), key: key === '' ? null : key, pv: newPV(20), dd: null, seq: 0 };
+  go('screen-drill');
+};
+A['drill-back'] = function () { go('screen-dash', function () { V.dashId = R ? R.dashId : V.dashId; }); };
+A['drill-clear'] = function () { if (R) { R.key = null; R.pv = newPV(20); renderDrill(); } };
+function drillCtx() {
+  var d = R && dashById(R.dashId), w = d && d.widgets.filter(function (x) { return x.id === R.wid; })[0], r = w && rep(w.reportId);
+  if (!w || !r) return null;
+  return { d: d, w: w, r: r };
+}
+/* 下鑽：POST /api/drill 一次取回明細（上限 2000 筆）；分頁與排序在前端。帶序號，只採用最新回應 */
+function renderDrill() {
+  var x = drillCtx();
+  if (x) {
+    var rr = R, t = ++R.seq;
+    R.dd = null;
+    $('#screen-drill').innerHTML = hdr('下鑽明細', '<button type="button" class="ui-btn ui-btn--action" data-act="drill-back">返回儀表板</button>') + '<div class="rp-page">' + LOADING + '</div>';
+    dataApi('/api/drill', { widget: x.w, report: x.r, dash: { filters: x.d.filters }, clicked: R.key ? { key: R.key } : null }).then(function (dd) {
+      if (R !== rr || rr.seq !== t || UI.screen !== 'screen-drill') return;
+      R.dd = dd; renderDrillPage();
+    });
+    return;
+  }
+  renderDrillPage();
+}
+function renderDrillPage() {
+  if (!R || !drillCtx()) {
+    $('#screen-drill').innerHTML = hdr('下鑽明細', '<button type="button" class="ui-btn ui-btn--neutral" data-goto="screen-dash">返回儀表板</button>') + '<div class="rp-page"><div class="ui-card"><div class="ui-empty"><p style="margin:0">請在儀表板上點選長條、折線資料點、圓餅區塊或指標卡，開啟下鑽明細。</p><button type="button" class="ui-btn ui-btn--action" data-act="dash-open" data-id="' + esc(homeId()) + '">前往首頁</button></div></div></div>'; return;
+  }
+  var x = drillCtx(), dd = R.dd, w = x.w;
+  if (!dd.ok) { $('#screen-drill').innerHTML = hdr('下鑽明細', '<button type="button" class="ui-btn ui-btn--action" data-act="drill-back">返回儀表板</button>') + '<div class="rp-page"><div class="rp-inline-err">' + (dd.reason ? '這張圖目前失效：' + esc(dd.reason) : '無法載入明細：' + esc((dd.errors && dd.errors[0] && dd.errors[0].msg) || '查詢失敗')) + '</div></div>'; return; }
+  var clicked = R.key ? esc(w.title) + ' › ' + esc(dd.categoryText) : esc(w.title) + (w.type === 'metric' ? ' › 指標卡' : ' › 全部（沒有限定分類）');
+  var na = dd.notApplied.map(function (t) { return '<span class="ui-chip ui-chip--warning">未套用：' + esc(t) + '</span>'; }).join(' ');
+  $('#screen-drill').innerHTML = hdr('下鑽明細', '<button type="button" class="ui-btn ui-btn--flat" data-act="drill-clear"' + (R.key ? '' : ' disabled title="目前沒有點選分類"') + '>清除點選分類</button><button type="button" class="ui-btn ui-btn--action" data-act="drill-back">返回儀表板</button>') +
+    '<div class="rp-page"><div class="ui-card rp-clicked"><div class="ui-note">你點的是：</div><div class="rp-side-big">' + clicked + '</div></div>' +
+    '<div class="rp-three"><div class="ui-card"><div class="rp-side-k">報表條件</div><ul>' + dd.reportTexts.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></div>' +
+    '<div class="ui-card"><div class="rp-side-k">儀表板篩選</div><ul>' + (dd.dashTexts.length ? dd.dashTexts.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') : '<li class="ui-note">無（日期不限、客戶與訂單類型全部）</li>') + '</ul>' + na + '</div>' +
+    '<div class="ui-card"><div class="rp-side-k">點選的分類</div><ul>' + (R.key ? '<li>' + esc(dd.categoryText) + '</li>' : '<li class="ui-note">無</li>') + '</ul></div></div>' +
+    '<div class="ui-card rp-sumcard">' + (dd.metricLabel ? '<div><div class="ui-note">合計：' + esc(dd.metricLabel) + '</div><div class="rp-metric-val">' + fmtVal(dd.value, dd.fmt) + '</div></div>' : '') + '<div><div class="ui-note">明細列數</div><div class="rp-metric-val">' + dd.count + '</div></div>' +
+    (dd.metricLabel ? '<p class="ui-note rp-sumnote">這個合計和儀表板上被點的數字用同一個計算函式算出；比率與不重複數是對下面這些明細列重新計算，不是欄位相加。</p>' : '') + '</div>' +
+    '<div id="drill-body"></div></div>';
+  renderDrillBody();
+}
+function renderDrillBody() {
+  if (!R || !R.dd || !R.dd.ok) return; var dd = R.dd, pv = R.pv;
+  var rows = dd.rows.slice();
+  if (pv.sort) { var k = pv.sort.key, s = pv.sort.dir === 'desc' ? -1 : 1; rows.sort(function (a, b) { var p = a[k], q = b[k]; if (p == null) return 1; if (q == null) return -1; return (p < q ? -1 : p > q ? 1 : 0) * s; }); }
+  var res = { mode: 'detail', columns: dd.columns, rows: rows };
+  var trunc = dd.truncated ? '<div class="ui-state-alert">只顯示前 ' + fmtVal(dd.limit, 'int') + ' 筆（共 ' + fmtVal(dd.count, 'int') + ' 筆）。上方合計是整體的值；要看其餘明細，請縮小儀表板篩選或報表條件。</div>' : '';
+  $('#drill-body').innerHTML = dd.rows.length ? trunc + '<div data-pv="drill">' + tableHtml(res, pv) + pagerHtml(dd.rows.length, pv) + '</div>' : '<div class="ui-card"><div class="ui-empty"><p style="margin:0">這個條件下沒有明細列</p></div></div>';
+}
+/* ===== 事件與啟動 ===== */
+document.addEventListener('click', function (e) {
+  if (!S) return;   // 目錄與狀態還沒載入完
+  if (!e.target.closest('#side-nav, .rp-navbtn')) closeNav();
+  var nv = e.target.closest('[data-nav]');
+  if (nv) { navTo(nv); return; }
+  var el = e.target.closest('[data-act]');
+  if (el) {
+    if (el.tagName === 'A') e.preventDefault();
+    if (el.disabled) return;
+    var f = A[el.getAttribute('data-act')]; if (f) f(el, e); return;
+  }
+  var g = e.target.closest('[data-goto]');
+  if (g) { e.preventDefault(); sideNav(g.getAttribute('data-goto')); }
+});
+document.addEventListener('change', function (e) { var k = e.target.getAttribute && e.target.getAttribute('data-ch'); if (k && CH[k]) CH[k](e.target, e); });
+document.addEventListener('input', function (e) { var k = e.target.getAttribute && e.target.getAttribute('data-in'); if (k && IN[k]) IN[k](e.target, e); });
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && modals.length) { var m = modals[modals.length - 1]; closeModal(m); if (m._o && m._o.onCancel) m._o.onCancel(); return; }
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('rp-hit')) { e.preventDefault(); e.target.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
+});
+
+/* 先載入 /api/meta（欄位目錄、選項）與 /api/state（報表、Dashboard），再 render */
+function boot() {
+  $('#screen-dash').classList.add('active');
+  $('#screen-dash').innerHTML = hdr('儀表板', '') + '<div class="rp-page">' + LOADING + '</div>';
+  Promise.all([api('GET', '/api/meta'), api('GET', '/api/state')]).then(function (rs) {
+    if (rs[0].status !== 200 || rs[1].status !== 200 || !rs[0].body || !rs[1].body) throw new Error(apiMsg(rs[0].status !== 200 ? rs[0] : rs[1]));
+    E.init(rs[0].body); S = rs[1].body; UI.asOf = rs[0].body.asOf; renderHdrInfo();
+    V.dashId = homeId();
+    showScreen('screen-dash');
+    var oe = Object.keys(rs[0].body.optsErrors || {});
+    if (oe.length) toast('部分選項清單（客戶、業務員…）無法載入：' + rs[0].body.optsErrors[oe[0]]);
+  }).catch(function (e) {
+    $('#screen-dash').innerHTML = hdr('儀表板', '') + '<div class="rp-page"><div class="rp-err-box"><b>無法載入</b><div class="rp-err" role="alert"><div>' + esc(e.message) + '</div><div class="rp-err-act"><button type="button" class="ui-btn ui-btn--action" onclick="location.reload()">重新載入</button></div></div></div></div>';
+  });
+}
+boot();
+
+})();
+</script>
+</body>
+</html>

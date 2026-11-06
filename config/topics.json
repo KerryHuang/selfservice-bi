@@ -1,0 +1,1268 @@
+{
+  "$comment": "欄位定義層，也是後端唯一的 SQL 白名單：欄位 id 對應 SQLite 運算式。參數：@today（資料基準日）。日期欄都是 YYYY-MM-DD 文字。",
+  "version": 1,
+  "topics": {
+    "orderLine": {
+      "label": "訂單明細",
+      "rowText": "一筆訂單明細（一個品項）",
+      "countLabel": "明細筆數",
+      "groups": {
+        "main": "主要資料：訂單明細",
+        "header": "相關資料：訂單表頭（必帶）",
+        "delivery": "相關資料：交期結果（選加）"
+      },
+      "from": "sales_order_lines AS d INNER JOIN sales_orders AS h ON h.id = d.order_id LEFT JOIN customers AS c ON c.id = h.customer_id LEFT JOIN urgency_types AS u ON u.code = h.urgency",
+      "where": "h.status <> 'cancelled'",
+      "related": {
+        "delivery": "LEFT JOIN (SELECT w2.order_line_id, MIN(w1.ship_date) AS firstShip, MAX(w1.ship_date) AS lastShip, COUNT(*) AS shipCount, SUM(w2.qty) AS shippedQty FROM shipment_lines AS w2 INNER JOIN shipments AS w1 ON w1.id = w2.shipment_id GROUP BY w2.order_line_id) AS s ON s.order_line_id = d.id"
+      },
+      "keys": {
+        "orderNo": "h.order_no",
+        "lineKey": "d.id"
+      },
+      "dateFields": [
+        "orderDate",
+        "basisDue",
+        "firstShip"
+      ],
+      "ratios": {
+        "onTime": {
+          "label": "達交率",
+          "scale": 100,
+          "unit": "%",
+          "num": "CASE WHEN {dueStatus} IN ('如期', '提早') THEN 1 ELSE 0 END",
+          "den": "CASE WHEN {dueStatus} IN ('如期', '提早', '延誤', '逾期未交') THEN 1 ELSE 0 END"
+        }
+      },
+      "fields": [
+        {
+          "id": "itemNo",
+          "label": "項次",
+          "type": "text",
+          "grp": "main",
+          "sql": "d.item_no"
+        },
+        {
+          "id": "partNo",
+          "label": "品號",
+          "type": "text",
+          "grp": "main",
+          "sql": "d.part_no"
+        },
+        {
+          "id": "partName",
+          "label": "品名",
+          "type": "text",
+          "grp": "main",
+          "sql": "d.part_name"
+        },
+        {
+          "id": "qty",
+          "label": "訂購數量",
+          "type": "number",
+          "grp": "main",
+          "kind": "qty",
+          "fmt": "int",
+          "sql": "d.qty"
+        },
+        {
+          "id": "unit",
+          "label": "單位",
+          "type": "enum",
+          "grp": "main",
+          "kind": "unit",
+          "sql": "d.unit"
+        },
+        {
+          "id": "unitPrice",
+          "label": "單價（原幣）",
+          "type": "number",
+          "grp": "main",
+          "kind": "origPrice",
+          "fmt": "money",
+          "notSummable": "不同品項的單價不能加總或平均（請改用明細金額）",
+          "sql": "COALESCE(d.unit_price, d.amount / NULLIF(d.qty, 0))"
+        },
+        {
+          "id": "amount",
+          "label": "明細金額（原幣）",
+          "type": "number",
+          "grp": "main",
+          "kind": "origMoney",
+          "fmt": "money",
+          "sql": "d.amount"
+        },
+        {
+          "id": "amountLocal",
+          "label": "本幣金額",
+          "type": "number",
+          "grp": "main",
+          "kind": "localMoney",
+          "fmt": "money",
+          "sql": "ROUND(d.amount * h.exchange_rate, 0)"
+        },
+        {
+          "id": "lineDue",
+          "label": "明細預交日",
+          "type": "date",
+          "grp": "main",
+          "sql": "d.due_date"
+        },
+        {
+          "id": "basisDue",
+          "label": "預交日（系統判定）",
+          "type": "date",
+          "grp": "main",
+          "sql": "COALESCE(d.due_date, h.due_date)"
+        },
+        {
+          "id": "orderNo",
+          "label": "訂單編號",
+          "type": "text",
+          "grp": "header",
+          "sql": "h.order_no"
+        },
+        {
+          "id": "orderDate",
+          "label": "接單日",
+          "type": "date",
+          "grp": "header",
+          "sql": "h.order_date"
+        },
+        {
+          "id": "headerDue",
+          "label": "表頭預交日",
+          "type": "date",
+          "grp": "header",
+          "sql": "h.due_date"
+        },
+        {
+          "id": "factoryDue",
+          "label": "廠內交期（只能顯示）",
+          "type": "date",
+          "grp": "header",
+          "displayOnly": true,
+          "sql": "h.factory_due"
+        },
+        {
+          "id": "customer",
+          "label": "客戶",
+          "type": "enum",
+          "grp": "header",
+          "sql": "c.short_name"
+        },
+        {
+          "id": "salesperson",
+          "label": "業務員",
+          "type": "enum",
+          "grp": "header",
+          "sql": "h.salesperson"
+        },
+        {
+          "id": "orderType",
+          "label": "訂單類型",
+          "type": "enum",
+          "grp": "header",
+          "sql": "h.order_type"
+        },
+        {
+          "id": "urgency",
+          "label": "緊急程度",
+          "type": "enum",
+          "grp": "header",
+          "sql": "u.name"
+        },
+        {
+          "id": "currency",
+          "label": "幣別",
+          "type": "enum",
+          "grp": "header",
+          "sql": "h.currency"
+        },
+        {
+          "id": "orderTotal",
+          "label": "訂單總額（表頭）",
+          "type": "number",
+          "grp": "header",
+          "kind": "origMoney",
+          "fmt": "money",
+          "notSummable": "一張訂單有多筆明細，表頭金額加總會重複計算",
+          "sql": "h.total_amount"
+        },
+        {
+          "id": "firstShip",
+          "label": "首次出貨日（實交日）",
+          "type": "date",
+          "grp": "delivery",
+          "sql": "s.firstShip"
+        },
+        {
+          "id": "lastShip",
+          "label": "末次出貨日",
+          "type": "date",
+          "grp": "delivery",
+          "sql": "s.lastShip"
+        },
+        {
+          "id": "shipCount",
+          "label": "出貨次數",
+          "type": "number",
+          "grp": "delivery",
+          "fmt": "int",
+          "sql": "COALESCE(s.shipCount, 0)"
+        },
+        {
+          "id": "shippedQty",
+          "label": "已出貨量",
+          "type": "number",
+          "grp": "delivery",
+          "kind": "qty",
+          "fmt": "int",
+          "sql": "COALESCE(s.shippedQty, 0)"
+        },
+        {
+          "id": "unshippedQty",
+          "label": "未出貨量",
+          "type": "number",
+          "grp": "delivery",
+          "kind": "qty",
+          "fmt": "int",
+          "sql": "d.qty - COALESCE(s.shippedQty, 0)"
+        },
+        {
+          "id": "dueStatus",
+          "label": "交期狀態",
+          "type": "enum",
+          "grp": "delivery",
+          "chip": true,
+          "opts": [
+            "未到期",
+            "如期",
+            "提早",
+            "延誤",
+            "逾期未交"
+          ],
+          "sql": "CASE WHEN COALESCE(d.due_date, h.due_date) IS NULL THEN NULL WHEN s.firstShip IS NULL THEN CASE WHEN COALESCE(d.due_date, h.due_date) >= @today THEN '未到期' ELSE '逾期未交' END WHEN s.firstShip < COALESCE(d.due_date, h.due_date) THEN '提早' WHEN s.firstShip = COALESCE(d.due_date, h.due_date) THEN '如期' ELSE '延誤' END"
+        },
+        {
+          "id": "delayDays",
+          "label": "延誤天數",
+          "type": "number",
+          "grp": "delivery",
+          "fmt": "int",
+          "sql": "CASE WHEN COALESCE(d.due_date, h.due_date) IS NULL THEN 0 WHEN s.firstShip IS NULL THEN CASE WHEN COALESCE(d.due_date, h.due_date) < @today THEN CAST(julianday(@today) - julianday(COALESCE(d.due_date, h.due_date)) AS integer) ELSE 0 END WHEN s.firstShip > COALESCE(d.due_date, h.due_date) THEN CAST(julianday(s.firstShip) - julianday(COALESCE(d.due_date, h.due_date)) AS integer) ELSE 0 END"
+        }
+      ]
+    },
+    "shipment": {
+      "label": "出貨明細",
+      "rowText": "一筆出貨明細",
+      "countLabel": "出貨筆數",
+      "groups": {
+        "main": "主要資料：出貨明細",
+        "line": "相關資料：訂單明細",
+        "header": "相關資料：訂單表頭"
+      },
+      "from": "shipment_lines AS w2 INNER JOIN shipments AS w1 ON w1.id = w2.shipment_id LEFT JOIN sales_order_lines AS d ON d.id = w2.order_line_id LEFT JOIN sales_orders AS h ON h.id = d.order_id LEFT JOIN customers AS c ON c.id = w1.customer_id",
+      "where": "1 = 1",
+      "related": {},
+      "keys": {
+        "orderNo": "h.order_no",
+        "lineKey": "d.id",
+        "shipNo": "w1.ship_no"
+      },
+      "dateFields": [
+        "shipDate",
+        "basisDue"
+      ],
+      "fields": [
+        {
+          "id": "shipNo",
+          "label": "出貨單號",
+          "type": "text",
+          "grp": "main",
+          "sql": "w1.ship_no"
+        },
+        {
+          "id": "shipDate",
+          "label": "出貨日",
+          "type": "date",
+          "grp": "main",
+          "sql": "w1.ship_date"
+        },
+        {
+          "id": "shipQty",
+          "label": "本次出貨數",
+          "type": "number",
+          "grp": "main",
+          "kind": "qty",
+          "fmt": "int",
+          "sql": "w2.qty"
+        },
+        {
+          "id": "unit",
+          "label": "單位",
+          "type": "enum",
+          "grp": "main",
+          "kind": "unit",
+          "sql": "w2.unit"
+        },
+        {
+          "id": "shipAmount",
+          "label": "出貨金額（原幣）",
+          "type": "number",
+          "grp": "main",
+          "kind": "origMoney",
+          "fmt": "money",
+          "sql": "w2.amount"
+        },
+        {
+          "id": "shipAmountLocal",
+          "label": "本幣出貨金額",
+          "type": "number",
+          "grp": "main",
+          "kind": "localMoney",
+          "fmt": "money",
+          "sql": "ROUND(w2.amount * w1.exchange_rate, 0)"
+        },
+        {
+          "id": "currency",
+          "label": "幣別",
+          "type": "enum",
+          "grp": "main",
+          "sql": "w1.currency"
+        },
+        {
+          "id": "customer",
+          "label": "客戶",
+          "type": "enum",
+          "grp": "main",
+          "sql": "c.short_name"
+        },
+        {
+          "id": "orderNo",
+          "label": "訂單編號",
+          "type": "text",
+          "grp": "line",
+          "sql": "h.order_no"
+        },
+        {
+          "id": "partNo",
+          "label": "品號",
+          "type": "text",
+          "grp": "line",
+          "sql": "d.part_no"
+        },
+        {
+          "id": "partName",
+          "label": "品名",
+          "type": "text",
+          "grp": "line",
+          "sql": "d.part_name"
+        },
+        {
+          "id": "basisDue",
+          "label": "預交日（系統判定）",
+          "type": "date",
+          "grp": "line",
+          "sql": "COALESCE(d.due_date, h.due_date)"
+        },
+        {
+          "id": "orderedQty",
+          "label": "訂購數量",
+          "type": "number",
+          "grp": "line",
+          "kind": "qty",
+          "fmt": "int",
+          "notSummable": "同一筆明細出貨多次會重複計算訂購數量",
+          "sql": "d.qty"
+        },
+        {
+          "id": "lineAmount",
+          "label": "明細金額（原幣）",
+          "type": "number",
+          "grp": "line",
+          "kind": "origMoney",
+          "fmt": "money",
+          "notSummable": "同一筆明細出貨多次會重複計算明細金額",
+          "sql": "d.amount"
+        },
+        {
+          "id": "salesperson",
+          "label": "業務員",
+          "type": "enum",
+          "grp": "header",
+          "sql": "h.salesperson"
+        },
+        {
+          "id": "orderType",
+          "label": "訂單類型",
+          "type": "enum",
+          "grp": "header",
+          "sql": "h.order_type"
+        }
+      ]
+    },
+    "processLine": {
+      "label": "工令製程",
+      "rowText": "一道製程（一個工令零件的一個加工步驟）",
+      "countLabel": "製程數",
+      "groups": {
+        "main": "主要資料：工令製程",
+        "header": "相關資料：工令（訂單表頭）",
+        "report": "相關資料：報工彙總（選加）"
+      },
+      "from": "processes AS p INNER JOIN job_parts AS part ON part.id = p.job_part_id INNER JOIN sales_orders AS h ON h.id = p.order_id LEFT JOIN machines AS m ON m.id = p.machine_id",
+      "where": "h.status <> 'cancelled'",
+      "related": {
+        "report": "LEFT JOIN (SELECT process_id, SUM(run_hours) AS machHr, MAX(report_date) AS lastReport, COUNT(*) AS reportCount FROM work_reports WHERE process_id IS NOT NULL GROUP BY process_id) AS w ON w.process_id = p.id"
+      },
+      "keys": {
+        "orderNo": "h.order_no",
+        "lineKey": "p.id"
+      },
+      "dateFields": [
+        "endDate",
+        "startDate",
+        "headerDue"
+      ],
+      "ratios": {
+        "progress": {
+          "label": "製程完工比",
+          "scale": 100,
+          "unit": "%",
+          "num": "CASE WHEN p.is_outsourced = 0 AND p.status = 'done' THEN 1 ELSE 0 END",
+          "den": "CASE WHEN p.is_outsourced = 0 THEN 1 ELSE 0 END",
+          "note": "自製製程中已完工的比例，外包製程不計"
+        }
+      },
+      "fields": [
+        {
+          "id": "orderNo",
+          "label": "工令",
+          "type": "text",
+          "grp": "header",
+          "sql": "h.order_no"
+        },
+        {
+          "id": "orderType",
+          "label": "訂單類型",
+          "type": "enum",
+          "grp": "header",
+          "sql": "h.order_type"
+        },
+        {
+          "id": "orderStatus",
+          "label": "工令狀態",
+          "type": "enum",
+          "grp": "header",
+          "opts": [
+            "未結案",
+            "已結案"
+          ],
+          "sql": "CASE WHEN h.status = 'closed' THEN '已結案' ELSE '未結案' END"
+        },
+        {
+          "id": "headerDue",
+          "label": "訂單預交日",
+          "type": "date",
+          "grp": "header",
+          "sql": "h.due_date"
+        },
+        {
+          "id": "partNo",
+          "label": "零件號",
+          "type": "text",
+          "grp": "main",
+          "sql": "part.part_no"
+        },
+        {
+          "id": "partName",
+          "label": "零件名稱",
+          "type": "text",
+          "grp": "main",
+          "sql": "part.part_name"
+        },
+        {
+          "id": "seq",
+          "label": "製程序",
+          "type": "text",
+          "grp": "main",
+          "sql": "p.seq"
+        },
+        {
+          "id": "processName",
+          "label": "製程名稱",
+          "type": "enum",
+          "grp": "main",
+          "sql": "p.process_name"
+        },
+        {
+          "id": "machine",
+          "label": "機台",
+          "type": "enum",
+          "grp": "main",
+          "sql": "m.machine_no"
+        },
+        {
+          "id": "machineGroup",
+          "label": "機台群組",
+          "type": "enum",
+          "grp": "main",
+          "sql": "m.machine_group"
+        },
+        {
+          "id": "makeType",
+          "label": "自製／外包",
+          "type": "enum",
+          "grp": "main",
+          "opts": [
+            "自製",
+            "外包"
+          ],
+          "sql": "CASE WHEN p.is_outsourced = 1 THEN '外包' ELSE '自製' END"
+        },
+        {
+          "id": "done",
+          "label": "完工",
+          "type": "enum",
+          "grp": "main",
+          "chip": true,
+          "opts": [
+            "已完工",
+            "未完工"
+          ],
+          "sql": "CASE WHEN p.status = 'done' THEN '已完工' ELSE '未完工' END"
+        },
+        {
+          "id": "endDate",
+          "label": "完工日",
+          "type": "date",
+          "grp": "main",
+          "sql": "p.end_date"
+        },
+        {
+          "id": "startDate",
+          "label": "開工日",
+          "type": "date",
+          "grp": "main",
+          "sql": "p.start_date"
+        },
+        {
+          "id": "backlogState",
+          "label": "積壓狀態",
+          "type": "enum",
+          "grp": "main",
+          "chip": true,
+          "opts": [
+            "未開工",
+            "準備開工",
+            "開工中",
+            "暫停"
+          ],
+          "sql": "CASE WHEN h.status = 'open' AND p.is_outsourced = 0 THEN CASE p.status WHEN 'not_started' THEN '未開工' WHEN 'ready' THEN '準備開工' WHEN 'running' THEN '開工中' WHEN 'paused' THEN '暫停' END END"
+        },
+        {
+          "id": "qty",
+          "label": "製程數量",
+          "type": "number",
+          "grp": "main",
+          "fmt": "int",
+          "notSummable": "不同零件的數量單位不同",
+          "sql": "p.qty"
+        },
+        {
+          "id": "machHr",
+          "label": "報工機時",
+          "type": "number",
+          "grp": "report",
+          "kind": "hours",
+          "sql": "COALESCE(w.machHr, 0)"
+        },
+        {
+          "id": "lastReport",
+          "label": "最後報工日",
+          "type": "date",
+          "grp": "report",
+          "sql": "w.lastReport"
+        },
+        {
+          "id": "idleDays",
+          "label": "未動天數",
+          "type": "number",
+          "grp": "report",
+          "fmt": "int",
+          "notSummable": "天數不可加總",
+          "sql": "CASE WHEN p.status <> 'done' AND h.status = 'open' AND p.is_outsourced = 0 AND w.lastReport IS NOT NULL THEN CAST(julianday(@today) - julianday(w.lastReport) AS integer) END"
+        }
+      ]
+    },
+    "partProgress": {
+      "label": "工令零件",
+      "rowText": "一個工令零件",
+      "countLabel": "零件數",
+      "groups": {
+        "main": "主要資料：工令零件",
+        "header": "相關資料：工令（訂單表頭）"
+      },
+      "from": "job_parts AS part INNER JOIN sales_orders AS h ON h.id = part.order_id LEFT JOIN (SELECT job_part_id, SUM(CASE WHEN is_outsourced = 0 THEN 1 ELSE 0 END) AS selfCount, SUM(CASE WHEN is_outsourced = 0 AND status = 'done' THEN 1 ELSE 0 END) AS selfDone, MAX(end_date) AS lastDone FROM processes GROUP BY job_part_id) AS ps ON ps.job_part_id = part.id",
+      "where": "h.status <> 'cancelled'",
+      "related": {},
+      "keys": {
+        "orderNo": "h.order_no",
+        "lineKey": "part.id"
+      },
+      "dateFields": [
+        "doneDate",
+        "orderDue"
+      ],
+      "ratios": {
+        "orderProgress": {
+          "label": "工令進度",
+          "scale": 100,
+          "unit": "%",
+          "num": "COALESCE(ps.selfDone, 0)",
+          "den": "COALESCE(ps.selfCount, 0)",
+          "note": "自製製程的完工比例"
+        }
+      },
+      "fields": [
+        {
+          "id": "orderNo",
+          "label": "工令",
+          "type": "text",
+          "grp": "header",
+          "sql": "h.order_no"
+        },
+        {
+          "id": "orderType",
+          "label": "訂單類型",
+          "type": "enum",
+          "grp": "header",
+          "sql": "h.order_type"
+        },
+        {
+          "id": "orderStatus",
+          "label": "工令狀態",
+          "type": "enum",
+          "grp": "header",
+          "opts": [
+            "未結案",
+            "已結案"
+          ],
+          "sql": "CASE WHEN h.status = 'closed' THEN '已結案' ELSE '未結案' END"
+        },
+        {
+          "id": "orderDue",
+          "label": "交期",
+          "type": "date",
+          "grp": "header",
+          "sql": "h.due_date"
+        },
+        {
+          "id": "partNo",
+          "label": "零件號",
+          "type": "text",
+          "grp": "main",
+          "sql": "part.part_no"
+        },
+        {
+          "id": "partName",
+          "label": "零件名稱",
+          "type": "text",
+          "grp": "main",
+          "sql": "part.part_name"
+        },
+        {
+          "id": "done",
+          "label": "零件完工",
+          "type": "enum",
+          "grp": "main",
+          "chip": true,
+          "opts": [
+            "已完工",
+            "未完工"
+          ],
+          "sql": "CASE WHEN part.done = 1 THEN '已完工' ELSE '未完工' END"
+        },
+        {
+          "id": "doneDate",
+          "label": "完工日",
+          "type": "date",
+          "grp": "main",
+          "sql": "CASE WHEN part.done = 1 THEN ps.lastDone END"
+        },
+        {
+          "id": "selfCount",
+          "label": "自製製程數",
+          "type": "number",
+          "grp": "main",
+          "fmt": "int",
+          "sql": "COALESCE(ps.selfCount, 0)"
+        },
+        {
+          "id": "selfDone",
+          "label": "已完工自製製程數",
+          "type": "number",
+          "grp": "main",
+          "fmt": "int",
+          "sql": "COALESCE(ps.selfDone, 0)"
+        }
+      ]
+    },
+    "workReport": {
+      "label": "報工明細",
+      "rowText": "一筆報工紀錄（一段加工）",
+      "countLabel": "報工筆數",
+      "groups": {
+        "main": "主要資料：報工明細"
+      },
+      "from": "work_reports AS w LEFT JOIN machines AS m ON m.id = w.machine_id LEFT JOIN report_categories AS t ON t.code = w.category_code",
+      "where": "1 = 1",
+      "related": {},
+      "keys": {
+        "orderNo": "w.order_no",
+        "lineKey": "w.id"
+      },
+      "dateFields": [
+        "reportDate"
+      ],
+      "fields": [
+        {
+          "id": "reportDate",
+          "label": "報工日",
+          "type": "date",
+          "grp": "main",
+          "sql": "w.report_date"
+        },
+        {
+          "id": "machine",
+          "label": "機台",
+          "type": "enum",
+          "grp": "main",
+          "sql": "m.machine_no"
+        },
+        {
+          "id": "machineGroup",
+          "label": "機台群組",
+          "type": "enum",
+          "grp": "main",
+          "sql": "m.machine_group"
+        },
+        {
+          "id": "orderNo",
+          "label": "工令",
+          "type": "text",
+          "grp": "main",
+          "sql": "w.order_no"
+        },
+        {
+          "id": "partNo",
+          "label": "零件號",
+          "type": "text",
+          "grp": "main",
+          "sql": "w.part_no"
+        },
+        {
+          "id": "mode",
+          "label": "報工狀態",
+          "type": "enum",
+          "grp": "main",
+          "opts": [
+            "加工中",
+            "完工",
+            "暫停"
+          ],
+          "sql": "w.status"
+        },
+        {
+          "id": "category",
+          "label": "報工類別",
+          "type": "enum",
+          "grp": "main",
+          "sql": "t.name"
+        },
+        {
+          "id": "countsAsRun",
+          "label": "計入稼動",
+          "type": "enum",
+          "grp": "main",
+          "opts": [
+            "計入",
+            "不計入"
+          ],
+          "sql": "CASE WHEN t.counts_as_run = 1 THEN '計入' ELSE '不計入' END"
+        },
+        {
+          "id": "shift",
+          "label": "班別",
+          "type": "enum",
+          "grp": "main",
+          "opts": [
+            "正班",
+            "加班",
+            "夜班",
+            "假日加班"
+          ],
+          "sql": "w.shift"
+        },
+        {
+          "id": "machHr",
+          "label": "機時",
+          "type": "number",
+          "grp": "main",
+          "kind": "hours",
+          "sql": "w.run_hours"
+        },
+        {
+          "id": "qtyDone",
+          "label": "完工數量",
+          "type": "number",
+          "grp": "main",
+          "fmt": "int",
+          "notSummable": "不同零件的數量單位不同",
+          "sql": "w.qty_done"
+        }
+      ]
+    },
+    "machineDay": {
+      "label": "機台日稼動",
+      "rowText": "一台機台的一天",
+      "countLabel": "機台日數",
+      "groups": {
+        "main": "主要資料：機台日稼動"
+      },
+      "from": "work_calendar AS cal CROSS JOIN machines AS m LEFT JOIN (SELECT wr.machine_id, wr.report_date AS d, SUM(wr.run_hours) AS runHr FROM work_reports AS wr INNER JOIN report_categories AS rc ON rc.code = wr.category_code WHERE rc.counts_as_run = 1 GROUP BY wr.machine_id, wr.report_date) AS r ON r.machine_id = m.id AND r.d = cal.work_date",
+      "where": "cal.work_date <= @today AND m.retired_date IS NULL",
+      "related": {},
+      "keys": {
+        "lineKey": "m.machine_no"
+      },
+      "dateFields": [
+        "workDate"
+      ],
+      "ratios": {
+        "utilization": {
+          "label": "稼動率",
+          "scale": 100,
+          "unit": "%",
+          "num": "{runHr}",
+          "den": "{capacityHr}",
+          "note": "依報工機時計算，未扣休息時數"
+        }
+      },
+      "fields": [
+        {
+          "id": "workDate",
+          "label": "日期",
+          "type": "date",
+          "grp": "main",
+          "sql": "cal.work_date"
+        },
+        {
+          "id": "isWorkday",
+          "label": "工作日",
+          "type": "enum",
+          "grp": "main",
+          "opts": [
+            "工作日",
+            "休假日"
+          ],
+          "sql": "CASE WHEN cal.is_workday <> 0 THEN '工作日' ELSE '休假日' END"
+        },
+        {
+          "id": "machine",
+          "label": "機台",
+          "type": "enum",
+          "grp": "main",
+          "sql": "m.machine_no"
+        },
+        {
+          "id": "machineGroup",
+          "label": "機台群組",
+          "type": "enum",
+          "grp": "main",
+          "sql": "m.machine_group"
+        },
+        {
+          "id": "runHr",
+          "label": "報工機時",
+          "type": "number",
+          "grp": "main",
+          "kind": "hours",
+          "sql": "COALESCE(r.runHr, 0)"
+        },
+        {
+          "id": "capacityHr",
+          "label": "應有產能（時）",
+          "type": "number",
+          "grp": "main",
+          "kind": "hours",
+          "sql": "CASE WHEN cal.is_workday <> 0 THEN m.capacity_hours ELSE 0 END"
+        }
+      ]
+    },
+    "purchaseLine": {
+      "label": "採購明細",
+      "rowText": "一筆採購明細（一個品項）",
+      "countLabel": "明細筆數",
+      "groups": {
+        "main": "主要資料：採購明細",
+        "header": "相關資料：採購單表頭（必帶）",
+        "receipt": "相關資料：收料結果（選加）"
+      },
+      "from": "purchase_lines AS d INNER JOIN purchase_orders AS h ON h.id = d.po_id LEFT JOIN suppliers AS s ON s.id = h.supplier_id",
+      "where": "1 = 1",
+      "related": {
+        "receipt": "LEFT JOIN (SELECT b.purchase_line_id, MIN(a.receipt_date) AS firstRecv, MAX(a.receipt_date) AS lastRecv, COUNT(*) AS recvCount, SUM(b.qty) AS recvQty FROM receipt_lines AS b INNER JOIN receipts AS a ON a.id = b.receipt_id GROUP BY b.purchase_line_id) AS r ON r.purchase_line_id = d.id"
+      },
+      "keys": {
+        "orderNo": "h.po_no",
+        "lineKey": "d.id"
+      },
+      "dateFields": [
+        "orderDate",
+        "dueDate",
+        "actualDate",
+        "firstRecv"
+      ],
+      "ratios": {
+        "supplierOnTime": {
+          "label": "供應商準時率",
+          "scale": 100,
+          "unit": "%",
+          "num": "CASE WHEN {deliveryState} = '準時' THEN 1 ELSE 0 END",
+          "den": "CASE WHEN {deliveryState} IN ('準時', '延誤') THEN 1 ELSE 0 END",
+          "note": "已收齊的明細中，末次收料日不晚於預交日的比例；依實交日歸期"
+        }
+      },
+      "fields": [
+        {
+          "id": "orderNo",
+          "label": "採購單號",
+          "type": "text",
+          "grp": "header",
+          "sql": "h.po_no"
+        },
+        {
+          "id": "orderDate",
+          "label": "訂購日",
+          "type": "date",
+          "grp": "header",
+          "sql": "h.order_date"
+        },
+        {
+          "id": "supplier",
+          "label": "供應商",
+          "type": "enum",
+          "grp": "header",
+          "sql": "s.short_name"
+        },
+        {
+          "id": "purchaseType",
+          "label": "採購類別",
+          "type": "enum",
+          "grp": "header",
+          "sql": "h.purchase_type"
+        },
+        {
+          "id": "currency",
+          "label": "幣別",
+          "type": "enum",
+          "grp": "header",
+          "sql": "h.currency"
+        },
+        {
+          "id": "itemNo",
+          "label": "項次",
+          "type": "text",
+          "grp": "main",
+          "sql": "d.item_no"
+        },
+        {
+          "id": "dueDate",
+          "label": "預交日",
+          "type": "date",
+          "grp": "main",
+          "sql": "d.due_date"
+        },
+        {
+          "id": "partNo",
+          "label": "料號",
+          "type": "text",
+          "grp": "main",
+          "sql": "d.part_no"
+        },
+        {
+          "id": "partName",
+          "label": "品名",
+          "type": "text",
+          "grp": "main",
+          "sql": "d.part_name"
+        },
+        {
+          "id": "spec",
+          "label": "規格",
+          "type": "text",
+          "grp": "main",
+          "sql": "d.spec"
+        },
+        {
+          "id": "jobNo",
+          "label": "工令",
+          "type": "text",
+          "grp": "main",
+          "sql": "d.job_no"
+        },
+        {
+          "id": "toolNo",
+          "label": "工模號",
+          "type": "text",
+          "grp": "main",
+          "sql": "d.tool_no"
+        },
+        {
+          "id": "unit",
+          "label": "單位",
+          "type": "enum",
+          "grp": "main",
+          "kind": "unit",
+          "sql": "d.unit"
+        },
+        {
+          "id": "qty",
+          "label": "訂購量",
+          "type": "number",
+          "grp": "main",
+          "kind": "qty",
+          "sql": "d.qty"
+        },
+        {
+          "id": "unitPrice",
+          "label": "單價（原幣）",
+          "type": "number",
+          "grp": "main",
+          "kind": "origPrice",
+          "fmt": "money",
+          "notSummable": "不同品項的單價不能加總或平均（請改用明細金額）",
+          "sql": "d.unit_price"
+        },
+        {
+          "id": "amount",
+          "label": "明細金額（原幣）",
+          "type": "number",
+          "grp": "main",
+          "kind": "origMoney",
+          "fmt": "money",
+          "sql": "d.amount"
+        },
+        {
+          "id": "amountLocal",
+          "label": "本幣金額",
+          "type": "number",
+          "grp": "main",
+          "kind": "localMoney",
+          "fmt": "money",
+          "sql": "ROUND(d.amount * h.exchange_rate, 0)"
+        },
+        {
+          "id": "closed",
+          "label": "結案",
+          "type": "enum",
+          "grp": "main",
+          "opts": [
+            "已結案",
+            "進行中"
+          ],
+          "sql": "CASE WHEN d.closed = 1 THEN '已結案' ELSE '進行中' END"
+        },
+        {
+          "id": "firstRecv",
+          "label": "首次收料日",
+          "type": "date",
+          "grp": "receipt",
+          "sql": "r.firstRecv"
+        },
+        {
+          "id": "lastRecv",
+          "label": "末次收料日",
+          "type": "date",
+          "grp": "receipt",
+          "sql": "r.lastRecv"
+        },
+        {
+          "id": "recvCount",
+          "label": "收料次數",
+          "type": "number",
+          "grp": "receipt",
+          "fmt": "int",
+          "sql": "COALESCE(r.recvCount, 0)"
+        },
+        {
+          "id": "recvQty",
+          "label": "已收量",
+          "type": "number",
+          "grp": "receipt",
+          "kind": "qty",
+          "sql": "COALESCE(r.recvQty, 0)"
+        },
+        {
+          "id": "openQty",
+          "label": "未收量",
+          "type": "number",
+          "grp": "receipt",
+          "kind": "qty",
+          "sql": "CASE WHEN d.qty > COALESCE(r.recvQty, 0) THEN d.qty - COALESCE(r.recvQty, 0) ELSE 0 END"
+        },
+        {
+          "id": "received",
+          "label": "收齊",
+          "type": "enum",
+          "grp": "receipt",
+          "chip": true,
+          "opts": [
+            "已收齊",
+            "未收齊"
+          ],
+          "sql": "CASE WHEN r.lastRecv IS NOT NULL AND r.recvQty >= d.qty THEN '已收齊' ELSE '未收齊' END"
+        },
+        {
+          "id": "actualDate",
+          "label": "實交日（收齊日）",
+          "type": "date",
+          "grp": "receipt",
+          "sql": "CASE WHEN r.lastRecv IS NOT NULL AND r.recvQty >= d.qty THEN r.lastRecv END"
+        },
+        {
+          "id": "deliveryState",
+          "label": "交期狀態",
+          "type": "enum",
+          "grp": "receipt",
+          "chip": true,
+          "opts": [
+            "準時",
+            "延誤",
+            "逾期未到",
+            "未到期",
+            "結案未收齊"
+          ],
+          "sql": "CASE WHEN d.due_date IS NULL THEN NULL WHEN r.lastRecv IS NOT NULL AND r.recvQty >= d.qty THEN CASE WHEN r.lastRecv <= d.due_date THEN '準時' ELSE '延誤' END WHEN d.closed = 1 THEN '結案未收齊' WHEN d.due_date < @today THEN '逾期未到' ELSE '未到期' END"
+        },
+        {
+          "id": "delayDays",
+          "label": "逾期／延誤天數",
+          "type": "number",
+          "grp": "receipt",
+          "fmt": "int",
+          "sql": "CASE WHEN d.due_date IS NULL THEN NULL WHEN r.lastRecv IS NOT NULL AND r.recvQty >= d.qty THEN CASE WHEN r.lastRecv > d.due_date THEN CAST(julianday(r.lastRecv) - julianday(d.due_date) AS integer) END WHEN d.closed = 1 THEN NULL WHEN d.due_date < @today THEN CAST(julianday(@today) - julianday(d.due_date) AS integer) END"
+        }
+      ]
+    },
+    "receiptLine": {
+      "label": "收料明細",
+      "rowText": "一筆收料明細",
+      "countLabel": "收料筆數",
+      "groups": {
+        "main": "主要資料：收料明細"
+      },
+      "from": "receipt_lines AS b INNER JOIN receipts AS a ON a.id = b.receipt_id LEFT JOIN suppliers AS s ON s.id = a.supplier_id",
+      "where": "1 = 1",
+      "related": {},
+      "keys": {
+        "orderNo": "a.receipt_no",
+        "lineKey": "b.id"
+      },
+      "dateFields": [
+        "receiptDate"
+      ],
+      "fields": [
+        {
+          "id": "receiptNo",
+          "label": "收料單號",
+          "type": "text",
+          "grp": "main",
+          "sql": "a.receipt_no"
+        },
+        {
+          "id": "receiptDate",
+          "label": "收料日",
+          "type": "date",
+          "grp": "main",
+          "sql": "a.receipt_date"
+        },
+        {
+          "id": "billMonth",
+          "label": "帳款月份",
+          "type": "enum",
+          "grp": "main",
+          "sql": "a.bill_month"
+        },
+        {
+          "id": "supplier",
+          "label": "供應商",
+          "type": "enum",
+          "grp": "main",
+          "sql": "s.short_name"
+        },
+        {
+          "id": "partNo",
+          "label": "料號",
+          "type": "text",
+          "grp": "main",
+          "sql": "b.part_no"
+        },
+        {
+          "id": "partName",
+          "label": "品名",
+          "type": "text",
+          "grp": "main",
+          "sql": "b.part_name"
+        },
+        {
+          "id": "toolNo",
+          "label": "工模號",
+          "type": "text",
+          "grp": "main",
+          "sql": "b.tool_no"
+        },
+        {
+          "id": "jobNo",
+          "label": "工令",
+          "type": "text",
+          "grp": "main",
+          "sql": "b.job_no"
+        },
+        {
+          "id": "qty",
+          "label": "收料數量",
+          "type": "number",
+          "grp": "main",
+          "kind": "qty",
+          "sql": "b.qty"
+        },
+        {
+          "id": "unit",
+          "label": "單位",
+          "type": "enum",
+          "grp": "main",
+          "kind": "unit",
+          "sql": "b.unit"
+        },
+        {
+          "id": "currency",
+          "label": "幣別",
+          "type": "enum",
+          "grp": "main",
+          "sql": "a.currency"
+        },
+        {
+          "id": "qcCheck",
+          "label": "品管",
+          "type": "enum",
+          "grp": "main",
+          "sql": "b.qc_result"
+        }
+      ]
+    }
+  }
+}

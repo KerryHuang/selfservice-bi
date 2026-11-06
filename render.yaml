@@ -1,0 +1,17 @@
+# Render Blueprint：Demo 站台（免費方案，閒置會休眠；磁碟不保留，重啟後回到初始狀態並重新產生資料）
+services:
+  - type: web
+    name: selfservice-bi
+    runtime: node
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.23.4
+      - key: HOST
+        value: 0.0.0.0
+      - key: TZ
+        value: Asia/Taipei

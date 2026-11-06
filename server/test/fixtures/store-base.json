@@ -1,0 +1,567 @@
+{
+  "v": 2,
+  "seq": 100,
+  "roleHome": {
+    "sales": "d-ops"
+  },
+  "reports": [
+    {
+      "id": "r-cust",
+      "name": "客戶別接單金額（本幣）",
+      "topic": "orderLine",
+      "related": {
+        "delivery": false
+      },
+      "updatedAt": "2026-10-28 09:20",
+      "columns": [
+        {
+          "field": "customer",
+          "label": ""
+        },
+        {
+          "field": "orderNo",
+          "label": ""
+        },
+        {
+          "field": "amountLocal",
+          "label": "接單金額（本幣）"
+        }
+      ],
+      "filters": {
+        "logic": "all",
+        "rows": []
+      },
+      "mode": "summary",
+      "groups": [
+        {
+          "field": "customer"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "m1",
+          "agg": "sum",
+          "field": "amountLocal",
+          "label": "接單金額（本幣）"
+        },
+        {
+          "id": "m2",
+          "agg": "distinctOrders",
+          "field": null,
+          "label": "不重複訂單數"
+        }
+      ],
+      "ownerId": "admin",
+      "shared": true
+    },
+    {
+      "id": "r-month",
+      "name": "月別接單金額（本幣）",
+      "topic": "orderLine",
+      "related": {
+        "delivery": false
+      },
+      "updatedAt": "2026-10-28 09:25",
+      "columns": [
+        {
+          "field": "orderDate",
+          "label": ""
+        },
+        {
+          "field": "amountLocal",
+          "label": "接單金額（本幣）"
+        }
+      ],
+      "filters": {
+        "logic": "all",
+        "rows": []
+      },
+      "mode": "summary",
+      "groups": [
+        {
+          "field": "orderDate",
+          "gran": "month"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "m1",
+          "agg": "sum",
+          "field": "amountLocal",
+          "label": "接單金額（本幣）"
+        }
+      ],
+      "ownerId": "admin",
+      "shared": true
+    },
+    {
+      "id": "r-due",
+      "name": "交期達成總覽",
+      "topic": "orderLine",
+      "related": {
+        "delivery": true
+      },
+      "updatedAt": "2026-10-30 16:02",
+      "columns": [
+        {
+          "field": "dueStatus",
+          "label": ""
+        },
+        {
+          "field": "basisDue",
+          "label": ""
+        }
+      ],
+      "filters": {
+        "logic": "all",
+        "rows": []
+      },
+      "mode": "summary",
+      "groups": [
+        {
+          "field": "dueStatus"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "m1",
+          "agg": "count",
+          "field": null,
+          "label": "明細筆數"
+        },
+        {
+          "id": "m2",
+          "agg": "onTimeRate",
+          "field": null,
+          "label": "達交率"
+        },
+        {
+          "id": "m3",
+          "agg": "overdueCount",
+          "field": null,
+          "label": "逾期未交明細數"
+        }
+      ],
+      "ownerId": "admin",
+      "shared": true
+    },
+    {
+      "id": "r-overdue",
+      "name": "逾期未交明細",
+      "topic": "orderLine",
+      "related": {
+        "delivery": true
+      },
+      "updatedAt": "2026-10-30 16:10",
+      "columns": [
+        {
+          "field": "orderNo",
+          "label": ""
+        },
+        {
+          "field": "customer",
+          "label": ""
+        },
+        {
+          "field": "partNo",
+          "label": ""
+        },
+        {
+          "field": "partName",
+          "label": ""
+        },
+        {
+          "field": "qty",
+          "label": ""
+        },
+        {
+          "field": "unit",
+          "label": ""
+        },
+        {
+          "field": "basisDue",
+          "label": ""
+        },
+        {
+          "field": "delayDays",
+          "label": ""
+        },
+        {
+          "field": "dueStatus",
+          "label": ""
+        }
+      ],
+      "filters": {
+        "logic": "all",
+        "rows": [
+          {
+            "id": "c1",
+            "field": "dueStatus",
+            "op": "in",
+            "value": "",
+            "value2": "",
+            "values": [
+              "逾期未交"
+            ],
+            "from": "",
+            "to": ""
+          }
+        ]
+      },
+      "mode": "detail",
+      "groups": [],
+      "metrics": [],
+      "ownerId": "admin",
+      "shared": true
+    },
+    {
+      "id": "r-ship",
+      "name": "月別出貨金額（本幣）",
+      "topic": "shipment",
+      "related": {
+        "delivery": false
+      },
+      "updatedAt": "2026-10-31 11:45",
+      "columns": [
+        {
+          "field": "shipDate",
+          "label": ""
+        },
+        {
+          "field": "shipNo",
+          "label": ""
+        },
+        {
+          "field": "shipAmountLocal",
+          "label": "出貨金額（本幣）"
+        }
+      ],
+      "filters": {
+        "logic": "all",
+        "rows": []
+      },
+      "mode": "summary",
+      "groups": [
+        {
+          "field": "shipDate",
+          "gran": "month"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "m1",
+          "agg": "sum",
+          "field": "shipAmountLocal",
+          "label": "出貨金額（本幣）"
+        },
+        {
+          "id": "m2",
+          "agg": "distinctShips",
+          "field": null,
+          "label": "不重複出貨單數"
+        }
+      ],
+      "ownerId": "admin",
+      "shared": true
+    },
+    {
+      "id": "r-shared",
+      "name": "客戶交期達成率",
+      "topic": "orderLine",
+      "related": {
+        "delivery": true
+      },
+      "updatedAt": "2026-10-25 14:30",
+      "columns": [
+        {
+          "field": "customer",
+          "label": ""
+        },
+        {
+          "field": "dueStatus",
+          "label": ""
+        }
+      ],
+      "filters": {
+        "logic": "all",
+        "rows": []
+      },
+      "mode": "summary",
+      "groups": [
+        {
+          "field": "customer"
+        }
+      ],
+      "metrics": [
+        {
+          "id": "m1",
+          "agg": "count",
+          "field": null,
+          "label": "明細筆數"
+        },
+        {
+          "id": "m2",
+          "agg": "onTimeRate",
+          "field": null,
+          "label": "達交率"
+        }
+      ],
+      "ownerId": "admin",
+      "shared": true
+    }
+  ],
+  "dashboards": [
+    {
+      "id": "d-ops",
+      "name": "營運總覽",
+      "updatedAt": "2026-10-31 18:00",
+      "filters": {
+        "range": "last12m",
+        "from": "",
+        "to": "",
+        "customers": [],
+        "orderTypes": []
+      },
+      "widgets": [
+        {
+          "id": "w1",
+          "title": "接單金額（本幣）",
+          "type": "metric",
+          "size": "S",
+          "reportId": "r-cust",
+          "topic": "orderLine",
+          "category": null,
+          "metric": {
+            "agg": "sum",
+            "field": "amountLocal",
+            "label": "接單金額（本幣）"
+          },
+          "dateField": "orderDate",
+          "metricName": "接單金額",
+          "unit": "本幣"
+        },
+        {
+          "id": "w2",
+          "title": "不重複訂單數",
+          "type": "metric",
+          "size": "S",
+          "reportId": "r-cust",
+          "topic": "orderLine",
+          "category": null,
+          "metric": {
+            "agg": "distinctOrders",
+            "field": null,
+            "label": "不重複訂單數"
+          },
+          "dateField": "orderDate",
+          "metricName": "訂單數（同一張只算一次）",
+          "unit": "張"
+        },
+        {
+          "id": "w3",
+          "title": "達交率",
+          "type": "metric",
+          "size": "S",
+          "reportId": "r-due",
+          "topic": "orderLine",
+          "category": null,
+          "metric": {
+            "agg": "onTimeRate",
+            "field": null,
+            "label": "達交率"
+          },
+          "dateField": "basisDue",
+          "metricName": "達交率",
+          "unit": "%"
+        },
+        {
+          "id": "w4",
+          "title": "逾期未交明細數",
+          "type": "metric",
+          "size": "S",
+          "reportId": "r-due",
+          "topic": "orderLine",
+          "category": null,
+          "metric": {
+            "agg": "overdueCount",
+            "field": null,
+            "label": "逾期未交明細數"
+          },
+          "dateField": "basisDue",
+          "metricName": "逾期未交（屬延誤的一部分）",
+          "unit": "筆"
+        },
+        {
+          "id": "w5",
+          "title": "月別接單金額（本幣）",
+          "type": "line",
+          "size": "M",
+          "reportId": "r-month",
+          "topic": "orderLine",
+          "category": {
+            "field": "orderDate",
+            "gran": "month"
+          },
+          "metric": {
+            "agg": "sum",
+            "field": "amountLocal",
+            "label": "接單金額（本幣）"
+          },
+          "dateField": "orderDate",
+          "metricName": "",
+          "unit": null
+        },
+        {
+          "id": "w6",
+          "title": "客戶別接單金額（本幣）",
+          "type": "bar",
+          "size": "M",
+          "reportId": "r-cust",
+          "topic": "orderLine",
+          "category": {
+            "field": "customer"
+          },
+          "metric": {
+            "agg": "sum",
+            "field": "amountLocal",
+            "label": "接單金額（本幣）"
+          },
+          "dateField": "orderDate",
+          "metricName": "",
+          "unit": null
+        },
+        {
+          "id": "w7",
+          "title": "交期狀態分布",
+          "type": "pie",
+          "size": "M",
+          "reportId": "r-due",
+          "topic": "orderLine",
+          "category": {
+            "field": "dueStatus"
+          },
+          "metric": {
+            "agg": "count",
+            "field": null,
+            "label": "明細筆數"
+          },
+          "dateField": "basisDue",
+          "metricName": "",
+          "unit": null
+        },
+        {
+          "id": "w8",
+          "title": "月別出貨金額（本幣）",
+          "type": "bar",
+          "size": "M",
+          "reportId": "r-ship",
+          "topic": "shipment",
+          "category": {
+            "field": "shipDate",
+            "gran": "month"
+          },
+          "metric": {
+            "agg": "sum",
+            "field": "shipAmountLocal",
+            "label": "出貨金額（本幣）"
+          },
+          "dateField": "shipDate",
+          "metricName": "",
+          "unit": null
+        },
+        {
+          "id": "w9",
+          "title": "逾期未交明細",
+          "type": "table",
+          "size": "L",
+          "reportId": "r-overdue",
+          "topic": "orderLine",
+          "category": null,
+          "metric": null,
+          "dateField": null,
+          "metricName": "",
+          "unit": null
+        }
+      ],
+      "kind": "role",
+      "roles": [
+        "sales"
+      ],
+      "version": 1
+    },
+    {
+      "id": "d-stale",
+      "name": "失效看板（測試用）",
+      "updatedAt": "2026-09-15 10:00",
+      "filters": {
+        "range": "all",
+        "from": "",
+        "to": "",
+        "customers": [],
+        "orderTypes": []
+      },
+      "widgets": [
+        {
+          "id": "x1",
+          "title": "舊的客戶別圖（報表已刪）",
+          "type": "bar",
+          "size": "M",
+          "reportId": "r-gone",
+          "topic": "orderLine",
+          "category": {
+            "field": "customer"
+          },
+          "metric": {
+            "agg": "sum",
+            "field": "amountLocal",
+            "label": "接單金額（本幣）"
+          },
+          "dateField": "orderDate",
+          "metricName": "",
+          "unit": null
+        },
+        {
+          "id": "x2",
+          "title": "客戶別接單（欄位已移除）",
+          "type": "bar",
+          "size": "M",
+          "reportId": "r-month",
+          "topic": "orderLine",
+          "category": {
+            "field": "customer"
+          },
+          "metric": {
+            "agg": "sum",
+            "field": "amountLocal",
+            "label": "接單金額（本幣）"
+          },
+          "dateField": "orderDate",
+          "metricName": "",
+          "unit": null
+        },
+        {
+          "id": "x3",
+          "title": "接單金額（仍有效）",
+          "type": "metric",
+          "size": "S",
+          "reportId": "r-cust",
+          "topic": "orderLine",
+          "category": null,
+          "metric": {
+            "agg": "sum",
+            "field": "amountLocal",
+            "label": "接單金額（本幣）"
+          },
+          "dateField": "orderDate",
+          "metricName": "接單金額",
+          "unit": "本幣"
+        }
+      ],
+      "kind": "role",
+      "roles": [
+        "sales"
+      ],
+      "version": 1
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "id": "d-stale",
+  "name": "失效卡片測試（管理員）",
+  "updatedAt": "2026-09-15 10:00",
+  "filters": {
+    "range": "all",
+    "from": "",
+    "to": "",
+    "customers": [],
+    "orderTypes": []
+  },
+  "widgets": [
+    {
+      "id": "x1",
+      "title": "舊的客戶別圖（報表已刪）",
+      "type": "bar",
+      "size": "M",
+      "reportId": "r-gone",
+      "topic": "orderLine",
+      "category": {
+        "field": "customer"
+      },
+      "metric": {
+        "agg": "sum",
+        "field": "amountLocal",
+        "label": "接單金額（本幣）"
+      },
+      "dateField": "orderDate",
+      "metricName": "",
+      "unit": null
+    },
+    {
+      "id": "x2",
+      "title": "客戶別接單（欄位已移除）",
+      "type": "bar",
+      "size": "M",
+      "reportId": "r-month",
+      "topic": "orderLine",
+      "category": {
+        "field": "customer"
+      },
+      "metric": {
+        "agg": "sum",
+        "field": "amountLocal",
+        "label": "接單金額（本幣）"
+      },
+      "dateField": "orderDate",
+      "metricName": "",
+      "unit": null
+    },
+    {
+      "id": "x3",
+      "title": "接單金額（仍有效）",
+      "type": "metric",
+      "size": "S",
+      "reportId": "r-cust",
+      "topic": "orderLine",
+      "category": null,
+      "metric": {
+        "agg": "sum",
+        "field": "amountLocal",
+        "label": "接單金額（本幣）"
+      },
+      "dateField": "orderDate",
+      "metricName": "接單金額",
+      "unit": "本幣"
+    }
+  ],
+  "kind": "personal",
+  "version": 1,
+  "ownerId": "admin"
+}
