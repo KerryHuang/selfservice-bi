@@ -1279,7 +1279,7 @@ function redrawConds() { $('#conds').innerHTML = D.draft.filters.rows.length ? D
 function renderDBody_nav() { var why = ''; if (D.step === 3 && E.validateConditions(D.draft).length) why = '有條件還沒填完整，請處理標紅的列（或移除該列）'; var nx = $('[data-act="d-next"]'); if (nx) { nx.disabled = !!why; } var w = $('.rp-dnav .rp-red'); if (w) w.textContent = why; }
 function getCond(el) { var id = el.getAttribute('data-cid'); return D.draft.filters.rows.filter(function (c) { return c.id === id; })[0]; }
 function patchCondErr(c) {
-  var row = $('.rp-cond[data-cid="' + esc(c.id) + '"]'); if (!row) return; var e = condErr(c);
+  var row = $('.rp-cond[data-cid="' + CSS.escape(c.id) + '"]'); if (!row) return; var e = condErr(c);
   row.classList.toggle('is-bad', !!e); $('.rp-cond-err', row).textContent = e; renderSide(); renderDBody_nav();
 }
 A['cond-add'] = function () {
